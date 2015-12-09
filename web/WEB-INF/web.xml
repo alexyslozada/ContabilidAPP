@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	 version="3.1">
+    
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    
+    <context-param>
+        <param-name>servidor</param-name>
+        <param-value>127.0.0.1</param-value>
+    </context-param>
+    <context-param>
+        <param-name>puertobd</param-name>
+        <param-value>5432</param-value>
+    </context-param>
+    <context-param>
+        <param-name>basededatos</param-name>
+        <param-value>contabilidad</param-value>
+    </context-param>
+    <context-param>
+        <param-name>usuariobd</param-name>
+        <param-value>contable</param-value>
+    </context-param>
+    <context-param>
+        <param-name>clavebd</param-name>
+        <param-value>contable</param-value>
+    </context-param>
+    <context-param>
+        <param-name>conexionesiniciales</param-name>
+        <param-value>3</param-value>
+    </context-param>
+    <context-param>
+        <param-name>conexionesmaximas</param-name>
+        <param-value>100</param-value>
+    </context-param>
+    <context-param>
+        <param-name>activar_log_server</param-name>
+        <param-value>1</param-value>
+    </context-param>
+
+</web-app>
