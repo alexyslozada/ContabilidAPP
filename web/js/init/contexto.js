@@ -1,0 +1,1 @@
+"use strict";!function(t,e){var o=function(){var t=JSON.parse(this.responseText),e=libreria.getID("conectar");2===t.tipo?e.text(t.mensaje):(1===t.tipo||3===t.tipo)&&e.text(t.mensaje)};libreria.ajax({metodo:"post",url:"SContexto",funcion:o})}(window,document);

@@ -1,44 +1,42 @@
 package com.ingenio.servlets;
 
-import com.ingenio.dao.DAO;
+import com.ingenio.objetos.Usuario;
 import com.ingenio.utilidades.Constantes;
 import com.ingenio.utilidades.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-@WebServlet(name = "SContexto", urlPatterns = {"/SContexto"})
-public class SContexto extends HttpServlet {
+@WebServlet(name = "SAutenticado", urlPatterns = {"/SAutenticado"})
+public class SAutenticado extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         response.setContentType("application/json;charset=UTF-8");
+
+        byte tipo;
+        String mensaje;
+        String objeto = "";
+
+        HttpSession sesion = request.getSession(false);
+
+        if(Utilidades.get().autenticado(sesion)){
+            tipo    = Constantes.MSG_CORRECTO;
+            Usuario usuario  = (Usuario) sesion.getAttribute("credencial");
+            objeto  = usuario.toJSON();
+            mensaje = "Bienvenido: " + usuario.getNombre();
+        } else {
+            tipo    = Constantes.MSG_ERROR;
+            mensaje = "No está autenticado";
+        }
         try (PrintWriter out = response.getWriter()) {
-
-            byte tipo;
-            String mensaje;
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-            DAO dao = DAO.getDAO();
-
-            // Si entra al sistema por primera vez, se crea la piscina
-            if (!Utilidades.get().isContextoCreado()) {
-                dao.creaPiscina(getServletContext());
-            }
-
-            try {
-                tipo    = Constantes.MSG_CORRECTO;
-                mensaje = "Conexion correcta: " + sdf.format(dao.getFechaServerBD().getTime());
-            } catch (SQLException sqle){
-                tipo = Constantes.MSG_ERROR;
-                mensaje = "Error al obtener el contexto: "+sqle.getMessage();
-            }
-            out.println(Utilidades.get().respuestaJSON(tipo, mensaje, ""));
+            out.println(Utilidades.get().respuestaJSON(tipo, mensaje, objeto));
         }
     }
 

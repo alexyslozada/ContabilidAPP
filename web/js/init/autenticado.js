@@ -1,0 +1,1 @@
+"use strict";!function(e){function i(){var i=JSON.parse(this.responseText);2===i.tipo?(libreria.getID("mensaje-inicial").text(i.mensaje),console.log(i.objeto)):e.location.href="index.html"}libreria.ajax({url:"SAutenticado",funcion:i})}(window);

@@ -1,45 +1,28 @@
 package com.ingenio.servlets;
 
-import com.ingenio.dao.DAO;
-import com.ingenio.utilidades.Constantes;
 import com.ingenio.utilidades.Utilidades;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-@WebServlet(name = "SContexto", urlPatterns = {"/SContexto"})
-public class SContexto extends HttpServlet {
+/**
+ *
+ * @author Alexys
+ */
+@WebServlet(name = "SCerrarSesion", urlPatterns = {"/SCerrarSesion"})
+public class SCerrarSesion extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-
-            byte tipo;
-            String mensaje;
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-            DAO dao = DAO.getDAO();
-
-            // Si entra al sistema por primera vez, se crea la piscina
-            if (!Utilidades.get().isContextoCreado()) {
-                dao.creaPiscina(getServletContext());
-            }
-
-            try {
-                tipo    = Constantes.MSG_CORRECTO;
-                mensaje = "Conexion correcta: " + sdf.format(dao.getFechaServerBD().getTime());
-            } catch (SQLException sqle){
-                tipo = Constantes.MSG_ERROR;
-                mensaje = "Error al obtener el contexto: "+sqle.getMessage();
-            }
-            out.println(Utilidades.get().respuestaJSON(tipo, mensaje, ""));
-        }
+        
+        response.setContentType("text/html;charset=UTF-8");
+        HttpSession sesion = request.getSession(false);
+        if(sesion != null) sesion.invalidate();
+        Utilidades.get().irAPagina("/index.html", request, response, request.getServletContext());
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

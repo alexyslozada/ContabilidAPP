@@ -30,7 +30,7 @@ public class SAutenticar extends HttpServlet {
         
         String user = request.getParameter("usr");
         String pass = request.getParameter("pwd");
-        System.out.println("User: "+user+", Pass: "+pass);
+
         HttpSession sesion = request.getSession();
         
         try{
