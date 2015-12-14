@@ -1,0 +1,23 @@
+<div class="vista">
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+    <form id="frmActualizarPerfil" class="frmComun" action="#" method="post">
+        <fieldset>
+            <legend>Actualizar Perfil</legend>
+            <div class="grupo-input">
+                <input type="number" id="ide" name="ide" class="grupo-input--texto" readonly>
+            </div>
+            <div class="grupo-input">
+                <input type="text" id="nombre" name="nombre" class="grupo-input--texto" autofocus autocomplete="off" required placeholder="Perfil">
+            </div>
+            <div class="grupo-input">
+                <input type="checkbox" id="activo" name="activo" class="grupo-input--check">
+                <label for="activo"></label>
+            </div>
+            <div class="grupo-input">
+                <button type="submit" class="grupo-input--boton"
+                        onclick="_.getCtrl().actualizar()">Actualizar</button>
+            </div>
+        </fieldset>
+    </form>
+    <a href="#/perfiles" class="boton">Volver al listado</a>
+</div>

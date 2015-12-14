@@ -1,10 +1,10 @@
 <div class="vista">
     <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
-    <form id="frmCrearPerfil" action="#" method="post">
+    <form id="frmCrearPerfil" class="frmComun" action="#" method="post">
         <fieldset>
             <legend>Crear Perfil</legend>
             <div class="grupo-input">
-                <input type="text" id="nombre" name="nombre" class="grupo-input--texto" autofocus required placeholder="Perfil">
+                <input type="text" id="nombre" name="nombre" class="grupo-input--texto" autofocus autocomplete="off" required placeholder="Perfil">
             </div>
             <div class="grupo-input">
                 <button type="submit" class="grupo-input--boton"
@@ -12,5 +12,5 @@
             </div>
         </fieldset>
     </form>
-    <a href="#/perfiles" class="boton">Listado</a>
+    <a href="#/perfiles" class="boton">Volver al listado</a>
 </div>

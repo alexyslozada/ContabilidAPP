@@ -15,6 +15,12 @@
               'perfiles',
               function(){
                   _.getID('frmCrearPerfil').noSubmit();
+              })
+        .ruta('/perfiles-actualizar',
+              'vistas/perfiles/actualizar.html',
+              'perfiles',
+              function(){
+                  _.getID('frmActualizarPerfil').noSubmit();
               });
 
     window.addEventListener('load', _.manejadorRutas, false);

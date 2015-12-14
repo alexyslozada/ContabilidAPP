@@ -1,39 +1,75 @@
 package com.ingenio.servlets;
 
+import com.ingenio.dao.DAOPerfiles;
+import com.ingenio.excepciones.ExcepcionGeneral;
+import com.ingenio.objetos.Perfil;
 import com.ingenio.objetos.Usuario;
 import com.ingenio.utilidades.Constantes;
 import com.ingenio.utilidades.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet(name = "SAutenticado", urlPatterns = {"/SAutenticado"})
-public class SAutenticado extends HttpServlet {
+@MultipartConfig
+@WebServlet(name = "SPerfilActualizar", urlPatterns = {"/SPerfilActualizar"})
+public class SPerfilActualizar extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         response.setContentType("application/json;charset=UTF-8");
 
+        HttpSession sesion = request.getSession();
         byte tipo;
         String mensaje;
         String objeto = "";
 
-        HttpSession sesion = request.getSession(false);
-
         if(Utilidades.get().autenticado(sesion)){
-            tipo    = Constantes.MSG_CORRECTO;
-            Usuario usuario  = (Usuario) sesion.getAttribute("credencial");
-            objeto  = usuario.toJSON();
-            mensaje = "Bienvenido: " + usuario.getNombre();
+
+            DAOPerfiles dao = new DAOPerfiles();
+            Usuario usuario = (Usuario) sesion.getAttribute("credencial");
+
+            if(dao.tienePermiso(usuario.getPerfil(), "PERFILES", "modificar")){
+
+                String id = request.getParameter("ide");
+                String nombre = request.getParameter("nombre");
+                String activo = request.getParameter("activo");
+                boolean bActivo = false;
+                if(activo != null){
+                    bActivo = activo.equals("on");
+                }
+
+                Perfil perfil = new Perfil();
+                perfil.setIdperfil(Short.parseShort(id));
+                perfil.setNombre(nombre);
+                perfil.setActivo(bActivo);
+                
+                try{
+                    boolean respuesta = dao.actualizar(perfil);
+                    objeto = "{\"actualizado\":"+respuesta+"}";
+                    tipo = Constantes.MSG_CORRECTO;
+                    if(respuesta){
+                        mensaje = "Se actualizó correctamente el perfil: "+perfil.getNombre();
+                    } else {
+                        mensaje = "No se actualizó el perfil: "+perfil.getNombre();
+                    }
+                } catch (ExcepcionGeneral eg){
+                    tipo = Constantes.MSG_ADVERTENCIA;
+                    mensaje = eg.getMessage();
+                }
+            } else {
+                tipo = Constantes.MSG_ADVERTENCIA;
+                mensaje = "Su perfil no tiene acceso a la modificación del perfil";
+            }
         } else {
-            tipo    = Constantes.MSG_ERROR;
-            mensaje = "No está autenticado";
+            tipo = Constantes.MSG_NO_AUTENTICADO;
+            mensaje = "Usuario no autenticado";
             Utilidades.get().irAPagina("/index.html", request, response, request.getServletContext());
         }
         try (PrintWriter out = response.getWriter()) {

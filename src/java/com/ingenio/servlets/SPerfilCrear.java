@@ -1,6 +1,7 @@
 package com.ingenio.servlets;
 
 import com.ingenio.dao.DAOPerfiles;
+import com.ingenio.excepciones.ExcepcionGeneral;
 import com.ingenio.objetos.Usuario;
 import com.ingenio.utilidades.Constantes;
 import com.ingenio.utilidades.Utilidades;
@@ -27,22 +28,27 @@ public class SPerfilCrear extends HttpServlet {
         byte tipo = Constantes.MSG_ADVERTENCIA;
         String mensaje;
         String objeto = "";
-        
-        String nombre = request.getParameter("nombre");
 
         if(Utilidades.get().autenticado(sesion)){
+            String nombre = request.getParameter("nombre");
             DAOPerfiles dao = new DAOPerfiles();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
             if(dao.tienePermiso(usuario.getPerfil(), "PERFILES", "insertar")){
-                short resultado = dao.crear(nombre);
-                tipo = Constantes.MSG_CORRECTO;
-                mensaje = "Se ha creado el perfil con el id: " + resultado;
+                try{
+                    short resultado = dao.crear(nombre);
+                    tipo = Constantes.MSG_CORRECTO;
+                    mensaje = "Se ha creado el perfil con el id: " + resultado;
+                } catch (ExcepcionGeneral eg){
+                    tipo = Constantes.MSG_ADVERTENCIA;
+                    mensaje = eg.getMessage();
+                }
             } else {
                 mensaje = "Su perfil no tiene autorización para crear perfiles.";
             }
         } else {
             tipo = Constantes.MSG_NO_AUTENTICADO;
             mensaje = "Usuario no autenticado";
+            Utilidades.get().irAPagina("/index.html", request, response, request.getServletContext());
         }
 
         try (PrintWriter out = response.getWriter()) {

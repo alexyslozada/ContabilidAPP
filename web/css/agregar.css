@@ -1,4 +1,14 @@
 /* Borrar este */
+fieldset{
+    border: none;
+}
+legend{
+	color: #aaa;
+	display: block;
+	font-family: Roboto;
+	font-size: 2em;
+	text-align: center;
+}
 .mensaje-sistema{
 	background-color: rgba(0,0,0,.7);
 	border-radius: 5px;
@@ -7,6 +17,77 @@
 	padding: 1em;
 }
 /* Fin borrar*/
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button,
+input[type=date]::-webkit-inner-spin-button, 
+input[type=date]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+input[type="number"], input[type="date"]{
+	text-align: right;
+}
+.grupo-input--check{
+	width: 0;
+	height: 0;
+}
+.grupo-input--check + label{
+	width: 3em;
+	height: 1em;
+	background-color: gray;
+	display: block;
+	border-radius: 1.25em;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	transition: all .5s;
+}
+.grupo-input--check + label:before{
+	background-color: white;
+	border-radius: 50%;
+	box-shadow: 0 0 15px gray;
+	content: "";
+	display: block;
+	height: 1.5em;
+	position: relative;
+	transform: translateY(-15%);
+	transition: all .5s;
+	width: 1.5em;
+}
+.grupo-input--check:checked + label:before{
+	background-color: green;
+	left: 1.5em;
+}
+.grupo-input--check:checked + label{
+	background-color: teal;
+}
+.grupo-input--check:focus + label {
+	box-shadow: 0 0 20px teal;
+}
+input[type="radio"]{
+	width: 0;
+	height: 0;
+}
+input[type="radio"] + label:before{
+	content: "";
+	border-radius: 50%;
+	display: inline-block;
+	width: .75em;
+	height: .75em;
+	background-color: transparent;
+	box-shadow: 0 0 0 3px gray;
+	margin-right: .5em;
+}
+input[type="radio"]:checked + label:before{
+	background-color: teal;
+	width: .75em;
+	height: .75em;
+	box-shadow: 0 0 0 2px white,
+                    0 0 0 5px teal;
+}
+input[type="radio"]:focus + label{
+	box-shadow: 0 0 20px teal;
+}
+
 .boton{
     background-color: teal;
     color: #fff;
@@ -17,6 +98,21 @@
 }
 .boton:hover{
     box-shadow: 0 0 10px gray;
+}
+.fondo-gris{
+    background-color: rgb(238, 239, 244);
+}
+.vista{
+    background-color: #fff;
+    padding: 1em;
+}
+.frmComun .grupo-input .grupo-input--texto{
+    background-color: transparent;
+    color: #333;
+    padding-left: .5em;
+}
+.frmComun .grupo-input .grupo-input--boton{
+    width: 50%;
 }
 .tabla{
     border-collapse: collapse;
@@ -51,7 +147,6 @@
 }
 .tabla td{
     color: rgb(32, 38, 45);
-    /*font-weight: bold;*/
 }
 .tabla .accion{
     background-color: transparent;

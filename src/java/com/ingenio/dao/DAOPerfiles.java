@@ -1,6 +1,7 @@
 package com.ingenio.dao;
 
 import com.ingenio.excepciones.ExcepcionGeneral;
+import com.ingenio.objetos.Perfil;
 import com.ingenio.utilidades.Utilidades;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -55,8 +56,47 @@ public class DAOPerfiles extends DAOGenerales{
         }
         return respuesta;
     }
-    
-    public String listaPerfilJSON(){
+
+    public boolean actualizar(Perfil perfil) throws ExcepcionGeneral{
+        boolean respuesta = false;
+        try{
+            setConsulta("select * from fn_perfiles_upd(?,?,?)");
+            conexion = getConexion();
+            sentencia = conexion.prepareStatement(getConsulta());
+            sentencia.setShort(1, perfil.getIdperfil());
+            sentencia.setString(2, perfil.getNombre());
+            sentencia.setBoolean(3, perfil.isActivo());
+            resultado = sentencia.executeQuery();
+            if(resultado.next()){
+                respuesta = resultado.getBoolean(1);
+            }
+        } catch (SQLException sqle){
+            Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en DAOPerfiles.actualizar: {0}", new Object[]{sqle.getMessage()});
+            throw new ExcepcionGeneral(sqle.getMessage());            
+        }
+        return respuesta;
+    }
+
+    public String consultaPorId(short id) throws ExcepcionGeneral{
+        String respuesta = "";
+        try{
+            setConsulta("select * from fn_perfiles_sel_json(?, ?)");
+            conexion = getConexion();
+            sentencia = conexion.prepareStatement(getConsulta());
+            sentencia.setShort(1, new Integer(2).shortValue());
+            sentencia.setShort(2, id);
+            resultado = sentencia.executeQuery();
+            if(resultado.next()){
+                respuesta = resultado.getString(1);
+            }
+        } catch (SQLException sqle){
+            Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en DAOPerfiles.consultaPorId: {0}", new Object[]{sqle.getMessage()});
+            throw new ExcepcionGeneral(sqle.getMessage());
+        }
+        return respuesta;
+    }
+
+    public String listaPerfilJSON() throws ExcepcionGeneral{
         String respuesta = "";
         try{
             setConsulta("select * from fn_perfiles_sel_json(?)");
@@ -69,6 +109,7 @@ public class DAOPerfiles extends DAOGenerales{
             }
         } catch (SQLException sqle){
             Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en DAOPerfiles.listaPerfilJSON: {0}", new Object[]{sqle.getMessage()});
+            throw new ExcepcionGeneral(sqle.getMessage());
         } finally {
             cierraConexion(conexion, sentencia, resultado);
         }

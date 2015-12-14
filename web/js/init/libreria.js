@@ -44,6 +44,10 @@
             this.elemento.addEventListener('submit', function(e){e.preventDefault();}, false);
             return this;
           },
+          setValue: function(valor){
+              this.elemento.value = valor;
+              return this;
+          },
           text: function(contenido){
             this.elemento.textContent = contenido;
             return this;
@@ -81,14 +85,14 @@
                 eliminar.dataset.idu = registro['id'];
                 eliminar.addEventListener('click', function(e){
                     e.preventDefault();
-                    self.getCtrl().eliminar(e.target.dataset.idu);
+                    self.getCtrl().confirmaEliminar(e.target.dataset.idu);
                 },false);
 
                 actualizar = clon.querySelector('.actualizar');
                 actualizar.dataset.idu = registro['id'];
                 actualizar.addEventListener('click', function(e){
                     e.preventDefault();
-                    self.getCtrl().actualizar(e.target.dataset.idu);
+                    self.getCtrl().confirmaActualizar(e.target.dataset.idu);
                 },false);
                 
                 frag.appendChild(clon);
