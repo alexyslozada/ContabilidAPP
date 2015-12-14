@@ -20,7 +20,7 @@ public class DAOPerfiles extends DAOGenerales{
     public short crear(String nombre) throws ExcepcionGeneral{
         short respuesta = 0;
         try{
-            setConsulta("select * from fn_perfiles_ins(?)");
+            setConsulta("select fn_perfiles_ins(?)");
             conexion  = getConexion();
             sentencia = conexion.prepareStatement(getConsulta());
             sentencia.setString(1, nombre);
@@ -40,7 +40,7 @@ public class DAOPerfiles extends DAOGenerales{
     public boolean eliminar(Short id) throws ExcepcionGeneral{
         boolean respuesta = false;
         try{
-            setConsulta("select * from fn_perfiles_del(?)");
+            setConsulta("select fn_perfiles_del(?)");
             conexion  = getConexion();
             sentencia = conexion.prepareStatement(getConsulta());
             sentencia.setShort(1, id);
@@ -60,7 +60,7 @@ public class DAOPerfiles extends DAOGenerales{
     public boolean actualizar(Perfil perfil) throws ExcepcionGeneral{
         boolean respuesta = false;
         try{
-            setConsulta("select * from fn_perfiles_upd(?,?,?)");
+            setConsulta("select fn_perfiles_upd(?,?,?)");
             conexion = getConexion();
             sentencia = conexion.prepareStatement(getConsulta());
             sentencia.setShort(1, perfil.getIdperfil());
@@ -82,7 +82,7 @@ public class DAOPerfiles extends DAOGenerales{
     public String consultaPorId(short id) throws ExcepcionGeneral{
         String respuesta = "";
         try{
-            setConsulta("select * from fn_perfiles_sel_json(?, ?)");
+            setConsulta("select fn_perfiles_sel_json(?, ?)");
             conexion = getConexion();
             sentencia = conexion.prepareStatement(getConsulta());
             sentencia.setShort(1, new Integer(2).shortValue());
@@ -103,7 +103,7 @@ public class DAOPerfiles extends DAOGenerales{
     public String listaPerfilJSON() throws ExcepcionGeneral{
         String respuesta = "";
         try{
-            setConsulta("select * from fn_perfiles_sel_json(?)");
+            setConsulta("select fn_perfiles_sel_json(?)");
             conexion  = getConexion();
             sentencia = conexion.prepareStatement(getConsulta());
             sentencia.setShort(1, new Integer(1).shortValue());
