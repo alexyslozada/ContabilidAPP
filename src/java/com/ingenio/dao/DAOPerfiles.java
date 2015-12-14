@@ -73,6 +73,8 @@ public class DAOPerfiles extends DAOGenerales{
         } catch (SQLException sqle){
             Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en DAOPerfiles.actualizar: {0}", new Object[]{sqle.getMessage()});
             throw new ExcepcionGeneral(sqle.getMessage());            
+        } finally {
+            cierraConexion(conexion, sentencia, resultado);
         }
         return respuesta;
     }
@@ -92,6 +94,8 @@ public class DAOPerfiles extends DAOGenerales{
         } catch (SQLException sqle){
             Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en DAOPerfiles.consultaPorId: {0}", new Object[]{sqle.getMessage()});
             throw new ExcepcionGeneral(sqle.getMessage());
+        } finally {
+            cierraConexion(conexion, sentencia, resultado);
         }
         return respuesta;
     }
