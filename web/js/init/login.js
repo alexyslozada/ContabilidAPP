@@ -1,1 +1,31 @@
-"use strict";!function(e){libreria.getID("frmLogin").noSubmit();var r=function(){var r=JSON.parse(this.responseText),a=libreria.getID("mensaje");a.text(r.mensaje),2===r.tipo?e.location.href="sistema":(a.delClass("no-mostrar"),console.log("Error",r.mensaje))};libreria.getID("btnLogin").click(function(){var e=new FormData,a=libreria.getID("usr").value(),i=CryptoJS.SHA3(libreria.getID("pwd").value());e.append("usr",a),e.append("pwd",i),libreria.ajax({url:"SAutenticar",datos:e,funcion:r})})}(window);
+'use strict';
+(function(window){
+
+  libreria.getID('frmLogin').noSubmit();
+  
+  var conexion = function(){
+    var data = JSON.parse(this.responseText),
+        div  = libreria.getID('mensaje');
+        div.text(data.mensaje);
+    if(data.tipo === 2){
+      window.location.href = 'sistema';
+    } else {
+      div.delClass('no-mostrar');
+      console.log("Error", data.mensaje);
+    }
+  };
+  
+  libreria.getID('btnLogin').click(function(){
+    var data = new FormData(),
+        usr  = libreria.getID('usr').value(),
+        pwd  = CryptoJS.SHA3(libreria.getID('pwd').value());
+    data.append('usr', usr);
+    data.append('pwd', pwd);
+    libreria.ajax({
+      url: 'SAutenticar',
+      datos: data,
+      funcion: conexion
+    });
+  });
+    
+})(window);

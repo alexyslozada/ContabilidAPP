@@ -1,1 +1,190 @@
-"use strict";!function(t,n){function e(){var e=null,o=null,r={},i={},u=null,a={getID:function(t){return e=n.getElementById(t),this},addClass:function(t){return e.classList.add(t),this},click:function(t){return e.addEventListener("click",t,!1),this},delClass:function(t){return e.classList.remove(t),this},get:function(){return e},innerHTML:function(t){return e.innerHTML=t,this},noSubmit:function(){return e.addEventListener("submit",function(t){t.preventDefault()},!1),this},text:function(t){return e.textContent=t,this},toogleClass:function(t){return e.classList.toggle(t),this},value:function(){return e.value},controlador:function(t,n){i[t]={controlador:n}},getCtrl:function(){return u},enrutar:function(){return o=e,this},ruta:function(t,n,e,o){return r[t]={plantilla:n,controlador:e,carga:o},this},manejadorRutas:function(){var n=t.location.hash.substring(1)||"/",e=r[n];new XMLHttpRequest;e&&e.plantilla?(e.controlador&&(u=i[e.controlador].controlador),this.ajax({metodo:"get",url:e.plantilla,funcion:function(){o.innerHTML=this.responseText,setTimeout(function(){"function"==typeof e.carga&&e.carga()},300)}})):t.location.hash="#/"},ajax:function(t){var n=t.metodo||"post",e=t.url||"",o=t.datos||null,r=t.funcion,i=new XMLHttpRequest;i.addEventListener("load",r,!1),i.open(n,e,!0),i.send(o)}};return a}"undefined"==typeof t.libreria?t.libreria=e():console.log("Ya está llamada")}(window,document);
+'use strict';
+(function(window, document){
+  function inicio(){
+    var marco    = null,
+        vistaNoEncontrado = null,
+        rutas    = {},
+        controladores = {},
+        ctrl     = null,
+        libreria = {
+          MSG_CORRECTO: 2,
+          MSG_ERROR: 1,
+          MSG_ADVERTENCIA: 3,
+          MSG_NO_AUTENTICADO: 4,
+          getID: function(id){
+            var clone = {elemento: document.getElementById(id)};
+            clone = this.extender(clone, this);
+            return clone;
+          },
+          getElement: function(ele){
+            var clone = {elemento: ele};
+            clone = this.extender(clone, this);
+            return clone;
+          },
+          get: function(){
+            return this.elemento;
+          },
+          addClass: function(clase){
+            this.elemento.classList.add(clase);
+            return this;
+          },
+          click: function(funcion){
+            this.elemento.addEventListener('click', funcion, false);
+            return this;
+          },
+          delClass: function(clase){
+            this.elemento.classList.remove(clase);
+            return this;
+          },
+          innerHTML: function(contenido){
+            this.elemento.innerHTML = contenido;
+            return this;
+          },
+          noSubmit: function(){
+            this.elemento.addEventListener('submit', function(e){e.preventDefault();}, false);
+            return this;
+          },
+          text: function(contenido){
+            this.elemento.textContent = contenido;
+            return this;
+          },
+          toggleClass: function(clase){
+            this.elemento.classList.toggle(clase);
+            return this;
+          },
+          value: function(){
+            return this.elemento.value;
+          },
+          llenarFilas: function(cuerpoTabla, template, datos, campos){
+            var cuerpo = document.getElementById(cuerpoTabla),
+                fila = document.getElementById(template),
+                frag = document.createDocumentFragment(),
+                i = 0, j = 0, maxDatos = datos.length, registro = {},
+                clon = null, maxCampos = campos.length, campo = null,
+                eliminar = null, actualizar = null, self = this;
+
+            cuerpo.innerHTML = '';
+            for(; i < maxDatos; i = i + 1){
+                registro = datos[i];
+                clon = fila.content.cloneNode(true);
+                for(; j < maxCampos; j = j + 1){
+                    campo = clon.querySelector('.'+campos[j]);
+                    if(typeof registro[campos[j]] !== 'boolean'){
+                        campo.textContent = registro[campos[j]];
+                    } else {
+                        campo.textContent = registro[campos[j]]?'Si':'No';
+                    }
+                }
+                j = 0;
+                
+                eliminar = clon.querySelector('.eliminar');
+                eliminar.dataset.idu = registro['id'];
+                eliminar.addEventListener('click', function(e){
+                    e.preventDefault();
+                    self.getCtrl().eliminar(e.target.dataset.idu);
+                },false);
+
+                actualizar = clon.querySelector('.actualizar');
+                actualizar.dataset.idu = registro['id'];
+                actualizar.addEventListener('click', function(e){
+                    e.preventDefault();
+                    self.getCtrl().actualizar(e.target.dataset.idu);
+                },false);
+                
+                frag.appendChild(clon);
+            }
+            cuerpo.appendChild(frag);
+          },
+          controlador: function(nombre, controller){
+            controladores[nombre] = {'controlador': controller};
+          },
+          getCtrl: function(){
+            return ctrl;
+          },
+          enrutar: function(id){
+            marco = document.getElementById(id);
+            return this;
+          },
+          ruta: function(url, plantilla, controller, carga){
+            rutas[url] = {'plantilla': plantilla,
+                          'controlador': controller,
+                          'carga': carga};
+            return this;
+          },
+          cargaVista: function(destino){
+            var _this = this;
+            _this.ajax({metodo: 'get',
+                        url: destino.plantilla,
+                        funcion: function(){
+                          marco.innerHTML = this.responseText;
+                          setTimeout(function(){
+                              if(typeof(destino.carga) === 'function'){
+                                destino.carga();
+                              }
+                          }, 300);
+                        }
+            });
+          },
+          manejadorRutas: function(){
+            var hash = window.location.hash.substring(1) || '/',
+                destino = rutas[hash],
+                _this = window._;
+
+            if(destino && destino.plantilla){
+
+              if(destino.controlador){
+                ctrl = controladores[destino.controlador].controlador;
+              }
+
+              _this.cargaVista(destino);
+            } else {
+              destino = {};
+              destino.plantilla = vistaNoEncontrado;
+              _this.cargaVista(destino);
+            }
+          },
+          noEncontrado: function(archivo){
+            vistaNoEncontrado = archivo;
+            return this;
+          },
+          ajax: function(objeto){
+            var metodo = objeto.metodo || 'post',
+                url    = objeto.url || '',
+                datos  = objeto.datos || null,
+                callback = objeto.funcion,
+                xhr    = new XMLHttpRequest();
+
+            xhr.addEventListener('load', callback, false);
+            xhr.open(metodo, url, true);
+            xhr.send(datos);
+          },
+          extender: function(out) {
+            out = out || {};
+
+            for (var i = 1; i < arguments.length; i++) {
+              var obj = arguments[i];
+
+              if (!obj)
+                continue;
+
+              for (var key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                  if (typeof obj[key] === 'object')
+                    this.extender(out[key], obj[key]);
+                  else
+                    out[key] = obj[key];
+                }
+              }
+            }
+            return out;
+          }
+      };
+    return libreria;
+  };
+    
+  if(typeof window.libreria === "undefined"){
+    window.libreria = window._ = inicio();
+  } else {
+    console.log("Ya está llamada");
+  }
+})(window, document);

@@ -1,1 +1,20 @@
-"use strict";!function(e){function i(){var i=JSON.parse(this.responseText);2===i.tipo?(libreria.getID("mensaje-inicial").text(i.mensaje),console.log(i.objeto)):e.location.href="index.html"}libreria.ajax({url:"SAutenticado",funcion:i})}(window);
+/* global libreria */
+/* global _ */
+
+'use strict';
+(function(window){
+    
+	function validar(){
+            var data = JSON.parse(this.responseText);
+            if(data.tipo === 2){
+                    _.getID('mensaje-inicial').text(data.mensaje);
+            } else {
+                    window.location.href = 'index.html';
+            }
+	};
+	
+	libreria.ajax({
+            url: 'SAutenticado',
+            funcion: validar
+	});
+})(window);

@@ -1,0 +1,16 @@
+<div class="vista">
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+    <form id="frmCrearPerfil" action="#" method="post">
+        <fieldset>
+            <legend>Crear Perfil</legend>
+            <div class="grupo-input">
+                <input type="text" id="nombre" name="nombre" class="grupo-input--texto" autofocus required placeholder="Perfil">
+            </div>
+            <div class="grupo-input">
+                <button type="submit" class="grupo-input--boton"
+                        onclick="_.getCtrl().crear(_.getID('frmCrearPerfil').get())">Crear</button>
+            </div>
+        </fieldset>
+    </form>
+    <a href="#/perfiles" class="boton">Listado</a>
+</div>

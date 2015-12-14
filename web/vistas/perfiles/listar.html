@@ -1,0 +1,37 @@
+<div class="vista">
+    <h2>Perfiles</h2>
+    <div id="mensaje" class="mensaje_sistema no-mostrar"></div>
+    <a href="#/perfiles-crear" class="boton">Nuevo</a>
+    <table class="tabla">
+        <caption>Listado de Perfiles</caption>
+        <colgroup>
+            <col class="col-10">
+            <col class="col-50">
+            <col class="col-10">
+            <col class="col-30">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Perfil</th>
+                <th>Activo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="cuerpoTabla">
+        </tbody>
+    </table>
+    
+    <template id="plantilla">
+        <tr class="fila">
+            <td class="id"></td>
+            <td class="nombre"></td>
+            <td class="activo"></td>
+            <td class="acciones">
+                <button class="eliminar accion">Eliminar</button>
+                <button class="actualizar accion">Actualizar</button>
+                <button class="permisos accion">Permisos</button>
+            </td>
+        </tr>
+    </template>
+</div>

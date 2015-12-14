@@ -1,1 +1,18 @@
-"use strict";!function(t,e){var o=function(){var t=JSON.parse(this.responseText),e=libreria.getID("conectar");2===t.tipo?e.text(t.mensaje):(1===t.tipo||3===t.tipo)&&e.text(t.mensaje)};libreria.ajax({metodo:"post",url:"SContexto",funcion:o})}(window,document);
+'use strict';
+(function(window, document){
+  var conectar = function(){
+    var data = JSON.parse(this.responseText),
+        div  = libreria.getID('conectar');
+    if(data.tipo === 2){
+      div.text(data.mensaje);
+    } else if(data.tipo === 1 || data.tipo === 3){
+      div.text(data.mensaje);
+    }
+  };
+
+  libreria.ajax({
+    metodo:'post',
+    url:'SContexto',
+    funcion: conectar
+  });
+})(window, document);
