@@ -58,9 +58,8 @@ public class SPerfilEliminar extends HttpServlet {
             }
             
         } else {
-            tipo = Constantes.MSG_NO_AUTENTICADO;
-            mensaje = "No está autenticado";
             Utilidades.get().irAPagina("/index.html", request, response, request.getServletContext());
+            return;
         }
         try (PrintWriter out = response.getWriter()) {
             out.println(Utilidades.get().respuestaJSON(tipo, mensaje, objeto));

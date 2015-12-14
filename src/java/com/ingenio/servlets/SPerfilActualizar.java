@@ -68,9 +68,8 @@ public class SPerfilActualizar extends HttpServlet {
                 mensaje = "Su perfil no tiene acceso a la modificación del perfil";
             }
         } else {
-            tipo = Constantes.MSG_NO_AUTENTICADO;
-            mensaje = "Usuario no autenticado";
             Utilidades.get().irAPagina("/index.html", request, response, request.getServletContext());
+            return;
         }
         try (PrintWriter out = response.getWriter()) {
             out.println(Utilidades.get().respuestaJSON(tipo, mensaje, objeto));

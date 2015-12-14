@@ -49,8 +49,6 @@
 
         if(data.tipo === _.MSG_CORRECTO){
             formulario.reset();
-        } else if(data.tipo === _.MSG_NO_AUTENTICADO){
-            window.location.href = 'index.html';
         }
     };
     
@@ -74,8 +72,6 @@
             _.llenarFilas('cuerpoTabla', 'plantilla', data.objeto, campos);
         } else if(data.tipo === _.MSG_ADVERTENCIA){
             _.getID('mensaje').delClass('no-mostrar').innerHTML(data.mensaje);
-        } else if(data.tipo === _.MSG_NO_AUTENTICADO) {
-            window.location.href = "index.html";
         }
     };
 
