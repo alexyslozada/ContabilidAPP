@@ -1,5 +1,9 @@
+*.class
+*.properties
 dist/
 build/
 nbproject/
+nbproject/project.xml
 nbproject/private/
+nbproject/private/private.xml
 web/imgs/
