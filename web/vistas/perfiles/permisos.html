@@ -1,0 +1,47 @@
+<div class="vista">
+    <h2>Permisos por perfil</h2>
+    <div id="mensaje" class="mensaje_sistema no-mostrar"></div>
+    <a href="#/perfiles" class="boton">Volver a Perfiles</a>
+    <label>Perfil</label><input type="text" id="perfil" disabled>
+    <label>Activo</label><input type="checkbox" id="activo" disabled><label for="activo"></label>
+    <table class="tabla">
+        <caption>Permisos del Perfil</caption>
+        <colgroup>
+            <col class="col-10">
+            <col class="col-40">
+            <col class="col-10">
+            <col class="col-10">
+            <col class="col-10">
+            <col class="col-10">
+            <col class="col-10">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Objeto</th>
+                <th>Insertar</th>
+                <th>Modificar</th>
+                <th>Borrar</th>
+                <th>Consultar</th>
+                <th>Accion</th>
+            </tr>
+        </thead>
+        <tbody id="cuerpoTabla">
+        </tbody>
+    </table>
+
+    <template id="plantilla">
+        <tr class="fila">
+            <td class="id"></td>
+            <td class="oxp_objeto"></td>
+            <td class="oxp_insertar"></td>
+            <td class="oxp_modificar"></td>
+            <td class="oxp_borrar"></td>
+            <td class="oxp_consultar"></td>
+            <td class="acciones">
+                <button class="actualizar accion">Actualizar</button>
+            </td>
+        </tr>
+    </template>
+
+</div>
