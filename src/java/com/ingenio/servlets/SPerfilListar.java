@@ -70,8 +70,8 @@ public class SPerfilListar extends HttpServlet {
             }
             
         } else {
-            Utilidades.get().irAPagina("/index.html", request, response, request.getServletContext());
-            return;
+            tipo = Constantes.MSG_NO_AUTENTICADO;
+            mensaje = "Usted no se encuentra autenticado.";
         }
 
         try (PrintWriter out = response.getWriter()) {

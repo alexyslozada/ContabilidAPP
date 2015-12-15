@@ -32,8 +32,8 @@ public class SAutenticado extends HttpServlet {
             objeto  = usuario.toJSON();
             mensaje = "Bienvenido: " + usuario.getNombre();
         } else {
-            Utilidades.get().irAPagina("/index.html", request, response, request.getServletContext());
-            return;
+            tipo = Constantes.MSG_NO_AUTENTICADO;
+            mensaje = "Usted no se encuentra autenticado.";
         }
         try (PrintWriter out = response.getWriter()) {
             out.println(Utilidades.get().respuestaJSON(tipo, mensaje, objeto));
