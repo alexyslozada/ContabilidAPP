@@ -43,13 +43,15 @@ public class SObjXPerfilListar extends HttpServlet {
                 try{
                     sIdPerfil = Short.parseShort(idPerfil);
                     tipo = Constantes.MSG_CORRECTO;
+                    mensaje = "Consulta realizada";
                 } catch (NumberFormatException nfe){
                     tipo = Constantes.MSG_ERROR;
+                    mensaje = "El perfil debe ser numérico";
                     Utilidades.get().generaLogServer(LOG, Level.WARNING, "Error al hacer parseShort de {0}", new Object[]{idPerfil});
                 }
 
                 objeto = dao.consultarXPerfil(sIdPerfil);
-                mensaje = "Consulta realizada";
+
             } else {
                 tipo = Constantes.MSG_ADVERTENCIA;
                 mensaje = "Su perfil no está autorizado para consultar los permisos";

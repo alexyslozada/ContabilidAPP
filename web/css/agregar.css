@@ -28,64 +28,65 @@ input[type="number"], input[type="date"]{
 	text-align: right;
 }
 .grupo-input--check{
-	width: 0;
-	height: 0;
+    border:0;
+    width: 0;
+    height: 0;
 }
 .grupo-input--check + label{
-	width: 3em;
-	height: 1em;
-	background-color: gray;
-	display: block;
-	border-radius: 1.25em;
-	margin-top: 1em;
-	margin-bottom: 1em;
-	transition: all .5s;
+    width: 3em;
+    height: 1em;
+    background-color: gray;
+    display: inline-block;
+    border-radius: 1.25em;
+    margin-top: .5em;
+    margin-left: .5em;
+    transition: all .5s;
 }
 .grupo-input--check + label:before{
-	background-color: white;
-	border-radius: 50%;
-	box-shadow: 0 0 15px gray;
-	content: "";
-	display: block;
-	height: 1.5em;
-	position: relative;
-	transform: translateY(-15%);
-	transition: all .5s;
-	width: 1.5em;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 0 0 15px gray;
+    content: "";
+    display: block;
+    height: 1.5em;
+    position: relative;
+    transform: translateY(-15%);
+    transition: all .5s;
+    width: 1.5em;
 }
 .grupo-input--check:checked + label:before{
-	background-color: green;
-	left: 1.5em;
+    background-color: green;
+    left: 1.5em;
 }
 .grupo-input--check:checked + label{
-	background-color: teal;
+    background-color: teal;
 }
 .grupo-input--check:focus + label {
-	box-shadow: 0 0 20px teal;
+    box-shadow: 0 0 20px teal;
 }
 input[type="radio"]{
-	width: 0;
-	height: 0;
+    width: 0;
+    height: 0;
 }
 input[type="radio"] + label:before{
-	content: "";
-	border-radius: 50%;
-	display: inline-block;
-	width: .75em;
-	height: .75em;
-	background-color: transparent;
-	box-shadow: 0 0 0 3px gray;
-	margin-right: .5em;
+    content: "";
+    border-radius: 50%;
+    display: inline-block;
+    width: .75em;
+    height: .75em;
+    background-color: transparent;
+    box-shadow: 0 0 0 3px gray;
+    margin-right: .5em;
 }
 input[type="radio"]:checked + label:before{
-	background-color: teal;
-	width: .75em;
-	height: .75em;
-	box-shadow: 0 0 0 2px white,
-                    0 0 0 5px teal;
+    background-color: teal;
+    width: .75em;
+    height: .75em;
+    box-shadow: 0 0 0 2px white,
+                0 0 0 5px teal;
 }
 input[type="radio"]:focus + label{
-	box-shadow: 0 0 20px teal;
+    box-shadow: 0 0 20px teal;
 }
 
 .boton{
@@ -101,6 +102,12 @@ input[type="radio"]:focus + label{
 }
 .fondo-gris{
     background-color: rgb(238, 239, 244);
+}
+.label-data{
+    border: none;
+    font-family: 'Roboto';
+    margin-left: .5em;
+    padding-left: .5em;
 }
 .vista{
     background-color: #fff;
@@ -169,11 +176,17 @@ input[type="radio"]:focus + label{
 .actualizar{
     color: steelblue;
 }
+.editar{
+    color: steelblue;
+}
 .col-10{
     width: 10%;
 }
 .col-20{
     width: 20%;
+}
+.col-30{
+    width: 30%;
 }
 .col-40{
     width: 40%;

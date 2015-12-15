@@ -2,18 +2,18 @@
     <h2>Permisos por perfil</h2>
     <div id="mensaje" class="mensaje_sistema no-mostrar"></div>
     <a href="#/perfiles" class="boton">Volver a Perfiles</a>
-    <label>Perfil</label><input type="text" id="perfil" disabled>
-    <label>Activo</label><input type="checkbox" id="activo" disabled><label for="activo"></label>
+    <label>Perfil</label><input type="text" id="perfil" class="label-data" disabled><br>
+    <label>Activo</label><input type="checkbox" id="activo" class="grupo-input--check no-mostrar" disabled><label for="activo"></label>
     <table class="tabla">
         <caption>Permisos del Perfil</caption>
         <colgroup>
             <col class="col-10">
-            <col class="col-40">
+            <col class="col-30">
             <col class="col-10">
             <col class="col-10">
             <col class="col-10">
             <col class="col-10">
-            <col class="col-10">
+            <col class="col-20">
         </colgroup>
         <thead>
             <tr>
@@ -39,7 +39,8 @@
             <td class="oxp_borrar"></td>
             <td class="oxp_consultar"></td>
             <td class="acciones">
-                <button class="actualizar accion">Actualizar</button>
+                <button class="editar accion" data-accion="editar">Editar</button>
+                <button class="cancelar accion no-mostrar">Cancelar</button>
             </td>
         </tr>
     </template>

@@ -72,8 +72,7 @@
                 frag = document.createDocumentFragment(),
                 i = 0, j = 0, maxDatos = datos.length, registro = {},
                 clon = null, maxCampos = campos.length, campo = null,
-                eliminar = null, //actualizar = null,
-                self = this, accion = null, btnAccion = null;
+                accion = null, btnAccion = null;
 
             cuerpo.innerHTML = '';
             for(; i < maxDatos; i = i + 1){
