@@ -53,6 +53,8 @@
             setTimeout(function(){
                 window.location.hash = '#/perfiles';
             }, 3000);
+        } else if (data.tipo === _.MSG_NO_AUTENTICADO){
+            window.location.href = 'index.html';
         }
     };
 
@@ -64,6 +66,8 @@
 
         if(data.tipo === _.MSG_CORRECTO){
             formulario.reset();
+        } else if (data.tipo === _.MSG_NO_AUTENTICADO){
+            window.location.href = 'index.html';
         }
     };
 
@@ -95,6 +99,8 @@
             _.llenarFilas('cuerpoTabla', 'plantilla', data.objeto, campos, acciones);
         } else if(data.tipo === _.MSG_ADVERTENCIA){
             _.getID('mensaje').delClass('no-mostrar').innerHTML(data.mensaje);
+        } else if (data.tipo === _.MSG_NO_AUTENTICADO){
+            window.location.href = 'index.html';
         }
     };
 
@@ -115,6 +121,8 @@
 
         if(data.tipo === _.MSG_CORRECTO){
             _.getCtrl().listar();
+        } else if (data.tipo === _.MSG_NO_AUTENTICADO){
+            window.location.href = 'index.html';
         }
     };
 
@@ -127,6 +135,8 @@
                 _.getID('nombre').setValue(data.objeto.nombre);
                 _.getID('activo').get().checked = data.objeto.activo;
             }, 200);
+        } else if (data.tipo === _.MSG_NO_AUTENTICADO){
+            window.location.href = 'index.html';
         } else {
             alert(data.mensaje);
         }
