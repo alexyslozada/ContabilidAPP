@@ -6,6 +6,7 @@
         rutas    = {},
         controladores = {},
         ctrl     = null,
+        singleton = {},
         libreria = {
           MSG_CORRECTO: 2,
           MSG_ERROR: 1,
@@ -59,13 +60,20 @@
           value: function(){
             return this.elemento.value;
           },
-          llenarFilas: function(cuerpoTabla, template, datos, campos){
+          getSingleton: function(){
+              return singleton;
+          },
+          setSingleton: function(objeto){
+              singleton = objeto;
+          },
+          llenarFilas: function(cuerpoTabla, template, datos, campos, acciones){
             var cuerpo = document.getElementById(cuerpoTabla),
                 fila = document.getElementById(template),
                 frag = document.createDocumentFragment(),
                 i = 0, j = 0, maxDatos = datos.length, registro = {},
                 clon = null, maxCampos = campos.length, campo = null,
-                eliminar = null, actualizar = null, self = this;
+                eliminar = null, //actualizar = null,
+                self = this, accion = null, btnAccion = null;
 
             cuerpo.innerHTML = '';
             for(; i < maxDatos; i = i + 1){
@@ -80,21 +88,18 @@
                     }
                 }
                 j = 0;
-                
-                eliminar = clon.querySelector('.eliminar');
-                eliminar.dataset.idu = registro['id'];
-                eliminar.addEventListener('click', function(e){
-                    e.preventDefault();
-                    self.getCtrl().confirmaEliminar(e.target.dataset.idu);
-                },false);
 
-                actualizar = clon.querySelector('.actualizar');
-                actualizar.dataset.idu = registro['id'];
-                actualizar.addEventListener('click', function(e){
-                    e.preventDefault();
-                    self.getCtrl().confirmaActualizar(e.target.dataset.idu);
-                },false);
-                
+                /**
+                 * Accines a realizar
+                 * El objeto debe tener la siguiente estructura
+                 * {'nombre': {'clase', 'funcion'}}
+                 */ 
+                for(accion in acciones){
+                    btnAccion = clon.querySelector(acciones[accion].clase);
+                    btnAccion.dataset.idu = registro['id'];
+                    btnAccion.addEventListener('click', acciones[accion].funcion, false);
+                }
+
                 frag.appendChild(clon);
             }
             cuerpo.appendChild(frag);

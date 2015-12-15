@@ -21,6 +21,12 @@
               'perfiles',
               function(){
                   _.getID('frmActualizarPerfil').noSubmit();
+              })
+        .ruta('/perfiles-permisos',
+              'vistas/perfiles/permisos.html',
+              'objetosxperfil',
+              function(){
+                  _.getCtrl().cargaPermisos();
               });
 
     window.addEventListener('load', _.manejadorRutas, false);

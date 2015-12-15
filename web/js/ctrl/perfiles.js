@@ -30,6 +30,10 @@
                     eliminar(id);
                 }
             },
+            irAPermisos: function(id){
+                _.setSingleton({idPerfil: id});
+                window.location.hash = '#/perfiles-permisos';
+            },
             listar: function(){
                 var data = new FormData();
                 data.append('tipoConsulta', 1);
@@ -40,18 +44,7 @@
                 });
             }
         };
-    
-    function creado(){
-        var data = JSON.parse(this.responseText),
-            formulario = _.getID('frmCrearPerfil').get();
 
-        _.getID('mensaje').delClass('no-mostrar').innerHTML(data.mensaje);
-
-        if(data.tipo === _.MSG_CORRECTO){
-            formulario.reset();
-        }
-    };
-    
     function actualizado(){
         var data = JSON.parse(this.responseText);
         _.getID('mensaje').delClass('no-mostrar').innerHTML(data.mensaje);
@@ -63,13 +56,43 @@
         }
     };
 
+    function creado(){
+        var data = JSON.parse(this.responseText),
+            formulario = _.getID('frmCrearPerfil').get();
+
+        _.getID('mensaje').delClass('no-mostrar').innerHTML(data.mensaje);
+
+        if(data.tipo === _.MSG_CORRECTO){
+            formulario.reset();
+        }
+    };
+
     function cargaLista(){
         var data = JSON.parse(this.responseText),
-            campos = ['id','nombre','activo'];
+            campos = ['id','nombre','activo'],
+            acciones = {eliminar: {clase:'.eliminar',
+                                   funcion: function(e){
+                                        e.preventDefault();
+                                        perfilesCtrl.confirmaEliminar(e.target.dataset.idu);
+                                   }
+                                  },
+                        actualizar: {clase:'.actualizar',
+                                     funcion: function(e){
+                                         e.preventDefault();
+                                         perfilesCtrl.confirmaActualizar(e.target.dataset.idu);
+                                     }
+                                 },
+                        permisos: {clase: '.permisos',
+                                    funcion: function(e){
+                                        e.preventDefault();
+                                        perfilesCtrl.irAPermisos(e.target.dataset.idu);
+                                    }
+                                }
+                        };
 
         if(data.tipo === _.MSG_CORRECTO){
             datos = data.objeto;
-            _.llenarFilas('cuerpoTabla', 'plantilla', data.objeto, campos);
+            _.llenarFilas('cuerpoTabla', 'plantilla', data.objeto, campos, acciones);
         } else if(data.tipo === _.MSG_ADVERTENCIA){
             _.getID('mensaje').delClass('no-mostrar').innerHTML(data.mensaje);
         }

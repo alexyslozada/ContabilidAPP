@@ -1,9 +1,13 @@
 package com.ingenio.objetos;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Perfil {
     private short idperfil;
     private String nombre;
     private boolean activo;
+    private List<ObjetoXPerfil> objetos = new ArrayList<>();
 
     public Perfil() {
     }
@@ -37,19 +41,38 @@ public class Perfil {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
+
+    public List<ObjetoXPerfil> getObjetos() {
+        return objetos;
+    }
+
+    public void setObjetos(List<ObjetoXPerfil> objetos) {
+        this.objetos = objetos;
+    }
     
     public String toJSON(){
         StringBuilder sb = new StringBuilder();
-        sb.append("{");
-        sb.append("\"idperfil\":");
-        sb.append(idperfil);
-        sb.append(",");
-        sb.append("\"perfil\":\"");
-        sb.append(nombre);
-        sb.append("\",");
-        sb.append("\"activo\":");
-        sb.append(activo);
-        sb.append("}");
+        sb.append("{")
+          .append("\"idperfil\":")
+          .append(idperfil)
+          .append(",")
+          .append("\"perfil\":\"")
+          .append(nombre)
+          .append("\",")
+          .append("\"activo\":")
+          .append(activo)
+          .append(", ")
+          .append("\"objetos\": ")
+          .append("[");
+        for (ObjetoXPerfil objeto : objetos) {
+            sb.append(objeto.toJSON());
+            sb.append(",");
+        }
+        if(objetos.size() > 0){
+            sb.delete(sb.length()-1, sb.length());
+        }
+        sb.append("]")
+          .append("}");
         return sb.toString();
     }
 }
