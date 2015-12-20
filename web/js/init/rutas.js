@@ -27,7 +27,15 @@
               'objetosxperfil',
               function(){
                   _.getCtrl().cargaPermisos();
-              });
+              })
+        .ruta('/usuarios',
+              'vistas/usuarios/listar.html',
+              'usuarios',
+              function(){})
+        .ruta('/usuarios-crear',
+              'vistas/usuarios/crear.html',
+              'usuarios',
+              function(){});
 
     window.addEventListener('load', _.manejadorRutas, false);
     window.addEventListener('hashchange', _.manejadorRutas, false);

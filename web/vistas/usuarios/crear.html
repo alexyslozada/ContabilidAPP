@@ -1,0 +1,33 @@
+<div class="vista">
+    <form id="frmCrearUsuario" method="post" action="#" class="formulario">
+        <fieldset>
+            <legend>Crear Usuario</legend>
+            <div class="contenedor">
+                <div class="item">
+                    <label for="identificacion" class="label-titulo">Identificación</label>
+                    <input type="text" id="identificacion" name="identificacion" autofocus autocomplete="off" required placeholder="Número de identificación">
+                </div>
+                <div class="item">
+                    <label for="nombre" class="label-titulo">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" autocomplete="off" required placeholder="Nombre completo">
+                </div>
+                <div class="item">
+                    <label for="correo" class="label-titulo">Correo</label>
+                    <input type="email" id="correo" name="correo" autocomplete="off" required placeholder="Correo">
+                </div>
+                <div class="item">
+                    <label for="clave" class="label-titulo">Clave</label>
+                    <input type="password" id="clave" name="clave" required placeholder="Clave">
+                </div>
+                <div class="item">
+                    <label for="perfil" class="label-titulo">Perfil</label>
+                    <select id="perfil" name="perfil"></select>
+                </div>
+                <div class="item">
+                    <button id="btnCrear" class="boton primario">Crear Usuario</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+</div>

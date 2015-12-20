@@ -39,10 +39,10 @@ public class SPerfilListar extends HttpServlet {
             String ide          = request.getParameter("id");
             
             short sTipoConsulta, sIde = 0;
-            sTipoConsulta = parseShort(tipoConsulta);
+            sTipoConsulta = Utilidades.get().parseShort(tipoConsulta, LOG);
 
             if(sTipoConsulta == 2){
-                sIde = parseShort(ide);
+                sIde = Utilidades.get().parseShort(ide, LOG);
             }
 
             DAOPerfiles dao = new DAOPerfiles();
@@ -79,15 +79,6 @@ public class SPerfilListar extends HttpServlet {
         }
     }
 
-    private short parseShort(String cadena){
-        short datos = 0;
-        try{
-            datos = Short.parseShort(cadena);
-        } catch (NumberFormatException nfe){
-            Utilidades.get().generaLogServer(LOG, Level.WARNING, "Error al hacer parse de un dato que no es numérico {0}", new Object[]{cadena});
-        }
-        return datos;
-    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

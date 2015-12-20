@@ -1,0 +1,22 @@
+.imagen-background{
+    background-color: teal;
+}
+.titulo__nombre{
+    color: rgb(253,217,0);
+}
+.titulo__slogan{
+    color: #fff;
+}
+.contacto{
+    background-color: rgba(0,0,0,.7);
+    color: #ccc;
+    font-weight: 300;
+    padding: 1em;
+}
+.contacto__datos{
+    list-style: none;
+}
+#frmLogin{
+    margin: 1em auto;
+    width: 50%;
+}

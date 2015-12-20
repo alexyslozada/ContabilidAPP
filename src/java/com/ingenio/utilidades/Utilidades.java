@@ -1,5 +1,6 @@
 package com.ingenio.utilidades;
 
+import com.ingenio.objetos.Paginacion;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,19 +72,68 @@ public final class Utilidades {
         }
     }
     
+    public boolean parseBoolean(String bool, Logger LOG){
+        boolean respuesta = false;
+        if(bool != null){
+            respuesta = bool.equals("on");
+        }
+        return respuesta;
+    }
+    
+    public short parseShort(String cadena, Logger LOG){
+        short datos = 0;
+        try{
+            datos = Short.parseShort(cadena);
+        } catch (NumberFormatException nfe){
+            Utilidades.get().generaLogServer(LOG, Level.WARNING, "Error al hacer parse de un dato que no es numérico {0}", new Object[]{cadena});
+        }
+        return datos;
+    }
+
+
+    public String paginacionJSON(Paginacion paginacion){
+        StringBuilder sb = new StringBuilder();
+        sb.append("{")
+            .append("\"pagina\":")
+            .append(paginacion.getPagina())
+            .append(",")
+            .append("\"limite\":")
+            .append(paginacion.getLimite())
+            .append(",")
+            .append("\"columna_orden\":")
+            .append(paginacion.getColumna_orden())
+            .append(",")
+            .append("\"tipo_orden\":\"")
+            .append(paginacion.getTipo_orden())
+            .append("\"")
+          .append("}");
+        return sb.toString();
+    }
+
     public String respuestaJSON(byte tipo, String mensaje, String objeto){
         StringBuilder sb = new StringBuilder();
-        sb.append("{\"tipo\":");
-        sb.append(tipo);
-        sb.append(", \"mensaje\": \"");
-        sb.append(mensaje);
-        sb.append("\", \"objeto\": ");
+        sb.append("{\"tipo\":")
+          .append(tipo)
+          .append(", \"mensaje\": \"")
+          .append(mensaje)
+          .append("\", \"objeto\": ");
         if(objeto == null || objeto.length() == 0){
             sb.append("\"\"");
         } else {
             sb.append(objeto);
         }
         sb.append("}");
+        return sb.toString();
+    }
+    
+    public String respuestaJSON(byte tipo, String mensaje, String objeto, Paginacion paginacion){
+        StringBuilder sb = new StringBuilder();
+        sb.append(respuestaJSON(tipo, mensaje, objeto));
+        sb.delete(sb.length()-1, sb.length());
+        sb.append(",")
+            .append("\"paginacion\":")
+            .append(paginacionJSON(paginacion))
+            .append("}");
         return sb.toString();
     }
 }

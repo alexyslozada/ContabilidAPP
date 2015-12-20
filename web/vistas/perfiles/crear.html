@@ -1,14 +1,17 @@
 <div class="vista">
     <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
-    <form id="frmCrearPerfil" class="frmComun" action="#" method="post">
+    <form id="frmCrearPerfil" class="formulario" action="#" method="post">
         <fieldset>
             <legend>Crear Perfil</legend>
-            <div class="grupo-input">
-                <input type="text" id="nombre" name="nombre" class="grupo-input--texto" autofocus autocomplete="off" required placeholder="Perfil">
-            </div>
-            <div class="grupo-input">
-                <button type="submit" class="grupo-input--boton"
+            <div class="contenedor">
+                <div class="item">
+                    <label for="nombre" class="label-titulo">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" autofocus autocomplete="off" required placeholder="Perfil">
+                </div>
+                <div class="item">
+                    <button type="submit" class="boton primario"
                         onclick="_.getCtrl().crear(_.getID('frmCrearPerfil').get())">Crear</button>
+                </div>
             </div>
         </fieldset>
     </form>

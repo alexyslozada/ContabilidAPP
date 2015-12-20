@@ -1,41 +1,41 @@
 <div class="vista">
-    <h2>Perfiles</h2>
     <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
-    <a href="#/perfiles-crear" class="boton">Nuevo</a>
+    <a href="#/usuarios-crear" class="boton">Nuevo Usuario</a>
     <table class="tabla">
-        <caption>Listado de Perfiles</caption>
+        <caption>Usuarios</caption>
         <colgroup>
-            <col class="col-10">
-            <col class="col-50">
-            <col class="col-10">
-            <col class="col-30">
+            <col>
+            <col>
+            <col>
+            <col>
+            <col>
+            <col>
+            <col>
         </colgroup>
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Identificación</th>
+                <th>Nombre</th>
+                <th>Correo</th>
                 <th>Perfil</th>
                 <th>Activo</th>
                 <th>Acciones</th>
             </tr>
         </thead>
-        <tbody id="cuerpoTabla">
-        </tbody>
+        <tbody id="cuerpoTabla"></tbody>
     </table>
-    <div class="contenedor">
-        <div class="item">
-            <ul id="paginacion" class="paginacion"></ul>
-        </div>
-    </div>
-    
     <template id="plantilla">
         <tr class="fila">
             <td class="id"></td>
+            <td class="identificacion"></td>
             <td class="nombre"></td>
+            <td class="correo"></td>
+            <td class="perfil"></td>
             <td class="activo"></td>
             <td class="acciones">
                 <button class="eliminar accion">Eliminar</button>
                 <button class="actualizar accion">Actualizar</button>
-                <button class="permisos accion">Permisos</button>
             </td>
         </tr>
     </template>

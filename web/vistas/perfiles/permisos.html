@@ -1,9 +1,22 @@
 <div class="vista">
     <h2>Permisos por perfil</h2>
-    <div id="mensaje" class="mensaje_sistema no-mostrar"></div>
-    <a href="#/perfiles" class="boton">Volver a Perfiles</a>
-    <label>Perfil</label><input type="text" id="perfil" class="label-data" disabled><br>
-    <label>Activo</label><input type="checkbox" id="activo" class="grupo-input--check no-mostrar" disabled><label for="activo"></label>
+    <div class="contenedor">
+        <div class="item">
+            <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+        </div>
+        <div class="item">
+            <a href="#/perfiles" class="boton">Volver a Perfiles</a>
+        </div>
+        <div class="item">
+            <label for="perfil" class="label-titulo">Perfil</label>
+            <input type="text" id="perfil" disabled>
+        </div>
+        <div class="item">
+            <label class="label-titulo">Activo</label>
+            <input type="checkbox" id="activo" disabled>
+            <label for="activo" class="label-check"></label>
+        </div>
+    </div>
     <table class="tabla">
         <caption>Permisos del Perfil</caption>
         <colgroup>

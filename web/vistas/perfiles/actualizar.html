@@ -1,21 +1,26 @@
 <div class="vista">
     <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
-    <form id="frmActualizarPerfil" class="frmComun" action="#" method="post">
+    <form id="frmActualizarPerfil" class="formulario" action="#" method="post">
         <fieldset>
             <legend>Actualizar Perfil</legend>
-            <div class="grupo-input">
-                <input type="number" id="ide" name="ide" class="grupo-input--texto" readonly>
-            </div>
-            <div class="grupo-input">
-                <input type="text" id="nombre" name="nombre" class="grupo-input--texto" autofocus autocomplete="off" required placeholder="Perfil">
-            </div>
-            <div class="grupo-input">
-                <input type="checkbox" id="activo" name="activo" class="grupo-input--check">
-                <label for="activo"></label>
-            </div>
-            <div class="grupo-input">
-                <button type="submit" class="grupo-input--boton"
-                        onclick="_.getCtrl().actualizar()">Actualizar</button>
+            <div class="contenedor">
+                <div class="item base-50">
+                    <label for="ide" class="label-titulo">ID</label>
+                    <input type="number" id="ide" name="ide" readonly>
+                </div>
+                <div class="item">
+                    <label for="nombre" class="label-titulo">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" autofocus autocomplete="off" required placeholder="Perfil">
+                </div>
+                <div class="item">
+                    <label class="label-titulo">Activo</label>
+                    <input type="checkbox" id="activo" name="activo">
+                    <label for="activo" class="label-check"></label>
+                </div>
+                <div class="item">
+                    <button type="submit" class="boton primario"
+                            onclick="_.getCtrl().actualizar()">Actualizar</button>
+                </div>
             </div>
         </fieldset>
     </form>

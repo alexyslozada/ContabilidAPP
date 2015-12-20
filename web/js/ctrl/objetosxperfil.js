@@ -78,12 +78,12 @@
             activo = campos[i].textContent === 'Si'?true:false;
             check = document.createElement('input');
             check.setAttribute('type', 'checkbox');
-            check.classList.add('grupo-input--check');
             check.classList.add('no-mostrar');
             check.setAttribute('name', campos[i].className);
             check.setAttribute('id', campos[i].className);
             label = document.createElement('label');
             label.setAttribute('for', campos[i].className);
+            label.classList.add('label-check');
             check.checked = activo;
             campos[i].innerHTML = '';
             campos[i].appendChild(check);

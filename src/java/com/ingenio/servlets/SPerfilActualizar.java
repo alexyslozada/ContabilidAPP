@@ -8,6 +8,7 @@ import com.ingenio.utilidades.Constantes;
 import com.ingenio.utilidades.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -20,6 +21,8 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "SPerfilActualizar", urlPatterns = {"/SPerfilActualizar"})
 public class SPerfilActualizar extends HttpServlet {
 
+    private static final Logger LOG = Logger.getLogger(SPerfilActualizar.class.getName());
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -40,10 +43,7 @@ public class SPerfilActualizar extends HttpServlet {
                 String id = request.getParameter("ide");
                 String nombre = request.getParameter("nombre");
                 String activo = request.getParameter("activo");
-                boolean bActivo = false;
-                if(activo != null){
-                    bActivo = activo.equals("on");
-                }
+                boolean bActivo = Utilidades.get().parseBoolean(activo, LOG);
 
                 Perfil perfil = new Perfil();
                 perfil.setIdperfil(Short.parseShort(id));
