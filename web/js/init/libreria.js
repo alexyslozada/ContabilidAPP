@@ -74,7 +74,7 @@
                 clon = null, maxCampos = campos.length, campo = null,
                 accion = null, btnAccion = null;
 
-            cuerpo.innerHTML = '';
+            cuerpo.textContent = '';
             for(; i < maxDatos; i = i + 1){
                 registro = datos[i];
                 clon = fila.content.cloneNode(true);
@@ -103,11 +103,23 @@
             }
             cuerpo.appendChild(frag);
           },
+          paginacion: function(pagina, limite, columna_orden, tipo_orden){
+            var data = new FormData();
+            data.append("pagina", pagina);
+            data.append("limite", limite);
+            data.append("columna_orden", columna_orden);
+            data.append("tipo_orden", tipo_orden);
+            return data;
+          },
           controlador: function(nombre, controller){
             controladores[nombre] = {'controlador': controller};
           },
           getCtrl: function(){
-            return ctrl;
+            if(arguments.length === 0){
+                return ctrl;
+            } else {
+                return controladores[arguments[0]].controlador;
+            }
           },
           enrutar: function(id){
             marco = document.getElementById(id);
@@ -120,18 +132,16 @@
             return this;
           },
           cargaVista: function(destino){
-            var _this = this;
-            _this.ajax({metodo: 'get',
-                        url: destino.plantilla,
-                        funcion: function(){
-                          marco.innerHTML = this.responseText;
-                          setTimeout(function(){
-                              if(typeof(destino.carga) === 'function'){
-                                destino.carga();
-                              }
-                          }, 300);
-                        }
-            });
+            this.ajax({metodo: 'get',
+                        url: destino.plantilla
+                     }).then(function(data){
+                         marco.innerHTML = data;
+                         if(typeof(destino.carga) === 'function'){
+                            destino.carga();
+                         }
+                     }, function(error){
+                         console.log(error);
+                     });
           },
           manejadorRutas: function(){
             var hash = window.location.hash.substring(1) || '/',
@@ -156,15 +166,25 @@
             return this;
           },
           ajax: function(objeto){
-            var metodo = objeto.metodo || 'post',
+            return new Promise(function(resolver, rechazar){
+              var metodo = objeto.metodo || 'post',
                 url    = objeto.url || '',
                 datos  = objeto.datos || null,
-                callback = objeto.funcion,
                 xhr    = new XMLHttpRequest();
 
-            xhr.addEventListener('load', callback, false);
-            xhr.open(metodo, url, true);
-            xhr.send(datos);
+              xhr.open(metodo, url, true);
+              xhr.addEventListener('load', function(){
+                if(this.status === 200){
+                    resolver(this.responseText);
+                } else {
+                    rechazar(Error('Error al cargar la información: '+this.statusText));
+                }
+              }, false);
+              xhr.addEventListener('error', function(){
+                  rechazar(Error('Hubo un error en la red'));
+              }, false);
+              xhr.send(datos);
+            });
           },
           extender: function(out) {
             out = out || {};

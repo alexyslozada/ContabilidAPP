@@ -1,6 +1,6 @@
 /* global _ */
 'use strict';
-(function(){
+(function(_){
     var menuppal = _.getID('menu-ppal'),
         menuprincipal = _.getID('menu-principal'),
         links = menuppal.get().getElementsByClassName('menu-ppal__link'),
@@ -18,4 +18,4 @@
             menuppal.toggleClass('mostrar-menu-ppal');
         });
     }
-})();
+})(_);

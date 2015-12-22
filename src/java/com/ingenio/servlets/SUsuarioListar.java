@@ -42,7 +42,7 @@ public class SUsuarioListar extends HttpServlet {
 
             if(dao.tienePermiso(usuario.getPerfil(), "USUARIOS", "consultar")){
 
-                String tipoConsulta   = request.getParameter("tipoConsulta");
+                String tipoConsulta   = request.getParameter("tipo_consulta");
 
                 String pagina         = request.getParameter("pagina");
                 String limite         = request.getParameter("limite");

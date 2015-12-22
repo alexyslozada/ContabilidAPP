@@ -2,23 +2,17 @@
 'use strict';
 (function(window){
     
-    var datos = [],
-        perfilesCtrl = {
+    var perfilesCtrl = {
             actualizar: function(){
                 var formulario = _.getID('frmActualizarPerfil').get();
                 _.ajax({
                     url: 'SPerfilActualizar',
-                    datos: new FormData(formulario),
-                    funcion: actualizado
-                });
+                    datos: new FormData(formulario)
+                }).then(function(datos){actualizado(datos);}, function(error){console.log(error);});
             },
             crear: function(){
                 var formulario = _.getID('frmCrearPerfil').get();
-                _.ajax({
-                    url: 'SPerfilCrear',
-                    datos: new FormData(formulario),
-                    funcion: creado
-                });
+                _.ajax({url: 'SPerfilCrear', datos: new FormData(formulario)}).then(function(datos){creado(datos);}, function(error){console.log(error);});
             },
             confirmaActualizar: function(id){
                 if(confirm("Desea actualizar este registro?")){
@@ -34,20 +28,34 @@
                 _.setSingleton({idPerfil: id});
                 window.location.hash = '#/perfiles-permisos';
             },
-            listar: function(){
+            /**
+             * Listar: consulta la lista de perfiles.
+             * Si no se pasan parámetros, se carga la tabla nativa.
+             * De lo contrario, se devuelve el objeto json del listado
+             * @param boolean True: Significa que solo devuelve el json.
+             * @returns Si True JSON, de lo contrario carga la tabla nativa.
+             */
+            listar: function(json){
                 var data = new FormData();
                 data.append('tipoConsulta', 1);
                 _.ajax({
-                    url: 'SPerfilListar',
-                    funcion: cargaLista,
-                    datos: data
-                });
+                        url: 'SPerfilListar',
+                        datos: data
+                      }).then(function(respuesta){
+                                if(!json){
+                                  cargaLista(respuesta);
+                                } else {
+                                  _.setSingleton(devuelveJSON(respuesta));
+                                }
+                      }, function(error){
+                          console.log(error);
+                      });
             }
         };
 
-    function actualizado(){
-        var data = JSON.parse(this.responseText);
-        _.getID('mensaje').delClass('no-mostrar').innerHTML(data.mensaje);
+    function actualizado(datos){
+        var data = JSON.parse(datos);
+        _.getID('mensaje').delClass('no-mostrar').text(data.mensaje);
         if(data.tipo === _.MSG_CORRECTO){
             _.getID('frmActualizarPerfil').get().reset();
             setTimeout(function(){
@@ -62,7 +70,7 @@
         var data = JSON.parse(this.responseText),
             formulario = _.getID('frmCrearPerfil').get();
 
-        _.getID('mensaje').delClass('no-mostrar').innerHTML(data.mensaje);
+        _.getID('mensaje').delClass('no-mostrar').text(data.mensaje);
 
         if(data.tipo === _.MSG_CORRECTO){
             formulario.reset();
@@ -71,8 +79,8 @@
         }
     };
 
-    function cargaLista(){
-        var data = JSON.parse(this.responseText),
+    function cargaLista(datos){
+        var data = JSON.parse(datos),
             campos = ['id','nombre','activo'],
             acciones = {eliminar: {clase:'.eliminar',
                                    funcion: function(e){
@@ -95,29 +103,37 @@
                         };
 
         if(data.tipo === _.MSG_CORRECTO){
-            datos = data.objeto;
             _.llenarFilas('cuerpoTabla', 'plantilla', data.objeto, campos, acciones);
         } else if(data.tipo === _.MSG_ADVERTENCIA){
-            _.getID('mensaje').delClass('no-mostrar').innerHTML(data.mensaje);
+            _.getID('mensaje').delClass('no-mostrar').text(data.mensaje);
         } else if (data.tipo === _.MSG_NO_AUTENTICADO){
             window.location.href = 'index.html';
         }
     };
 
+    function devuelveJSON(respuesta){
+        var data = JSON.parse(respuesta);
+        if(data.tipo === _.MSG_CORRECTO){
+            return data.objeto;
+        } else if(data.tipo === _.MSG_ADVERTENCIA){
+            _.getID('mensaje').delClass('no-mostrar').text(data.mensaje);
+        } else if (data.tipo === _.MSG_NO_AUTENTICADO){
+            window.location.href = 'index.html';
+        }
+        console.log("Aqui no debería entrar nunca");
+        return {};
+    };
+    
     function eliminar(id){
         var data = new FormData();
             data.append('id', id);
-            _.ajax({
-                url: 'SPerfilEliminar',
-                datos: data,
-                funcion: eliminado
-            });
+            _.ajax({url: 'SPerfilEliminar', datos: data}).then(function(datos){eliminado(datos);}, function(error){console.log(error);});
     };
     
-    function eliminado(){
-        var data = JSON.parse(this.responseText);
+    function eliminado(datos){
+        var data = JSON.parse(datos);
 
-        _.getID('mensaje').delClass('no-mostrar').innerHTML(data.mensaje);
+        _.getID('mensaje').delClass('no-mostrar').text(data.mensaje);
 
         if(data.tipo === _.MSG_CORRECTO){
             _.getCtrl().listar();
@@ -126,8 +142,8 @@
         }
     };
 
-    function muestraActualizar(){
-        var data = JSON.parse(this.responseText);
+    function muestraActualizar(datos){
+        var data = JSON.parse(datos);
         if(data.tipo === _.MSG_CORRECTO){
             window.location.hash = '#/perfiles-actualizar';
             setTimeout(function(){
@@ -146,11 +162,7 @@
         var data = new FormData();
         data.append('tipoConsulta', 2);
         data.append('id', id);
-        _.ajax({
-            url: 'SPerfilListar',
-            funcion: muestraActualizar,
-            datos: data
-        });
+        _.ajax({url: 'SPerfilListar', datos: data}).then(function(datos){muestraActualizar(datos);}, function(error){console.log(error);});
     };
     
     _.controlador('perfiles', perfilesCtrl);

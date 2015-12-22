@@ -1,20 +1,16 @@
-/* global libreria */
 /* global _ */
 
 'use strict';
 (function(window){
-    
-	function validar(){
-            var data = JSON.parse(this.responseText);
-            if(data.tipo === 2){
-                    _.getID('mensaje-inicial').text(data.mensaje);
-            } else {
-                    window.location.href = 'index.html';
-            }
-	};
-	
-	libreria.ajax({
-            url: 'SAutenticado',
-            funcion: validar
-	});
-})(window);
+    function validar(datos){
+        var data = JSON.parse(datos);
+        if(data.tipo === 2){
+            _.getID('mensaje-inicial').text(data.mensaje);
+        } else {
+            window.location.href = 'index.html';
+        }
+    };
+
+    _.ajax({url: 'SAutenticado'}).then(function(datos){validar(datos);}, function(error){console.log(error);});
+
+})(window, _);

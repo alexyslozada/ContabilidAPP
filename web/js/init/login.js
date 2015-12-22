@@ -1,11 +1,13 @@
+/* global CryptoJS */
+/* global _ */
 'use strict';
-(function(window){
+(function(window, _, CryptoJS){
 
-  libreria.getID('frmLogin').noSubmit();
+  _.getID('frmLogin').noSubmit();
   
-  var conexion = function(){
-    var data = JSON.parse(this.responseText),
-        div  = libreria.getID('mensaje');
+  var conexion = function(datos){
+    var data = JSON.parse(datos),
+        div  = _.getID('mensaje');
         div.text(data.mensaje);
     if(data.tipo === 2){
       window.location.href = 'sistema';
@@ -15,17 +17,13 @@
     }
   };
   
-  libreria.getID('btnLogin').click(function(){
+  _.getID('btnLogin').click(function(){
     var data = new FormData(),
-        usr  = libreria.getID('usr').value(),
-        pwd  = CryptoJS.SHA3(libreria.getID('pwd').value());
+        usr  = _.getID('usr').value(),
+        pwd  = CryptoJS.SHA3(_.getID('pwd').value());
     data.append('usr', usr);
     data.append('pwd', pwd);
-    libreria.ajax({
-      url: 'SAutenticar',
-      datos: data,
-      funcion: conexion
-    });
+    _.ajax({url: 'SAutenticar', datos: data}).then(function(datos){conexion(datos);}, function(error){console.log(error);});
   });
     
-})(window);
+})(window, _, CryptoJS);

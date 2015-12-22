@@ -7,16 +7,12 @@
             var id = _.getSingleton().idPerfil,
                 data = new FormData();
             data.append('id', id);
-            _.ajax({
-                url: 'SObjXPerfilListar',
-                datos: data,
-                funcion: cargarDatos
-            });
+            _.ajax({url: 'SObjXPerfilListar', datos: data}).then(function(datos){cargarDatos(datos);}, function(error){console.log(error);});
         }
     };
     
-    function actualizado(){
-        var data = JSON.parse(this.responseText);
+    function actualizado(datos){
+        var data = JSON.parse(datos);
         _.getID('mensaje').delClass('no-mostrar').text(data.mensaje);
         if(data.tipo === _.MSG_CORRECTO){
             actualizaTabla();
@@ -33,8 +29,8 @@
         }
     };
 
-    function cargarDatos(){
-        var data = JSON.parse(this.responseText),
+    function cargarDatos(datos){
+        var data = JSON.parse(datos),
             campos = ['id', 'oxp_objeto', 'oxp_insertar', 'oxp_modificar', 'oxp_borrar', 'oxp_consultar'],
             acciones = {'editar': 
                             {
@@ -124,11 +120,7 @@
         data.append('modificar', campos[3].querySelector('#oxp_modificar').checked);
         data.append('borrar', campos[4].querySelector('#oxp_borrar').checked);
         data.append('consultar', campos[5].querySelector('#oxp_consultar').checked);
-        _.ajax({
-            url: 'SObjXPerfilActualizar',
-            datos: data,
-            funcion: actualizado
-        });
+        _.ajax({url: 'SObjXPerfilActualizar', datos: data}).then(function(datos){actualizado(datos);}, function(error){console.log(error);});
     };
     
     function cambiaBoton(btn){
