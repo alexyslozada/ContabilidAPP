@@ -1,4 +1,4 @@
-package com.ingenio.servlets;
+package com.ingenio.servlets.usuario;
 
 import com.ingenio.dao.DAOUsuarios;
 import com.ingenio.excepciones.ExcepcionGeneral;
@@ -57,6 +57,9 @@ public class SUsuarioListar extends HttpServlet {
                 sColumna_orden = Utilidades.get().parseShort(columna_orden, LOG);
 
                 Usuario userConsulta = new Usuario();
+                Perfil perfilConsulta = new Perfil();
+                userConsulta.setPerfil(perfilConsulta);
+
                 paginacion = new Paginacion(sPagina, sLimite, sColumna_orden, tipo_orden);
                 
                 try{
@@ -66,7 +69,7 @@ public class SUsuarioListar extends HttpServlet {
                         case 1:
                             break;
                         case 2:
-                            String id_usuario = request.getParameter("id_usuario");
+                            String id_usuario = request.getParameter("id");
                             short sId_usuario = Utilidades.get().parseShort(id_usuario, LOG);
                             userConsulta.setIdusuario(sId_usuario);
                             break;
@@ -81,9 +84,7 @@ public class SUsuarioListar extends HttpServlet {
                         case 5:
                             String perfil = request.getParameter("perfil");
                             short sPerfil = Utilidades.get().parseShort(perfil, LOG);
-                            Perfil perfilConsulta = new Perfil();
                             perfilConsulta.setIdperfil(sPerfil);
-                            userConsulta.setPerfil(perfilConsulta);
                             break;
                         case 6:
                             String activo   = request.getParameter("activo");
@@ -94,7 +95,7 @@ public class SUsuarioListar extends HttpServlet {
                             tipo = Constantes.MSG_ERROR;
                             mensaje = "El tipo de consulta no es válido";
                     }
-                    objeto = dao.listar(sTipoConsulta, usuario, paginacion);
+                    objeto = dao.listar(sTipoConsulta, userConsulta, paginacion);
                 } catch (ExcepcionGeneral eg){
                     Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en SUsuarioListar {0}", new Object[]{eg.getMessage()});
                     tipo = Constantes.MSG_ERROR;
@@ -102,7 +103,7 @@ public class SUsuarioListar extends HttpServlet {
                 }
             } else {
                 tipo = Constantes.MSG_ADVERTENCIA;
-                mensaje = "Su perfil no tiene permiso para consultar usuarios";
+                mensaje = Constantes.MSG_SIN_PERMISO_TEXT;
             }
         } else {
             tipo = Constantes.MSG_NO_AUTENTICADO;

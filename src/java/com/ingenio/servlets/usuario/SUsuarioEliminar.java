@@ -1,13 +1,12 @@
-package com.ingenio.servlets;
+package com.ingenio.servlets.usuario;
 
-import com.ingenio.dao.DAOPerfiles;
+import com.ingenio.dao.DAOUsuarios;
 import com.ingenio.excepciones.ExcepcionGeneral;
 import com.ingenio.objetos.Usuario;
 import com.ingenio.utilidades.Constantes;
 import com.ingenio.utilidades.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -18,11 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @MultipartConfig
-@WebServlet(name = "SPerfilListar", urlPatterns = {"/SPerfilListar"})
-public class SPerfilListar extends HttpServlet {
-    
-    private static final Logger LOG = Logger.getLogger(SPerfilListar.class.getName());
+@WebServlet(name = "SUsuarioEliminar", urlPatterns = {"/SUsuarioEliminar"})
+public class SUsuarioEliminar extends HttpServlet {
 
+    private static final Logger LOG = Logger.getLogger(SUsuarioEliminar.class.getName());
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -34,46 +33,31 @@ public class SPerfilListar extends HttpServlet {
         String objeto = "";
 
         if(Utilidades.get().autenticado(sesion)){
-            
-            String tipoConsulta = request.getParameter("tipoConsulta");
-            String ide          = request.getParameter("id");
-            
-            short sTipoConsulta, sIde = 0;
-            sTipoConsulta = Utilidades.get().parseShort(tipoConsulta, LOG);
-
-            if(sTipoConsulta == 2){
-                sIde = Utilidades.get().parseShort(ide, LOG);
-            }
-
-            DAOPerfiles dao = new DAOPerfiles();
+            DAOUsuarios dao = new DAOUsuarios();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
-
-            if(dao.tienePermiso(usuario.getPerfil(), "PERFILES", "consultar")){
+            if(dao.tienePermiso(usuario.getPerfil(), "USUARIOS", "borrar")){
+                String idUsuario = request.getParameter("id");
+                short sIdUsuario = Utilidades.get().parseShort(idUsuario, LOG);
                 try{
-                    switch (sTipoConsulta){
-                        case 1:
-                            objeto = dao.listaPerfilJSON();
-                            break;
-                        case 2:
-                            objeto = dao.consultaPorId(sIde);
-                            break;
-                    }
+                    boolean respuesta = dao.eliminar(sIdUsuario);
                     tipo = Constantes.MSG_CORRECTO;
-                    mensaje = "Información consultada";
+                    if(respuesta){
+                        mensaje = Constantes.MSG_ELIMINADO_TEXT;
+                    } else {
+                        mensaje = Constantes.MSG_ELIMINADO_NO_TEXT;
+                    }
                 } catch (ExcepcionGeneral eg){
-                    tipo = Constantes.MSG_ADVERTENCIA;
-                    mensaje = eg.getMessage();
+                    tipo = Constantes.MSG_ERROR;
+                    mensaje = Constantes.MSG_ERROR_GENERAL_TEXT + eg.getMessage();
                 }
             } else {
                 tipo = Constantes.MSG_ADVERTENCIA;
-                mensaje = "Su perfil no tiene permiso para consultar perfiles";
+                mensaje = Constantes.MSG_SIN_PERMISO_TEXT;
             }
-            
         } else {
             tipo = Constantes.MSG_NO_AUTENTICADO;
-            mensaje = "Usted no se encuentra autenticado.";
+            mensaje = Constantes.MSG_NO_AUTENTICADO_TEXT;
         }
-
         try (PrintWriter out = response.getWriter()) {
             out.println(Utilidades.get().respuestaJSON(tipo, mensaje, objeto));
         }

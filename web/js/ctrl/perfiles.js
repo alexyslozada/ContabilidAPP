@@ -3,55 +3,82 @@
 (function(window){
     
     var perfilesCtrl = {
-            actualizar: function(){
-                var formulario = _.getID('frmActualizarPerfil').get();
-                _.ajax({
-                    url: 'SPerfilActualizar',
-                    datos: new FormData(formulario)
-                }).then(function(datos){actualizado(datos);}, function(error){console.log(error);});
-            },
-            crear: function(){
-                var formulario = _.getID('frmCrearPerfil').get();
-                _.ajax({url: 'SPerfilCrear', datos: new FormData(formulario)}).then(function(datos){creado(datos);}, function(error){console.log(error);});
-            },
-            confirmaActualizar: function(id){
-                if(confirm("Desea actualizar este registro?")){
-                    preparaActualizar(id);
-                }
-            },
-            confirmaEliminar: function(id){
-                if(confirm("Está seguro que desea eliminar este registro?")){
-                    eliminar(id);
-                }
-            },
-            irAPermisos: function(id){
-                _.setSingleton({idPerfil: id});
-                window.location.hash = '#/perfiles-permisos';
-            },
-            /**
-             * Listar: consulta la lista de perfiles.
-             * Si no se pasan parámetros, se carga la tabla nativa.
-             * De lo contrario, se devuelve el objeto json del listado
-             * @param boolean True: Significa que solo devuelve el json.
-             * @returns Si True JSON, de lo contrario carga la tabla nativa.
-             */
-            listar: function(json){
-                var data = new FormData();
-                data.append('tipoConsulta', 1);
-                _.ajax({
-                        url: 'SPerfilListar',
-                        datos: data
-                      }).then(function(respuesta){
-                                if(!json){
-                                  cargaLista(respuesta);
-                                } else {
-                                  _.setSingleton(devuelveJSON(respuesta));
-                                }
-                      }, function(error){
-                          console.log(error);
-                      });
+        actualizar: function(){
+            var formulario = _.getID('frmActualizarPerfil').get();
+            _.ajax({
+                url: 'SPerfilActualizar',
+                datos: new FormData(formulario)
+            }).then(function(datos){actualizado(datos);}, function(error){console.log(error);});
+        },
+        crear: function(){
+            var formulario = _.getID('frmCrearPerfil').get();
+            _.ajax({url: 'SPerfilCrear', datos: new FormData(formulario)}).then(function(datos){creado(datos);}, function(error){console.log(error);});
+        },
+        confirmaActualizar: function(id){
+            if(confirm("Desea actualizar este registro?")){
+                preparaActualizar(id);
             }
-        };
+        },
+        confirmaEliminar: function(id){
+            if(confirm("Está seguro que desea eliminar este registro?")){
+                eliminar(id);
+            }
+        },
+        irAPermisos: function(id){
+            _.setSingleton({idPerfil: id});
+            window.location.hash = '#/perfiles-permisos';
+        },
+        /**
+         * Listar: consulta la lista de perfiles.
+         * Si no se pasan parámetros, se carga la tabla nativa.
+         * De lo contrario, se devuelve el objeto json del listado
+         * @param boolean True: Significa que solo devuelve el json.
+         * @returns Si True JSON, de lo contrario carga la tabla nativa.
+         */
+        listar: function(callback){
+            var data = new FormData();
+            data.append('tipoConsulta', 1);
+            _.ajax({
+                    url: 'SPerfilListar',
+                    datos: data
+                  }).then(function(respuesta){
+                      callback(respuesta);
+                  }, function(error){
+                      console.log(error);
+                  });
+        },
+        cargaLista: function(datos){
+            var data = JSON.parse(datos),
+                campos = ['id','nombre','activo'],
+                acciones = {eliminar: {clase:'.eliminar',
+                                       funcion: function(e){
+                                            e.preventDefault();
+                                            perfilesCtrl.confirmaEliminar(e.target.dataset.idu);
+                                       }
+                                      },
+                            actualizar: {clase:'.actualizar',
+                                         funcion: function(e){
+                                             e.preventDefault();
+                                             perfilesCtrl.confirmaActualizar(e.target.dataset.idu);
+                                         }
+                                     },
+                            permisos: {clase: '.permisos',
+                                        funcion: function(e){
+                                            e.preventDefault();
+                                            perfilesCtrl.irAPermisos(e.target.dataset.idu);
+                                        }
+                                    }
+                            };
+
+            if(data.tipo === _.MSG_CORRECTO){
+                _.llenarFilas('cuerpoTabla', 'plantilla', data.objeto, campos, acciones);
+            } else if(data.tipo === _.MSG_ADVERTENCIA){
+                _.getID('mensaje').delClass('no-mostrar').text(data.mensaje);
+            } else if (data.tipo === _.MSG_NO_AUTENTICADO){
+                window.location.href = 'index.html';
+            }
+        }
+    };
 
     function actualizado(datos){
         var data = JSON.parse(datos);
@@ -66,8 +93,8 @@
         }
     };
 
-    function creado(){
-        var data = JSON.parse(this.responseText),
+    function creado(datos){
+        var data = JSON.parse(datos),
             formulario = _.getID('frmCrearPerfil').get();
 
         _.getID('mensaje').delClass('no-mostrar').text(data.mensaje);
@@ -79,51 +106,6 @@
         }
     };
 
-    function cargaLista(datos){
-        var data = JSON.parse(datos),
-            campos = ['id','nombre','activo'],
-            acciones = {eliminar: {clase:'.eliminar',
-                                   funcion: function(e){
-                                        e.preventDefault();
-                                        perfilesCtrl.confirmaEliminar(e.target.dataset.idu);
-                                   }
-                                  },
-                        actualizar: {clase:'.actualizar',
-                                     funcion: function(e){
-                                         e.preventDefault();
-                                         perfilesCtrl.confirmaActualizar(e.target.dataset.idu);
-                                     }
-                                 },
-                        permisos: {clase: '.permisos',
-                                    funcion: function(e){
-                                        e.preventDefault();
-                                        perfilesCtrl.irAPermisos(e.target.dataset.idu);
-                                    }
-                                }
-                        };
-
-        if(data.tipo === _.MSG_CORRECTO){
-            _.llenarFilas('cuerpoTabla', 'plantilla', data.objeto, campos, acciones);
-        } else if(data.tipo === _.MSG_ADVERTENCIA){
-            _.getID('mensaje').delClass('no-mostrar').text(data.mensaje);
-        } else if (data.tipo === _.MSG_NO_AUTENTICADO){
-            window.location.href = 'index.html';
-        }
-    };
-
-    function devuelveJSON(respuesta){
-        var data = JSON.parse(respuesta);
-        if(data.tipo === _.MSG_CORRECTO){
-            return data.objeto;
-        } else if(data.tipo === _.MSG_ADVERTENCIA){
-            _.getID('mensaje').delClass('no-mostrar').text(data.mensaje);
-        } else if (data.tipo === _.MSG_NO_AUTENTICADO){
-            window.location.href = 'index.html';
-        }
-        console.log("Aqui no debería entrar nunca");
-        return {};
-    };
-    
     function eliminar(id){
         var data = new FormData();
             data.append('id', id);
@@ -131,12 +113,13 @@
     };
     
     function eliminado(datos){
-        var data = JSON.parse(datos);
+        var data = JSON.parse(datos),
+            ctrl = _.getCtrl();
 
         _.getID('mensaje').delClass('no-mostrar').text(data.mensaje);
 
         if(data.tipo === _.MSG_CORRECTO){
-            _.getCtrl().listar();
+            ctrl.listar(ctrl.cargaLista);
         } else if (data.tipo === _.MSG_NO_AUTENTICADO){
             window.location.href = 'index.html';
         }
@@ -157,14 +140,14 @@
             alert(data.mensaje);
         }
     };
-    
+
     function preparaActualizar(id){
         var data = new FormData();
         data.append('tipoConsulta', 2);
         data.append('id', id);
         _.ajax({url: 'SPerfilListar', datos: data}).then(function(datos){muestraActualizar(datos);}, function(error){console.log(error);});
     };
-    
+
     _.controlador('perfiles', perfilesCtrl);
 
 })(window);

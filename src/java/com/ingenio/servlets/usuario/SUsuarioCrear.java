@@ -1,12 +1,13 @@
-package com.ingenio.servlets;
+package com.ingenio.servlets.usuario;
 
-import com.ingenio.dao.DAOObjetosXPerfil;
+import com.ingenio.dao.DAOUsuarios;
+import com.ingenio.excepciones.ExcepcionGeneral;
+import com.ingenio.objetos.Perfil;
 import com.ingenio.objetos.Usuario;
 import com.ingenio.utilidades.Constantes;
 import com.ingenio.utilidades.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -17,11 +18,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @MultipartConfig
-@WebServlet(name = "SObjXPerfilListar", urlPatterns = {"/SObjXPerfilListar"})
-public class SObjXPerfilListar extends HttpServlet {
+@WebServlet(name = "SUsuarioCrear", urlPatterns = {"/SUsuarioCrear"})
+public class SUsuarioCrear extends HttpServlet {
 
-    private static final Logger LOG = Logger.getLogger(SObjXPerfilListar.class.getName());
-
+    private static final Logger LOG = Logger.getLogger(SUsuarioCrear.class.getName());
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -33,34 +34,43 @@ public class SObjXPerfilListar extends HttpServlet {
         String objeto = "";
 
         if(Utilidades.get().autenticado(sesion)){
-            DAOObjetosXPerfil dao = new DAOObjetosXPerfil();
+            DAOUsuarios dao = new DAOUsuarios();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
-
-            if(dao.tienePermiso(usuario.getPerfil(), "PERMISOS", "consultar")){
-
-                String idPerfil = request.getParameter("id");
-                short sIdPerfil = 0;
+            if(dao.tienePermiso(usuario.getPerfil(), "USUARIOS", "insertar")){
+                String identificacion = request.getParameter("identificacion");
+                String nombre         = request.getParameter("nombre");
+                String correo         = request.getParameter("correo");
+                String clave          = request.getParameter("clave");
+                String perfil         = request.getParameter("perfil");
+                short idPerfil = Utilidades.get().parseShort(perfil, LOG),
+                      resultado;
+                
+                Usuario user = new Usuario();
+                Perfil  perf = new Perfil();
+                perf.setIdperfil(idPerfil);
+                user.setIdentificacion(identificacion);
+                user.setNombre(nombre);
+                user.setCorreo(correo);
+                user.setClave(clave);
+                user.setPerfil(perf);
+                
                 try{
-                    sIdPerfil = Short.parseShort(idPerfil);
+                    resultado = dao.crear(user);
                     tipo = Constantes.MSG_CORRECTO;
-                    mensaje = "Consulta realizada";
-                } catch (NumberFormatException nfe){
+                    mensaje = "Usuario creado con el id: "+resultado;
+                } catch (ExcepcionGeneral eg){
                     tipo = Constantes.MSG_ERROR;
-                    mensaje = "El perfil debe ser numérico";
-                    Utilidades.get().generaLogServer(LOG, Level.WARNING, "Error al hacer parseShort de {0}", new Object[]{idPerfil});
+                    mensaje = eg.getMessage();
                 }
-
-                objeto = dao.consultarXPerfil(sIdPerfil);
-
+                
             } else {
                 tipo = Constantes.MSG_ADVERTENCIA;
-                mensaje = "Su perfil no está autorizado para consultar los permisos";
+                mensaje = "Su perfil no tiene permiso para realizar esta acción.";
             }
         } else {
             tipo = Constantes.MSG_NO_AUTENTICADO;
-            mensaje = "Usted no se encuentra autenticado.";
+            mensaje = "No está autenticado.";
         }
-
         try (PrintWriter out = response.getWriter()) {
             out.println(Utilidades.get().respuestaJSON(tipo, mensaje, objeto));
         }

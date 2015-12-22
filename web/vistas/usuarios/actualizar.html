@@ -1,8 +1,12 @@
 <div class="vista">
-    <form id="frmCrearUsuario" method="post" action="#" class="formulario">
+    <form id="frmActualizarUsuario" method="post" action="#" class="formulario">
         <fieldset>
-            <legend>Crear Usuario</legend>
+            <legend>Actualizar Usuario</legend>
             <div class="contenedor">
+                <div class="item tablet-50">
+                    <label for="ide">ID</label>
+                    <input type="number" id="ide" name="ide" readonly>
+                </div>
                 <div class="item tablet-50">
                     <label for="identificacion" class="label-titulo">Identificación</label>
                     <input type="text" id="identificacion" name="identificacion" autofocus autocomplete="off" required placeholder="Número de identificación">
@@ -16,17 +20,18 @@
                     <input type="email" id="correo" name="correo" autocomplete="off" required placeholder="Correo">
                 </div>
                 <div class="item tablet-50">
-                    <label for="clave" class="label-titulo">Clave</label>
-                    <input type="password" id="clave" name="clave" required placeholder="Clave">
-                </div>
-                <div class="item tablet-50">
                     <label for="perfil" class="label-titulo">Perfil</label>
                     <select id="perfil" name="perfil"></select>
                 </div>
+                <div class="item tablet-50">
+                    <label class="label-titulo">Activo</label>
+                    <input type="checkbox" id="activo" name="activo">
+                    <label for="activo" class="label-check"></label>
+                </div>
                 <div class="item">
-                    <button id="btnCrear"
+                    <button id="btnActualizar"
                             class="boton primario"
-                            onclick="_.getCtrl().crear();">Crear Usuario</button>
+                            onclick="_.getCtrl().actualizar();">Actualizar Usuario</button>
                     <a href="#/usuarios" class="boton">Volver al Listado</a>
                 </div>
             </div>

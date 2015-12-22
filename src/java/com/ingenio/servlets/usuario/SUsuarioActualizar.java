@@ -1,12 +1,14 @@
-package com.ingenio.servlets;
+package com.ingenio.servlets.usuario;
 
-import com.ingenio.dao.DAOPerfiles;
+import com.ingenio.dao.DAOUsuarios;
 import com.ingenio.excepciones.ExcepcionGeneral;
+import com.ingenio.objetos.Perfil;
 import com.ingenio.objetos.Usuario;
 import com.ingenio.utilidades.Constantes;
 import com.ingenio.utilidades.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -16,8 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @MultipartConfig
-@WebServlet(name = "SPerfilCrear", urlPatterns = {"/SPerfilCrear"})
-public class SPerfilCrear extends HttpServlet {
+@WebServlet(name = "SUsuarioActualizar", urlPatterns = {"/SUsuarioActualizar"})
+public class SUsuarioActualizar extends HttpServlet {
+
+    private static final Logger LOG = Logger.getLogger(SUsuarioActualizar.class.getName());
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -25,31 +29,55 @@ public class SPerfilCrear extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
 
         HttpSession sesion = request.getSession();
-        byte tipo = Constantes.MSG_ADVERTENCIA;
+        byte tipo;
         String mensaje;
         String objeto = "";
 
         if(Utilidades.get().autenticado(sesion)){
-            String nombre = request.getParameter("nombre");
-            DAOPerfiles dao = new DAOPerfiles();
+            DAOUsuarios dao = new DAOUsuarios();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
-            if(dao.tienePermiso(usuario.getPerfil(), "PERFILES", "insertar")){
+            if(dao.tienePermiso(usuario.getPerfil(), "USUARIOS", "modificar")){
+                String idUsuario      = request.getParameter("ide");
+                String identificacion = request.getParameter("identificacion");
+                String nombre         = request.getParameter("nombre");
+                String correo         = request.getParameter("correo");
+                String perfil         = request.getParameter("perfil");
+                String activo         = request.getParameter("activo");
+                short idPerfil   = Utilidades.get().parseShort(perfil, LOG),
+                      sIdUsuario = Utilidades.get().parseShort(idUsuario, LOG);
+                boolean bActivo  = Utilidades.get().parseBoolean(activo, LOG);
+
+                Usuario user = new Usuario();
+                Perfil  perf = new Perfil();
+                perf.setIdperfil(idPerfil);
+
+                user.setIdusuario(sIdUsuario);
+                user.setIdentificacion(identificacion);
+                user.setNombre(nombre);
+                user.setCorreo(correo);
+                user.setPerfil(perf);
+                user.setActivo(bActivo);
+
                 try{
-                    short resultado = dao.crear(nombre);
+                    boolean respuesta = dao.actualizar(user);
                     tipo = Constantes.MSG_CORRECTO;
-                    mensaje = "Se ha creado el perfil con el id: " + resultado;
+                    if(respuesta){
+                        mensaje = Constantes.MSG_ACTUALIZADO_TEXT;
+                    } else {
+                        mensaje = Constantes.MSG_ACTUALIZADO_NO_TEXT;
+                    }
                 } catch (ExcepcionGeneral eg){
-                    tipo = Constantes.MSG_ADVERTENCIA;
-                    mensaje = eg.getMessage();
+                    tipo = Constantes.MSG_ERROR;
+                    mensaje = Constantes.MSG_ERROR_GENERAL_TEXT + eg.getMessage();
                 }
             } else {
-                mensaje = "Su perfil no tiene autorización para crear perfiles.";
+                tipo = Constantes.MSG_ADVERTENCIA;
+                mensaje = Constantes.MSG_SIN_PERMISO_TEXT;
             }
         } else {
             tipo = Constantes.MSG_NO_AUTENTICADO;
-            mensaje = "Usted no se encuentra autenticado.";
+            mensaje = Constantes.MSG_NO_AUTENTICADO_TEXT;
         }
-
         try (PrintWriter out = response.getWriter()) {
             out.println(Utilidades.get().respuestaJSON(tipo, mensaje, objeto));
         }

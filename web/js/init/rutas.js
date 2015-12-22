@@ -8,7 +8,8 @@
               'vistas/perfiles/listar.html',
               'perfiles',
               function(){
-                  _.getCtrl().listar(false);
+                  var ctrl = _.getCtrl();
+                  ctrl.listar(ctrl.cargaLista);
               })
         .ruta('/perfiles-crear',
               'vistas/perfiles/crear.html',
@@ -32,28 +33,22 @@
               'vistas/usuarios/listar.html',
               'usuarios',
               function(){
-                  _.getCtrl().listar();
+                  var ctrl = _.getCtrl();
+                  ctrl.listar(ctrl.cargaLista);
               })
         .ruta('/usuarios-crear',
               'vistas/usuarios/crear.html',
               'usuarios',
               function(){
-                  var select   = _.getID('perfil').get();
-                  _.getCtrl('perfiles').listar(true);
-                  setTimeout(function(){
-                    var opcion = null, perfiles = [],
-                        fragmento = document.createDocumentFragment(),
-                        i = 0, max = 0;
-                    perfiles = _.getSingleton();
-                    max = perfiles.length;
-                    for(; i < max; i = i + 1){
-                        opcion = document.createElement('option');
-                        opcion.setAttribute('value', perfiles[i].id);
-                        opcion.textContent = perfiles[i].nombre;
-                        fragmento.appendChild(opcion);
-                    }
-                    select.appendChild(fragmento);
-                }, 300);
+                  _.getID('frmCrearUsuario').noSubmit();
+                  _.getCtrl('perfiles').listar(_.getCtrl().poblarPerfiles);
+              })
+        .ruta('/usuarios-actualizar',
+              'vistas/usuarios/actualizar.html',
+              'usuarios',
+              function(){
+                  _.getID('frmActualizarUsuario').noSubmit();
+                  _.getCtrl('perfiles').listar(_.getCtrl().poblarPerfiles);
               });
 
     window.addEventListener('load', _.manejadorRutas, false);

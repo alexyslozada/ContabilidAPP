@@ -1,4 +1,4 @@
-package com.ingenio.servlets;
+package com.ingenio.servlets.perfil;
 
 import com.ingenio.dao.DAOPerfiles;
 import com.ingenio.excepciones.ExcepcionGeneral;

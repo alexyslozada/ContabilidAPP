@@ -40,6 +40,51 @@ public class DAOUsuarios extends DAOGenerales{
         }
         return respuesta;
     }
+    
+    public boolean eliminar(short idUsuario) throws ExcepcionGeneral{
+        boolean respuesta = false;
+        try{
+            setConsulta("select fn_usuarios_del(?)");
+            conexion = getConexion();
+            sentencia = conexion.prepareStatement(getConsulta());
+            sentencia.setShort(1, idUsuario);
+            resultado = sentencia.executeQuery();
+            if(resultado.next()){
+                respuesta = resultado.getBoolean(1);
+            }
+        } catch (SQLException sqle){
+            Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en DAOUsuarios.eliminar: {0}", new Object[]{sqle.getMessage()});
+            throw new ExcepcionGeneral(sqle.getMessage());
+        } finally {
+            cierraConexion(conexion, sentencia, resultado);
+        }
+        return respuesta;
+    }
+    
+    public boolean actualizar(Usuario usuario) throws ExcepcionGeneral {
+        boolean respuesta = false;
+        try{
+            setConsulta("select fn_usuarios_upd(?,?,?,?,?,?)");
+            conexion = getConexion();
+            sentencia = conexion.prepareStatement(getConsulta());
+            sentencia.setShort(1, usuario.getIdusuario());
+            sentencia.setString(2, usuario.getIdentificacion());
+            sentencia.setString(3, usuario.getNombre());
+            sentencia.setString(4, usuario.getCorreo());
+            sentencia.setShort(5, usuario.getPerfil().getIdperfil());
+            sentencia.setBoolean(6, usuario.isActivo());
+            resultado = sentencia.executeQuery();
+            if(resultado.next()){
+                respuesta = resultado.getBoolean(1);
+            }
+        } catch (SQLException sqle){
+            Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en DAOUsuarios.actualizar: {0}", new Object[]{sqle.getMessage()});
+            throw new ExcepcionGeneral(sqle.getMessage());            
+        } finally {
+            cierraConexion(conexion, sentencia, resultado);
+        }
+        return respuesta;
+    }
 
     public String listar(short tipo, Usuario usuario, Paginacion paginacion) throws ExcepcionGeneral{
         String respuesta = "";

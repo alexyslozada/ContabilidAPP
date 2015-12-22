@@ -1,4 +1,4 @@
-package com.ingenio.servlets;
+package com.ingenio.servlets.perfil;
 
 import com.ingenio.dao.DAOPerfiles;
 import com.ingenio.excepciones.ExcepcionGeneral;
@@ -7,6 +7,8 @@ import com.ingenio.utilidades.Constantes;
 import com.ingenio.utilidades.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -16,8 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @MultipartConfig
-@WebServlet(name = "SPerfilEliminar", urlPatterns = {"/SPerfilEliminar"})
-public class SPerfilEliminar extends HttpServlet {
+@WebServlet(name = "SPerfilListar", urlPatterns = {"/SPerfilListar"})
+public class SPerfilListar extends HttpServlet {
+    
+    private static final Logger LOG = Logger.getLogger(SPerfilListar.class.getName());
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -25,42 +29,51 @@ public class SPerfilEliminar extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
 
         HttpSession sesion = request.getSession();
-        byte tipo = Constantes.MSG_ADVERTENCIA;
+        byte tipo;
         String mensaje;
         String objeto = "";
-        
-        String id = request.getParameter("id");
-        short sid;
-        try{
-            sid = Short.parseShort(id);
-        } catch (NumberFormatException nfe){
-            sid = 0;
-        }
 
         if(Utilidades.get().autenticado(sesion)){
+            
+            String tipoConsulta = request.getParameter("tipoConsulta");
+            String ide          = request.getParameter("id");
+            
+            short sTipoConsulta, sIde = 0;
+            sTipoConsulta = Utilidades.get().parseShort(tipoConsulta, LOG);
+
+            if(sTipoConsulta == 2){
+                sIde = Utilidades.get().parseShort(ide, LOG);
+            }
+
             DAOPerfiles dao = new DAOPerfiles();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
-            if(dao.tienePermiso(usuario.getPerfil(), "PERFILES", "borrar")){
+
+            if(dao.tienePermiso(usuario.getPerfil(), "PERFILES", "consultar")){
                 try{
-                    tipo = Constantes.MSG_CORRECTO;
-                    boolean eliminado = dao.eliminar(sid);
-                    if(eliminado){
-                        mensaje = "El registro ha sido eliminado, ID: "+sid;
-                    } else {
-                        mensaje = "No se eliminó ningún registro";
+                    switch (sTipoConsulta){
+                        case 1:
+                            objeto = dao.listaPerfilJSON();
+                            break;
+                        case 2:
+                            objeto = dao.consultaPorId(sIde);
+                            break;
                     }
-                    objeto = "{\"eliminado\":"+eliminado+"}";
+                    tipo = Constantes.MSG_CORRECTO;
+                    mensaje = "Información consultada";
                 } catch (ExcepcionGeneral eg){
+                    tipo = Constantes.MSG_ADVERTENCIA;
                     mensaje = eg.getMessage();
                 }
             } else {
-                mensaje = "Su perfil no tiene permiso para realizar esta acción";
+                tipo = Constantes.MSG_ADVERTENCIA;
+                mensaje = "Su perfil no tiene permiso para consultar perfiles";
             }
             
         } else {
             tipo = Constantes.MSG_NO_AUTENTICADO;
             mensaje = "Usted no se encuentra autenticado.";
         }
+
         try (PrintWriter out = response.getWriter()) {
             out.println(Utilidades.get().respuestaJSON(tipo, mensaje, objeto));
         }
