@@ -57,14 +57,23 @@
                             }
                 };
             if(data.tipo === _.MSG_CORRECTO){
-                var total_paginas = Math.ceil(data.objeto.registros / usuariosCtrl.limite);
+                usuariosCtrl.total_paginas = Math.ceil(data.objeto.registros / usuariosCtrl.limite);
+                _.getID('pagina').get().setAttribute('max', usuariosCtrl.total_paginas);
                 _.llenarFilas('cuerpoTabla', 'plantilla', data.objeto.usuarios, campos, acciones);
-                _.getID('total_paginas').text('de '+total_paginas);
+                _.getID('total_paginas').text('de '+usuariosCtrl.total_paginas);
             } else if(data.tipo === _.MSG_ADVERTENCIA){
                 _.getID('mensaje').delClass('no-mostrar').innerHTML(data.mensaje);
             } else if (data.tipo === _.MSG_NO_AUTENTICADO){
                 window.location.href = 'index.html';
             }
+        },
+        paginar: function(){
+            _.paginar();
+            this.listar(this.cargaLista);
+        },
+        paginar_paginas: function(accion){
+            _.paginar_paginas(accion);
+            usuariosCtrl.paginar();
         },
         poblarPerfiles: function(datos){
             var data   = JSON.parse(datos),

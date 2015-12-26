@@ -36,20 +36,24 @@
                 <label for="columna_orden">Ordenado x</label>
                 <select id="columna_orden" name="columna_orden" class="paginacion__select">
                     <option value="1">Id</option>
-                    <option value="2" selected>Nombre</option>
-                    <option value="3">Identificación</option>
+                    <option value="2">Identificación</option>
+                    <option value="3" selected>Nombre</option>
+                    <option value="4">Correo</option>
+                    <option value="7">Perfil</option>
+                    <option value="5">Activo</option>
                 </select>
                 <label for="tipo_orden">Tipo</label>
                 <select id="tipo_orden" name="tipo_orden" class="paginacion__select">
                     <option value="asc">Ascendente</option>
                     <option value="desc">Descendente</option>
                 </select>
-                <button id="btnListar" class="paginacion__boton">Listar</button>
+                <button id="btnListar" class="paginacion__boton"
+                        onclick="_.getCtrl().paginar();">Listar</button>
                 <ul class="paginacion__paginas">
-                    <li><a id="pag_primera" href="#" title="Primero">&laquo;</a></li>
-                    <li><a id="pag_anterior" href="#" title="Anterior">&lt;</a></li>
-                    <li><a id="pag_siguiente" href="#" title="Siguiente">&gt;</a></li>
-                    <li><a id="pag_ultimo" href="#" title="Último">&raquo;</a></li>
+                    <li><button class="paginacion__navegacion" id="pag_primer" title="Primero" onclick="_.getCtrl().paginar_paginas('primer');">&laquo;</button></li>
+                    <li><button class="paginacion__navegacion" id="pag_anterior" title="Anterior" onclick="_.getCtrl().paginar_paginas('anterior');">&lt;</button></li>
+                    <li><button class="paginacion__navegacion" id="pag_siguiente" title="Siguiente" onclick="_.getCtrl().paginar_paginas('siguiente');">&gt;</button></li>
+                    <li><button class="paginacion__navegacion" id="pag_ultimo" title="Último" onclick="_.getCtrl().paginar_paginas('ultimo');">&raquo;</button></li>
                 </ul>
             </div>
         </div>

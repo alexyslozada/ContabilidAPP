@@ -103,6 +103,44 @@
             }
             cuerpo.appendChild(frag);
           },
+          paginar: function(){
+            var input = this.getID('pagina'),
+                pag = parseInt(input.value(), 10),
+                lim = parseInt(this.getID('limite').value(), 10);
+            if(pag <= this.getCtrl().total_paginas){
+                if(pag > 0){
+                    this.getCtrl().pagina = pag;
+                } else {
+                    this.getCtrl().pagina = 1;
+                }
+            } else {
+                this.getCtrl().pagina = this.getCtrl().total_paginas;
+            }
+            input.setValue(this.getCtrl().pagina);
+            if(lim > 0){
+                this.getCtrl().limite = lim;
+            } else {
+                this.getCtrl().limite = 1;
+                this.getID('limite').setValue(1);
+            }
+            this.getCtrl().columna_orden = parseInt(this.getID('columna_orden').value(), 10);
+            this.getCtrl().tipo_orden = this.getID('tipo_orden').value();
+          },
+          paginar_paginas: function(accion){
+            switch(accion){
+                case 'siguiente':
+                    this.getID('pagina').setValue(this.getCtrl().pagina + 1);
+                    break;
+                case 'anterior':
+                    this.getID('pagina').setValue(this.getCtrl().pagina - 1);
+                    break;
+                case 'primer':
+                    this.getID('pagina').setValue(1);
+                    break;
+                case 'ultimo':
+                    this.getID('pagina').setValue(this.getCtrl().total_paginas);
+            }
+          },
           paginacion: function(pagina, limite, columna_orden, tipo_orden){
             var data = new FormData();
             data.append("pagina", pagina);
