@@ -40,7 +40,7 @@ public class SPerfilEliminar extends HttpServlet {
         if(Utilidades.get().autenticado(sesion)){
             DAOPerfiles dao = new DAOPerfiles();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
-            if(dao.tienePermiso(usuario.getPerfil(), "PERFILES", "borrar")){
+            if(dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.BORRAR)){
                 try{
                     tipo = Constantes.MSG_CORRECTO;
                     boolean eliminado = dao.eliminar(sid);

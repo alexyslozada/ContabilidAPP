@@ -1,6 +1,8 @@
-package com.ingenio.servlets.perfil;
+package com.ingenio.servlets.tipoidentificacion;
 
-import com.ingenio.dao.DAOObjetosXPerfil;
+import com.ingenio.dao.DAOTipoIdentificacion;
+import com.ingenio.excepciones.ExcepcionGeneral;
+import com.ingenio.objetos.TipoIdentificacion;
 import com.ingenio.objetos.Usuario;
 import com.ingenio.utilidades.Constantes;
 import com.ingenio.utilidades.Utilidades;
@@ -17,10 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @MultipartConfig
-@WebServlet(name = "SObjXPerfilActualizar", urlPatterns = {"/SObjXPerfilActualizar"})
-public class SObjXPerfilActualizar extends HttpServlet {
-
-    private static final Logger LOG = Logger.getLogger(SObjXPerfilActualizar.class.getName());
+@WebServlet(name = "STipoIdentificacionActualizar", urlPatterns = {"/STipoIdentificacionActualizar"})
+public class STipoIdentificacionActualizar extends HttpServlet {
+    private static final Logger LOG = Logger.getLogger(STipoIdentificacionActualizar.class.getName());
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -33,62 +34,44 @@ public class SObjXPerfilActualizar extends HttpServlet {
         String objeto = "";
 
         if(Utilidades.get().autenticado(sesion)){
-            DAOObjetosXPerfil dao = new DAOObjetosXPerfil();
+            DAOTipoIdentificacion dao = new DAOTipoIdentificacion();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
 
             if(dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.MODIFICAR)){
-
-                String idPermiso = request.getParameter("id");
-                String insertar  = request.getParameter("insertar");
-                String modificar  = request.getParameter("modificar");
-                String borrar  = request.getParameter("borrar");
-                String consultar  = request.getParameter("consultar");
-
-                short sIdPermiso = 0;
-                boolean bInsertar = false,
-                        bModificar = false,
-                        bBorrar = false,
-                        bConsultar = false,
-                        respuesta;
-
-                if(insertar != null && insertar.equals("true")){
-                    bInsertar = true;
-                }
-                if(modificar != null && modificar.equals("true")){
-                    bModificar = true;
-                }
-                if(borrar != null && borrar.equals("true")){
-                    bBorrar = true;
-                }
-                if(consultar != null && consultar.equals("true")){
-                    bConsultar = true;
-                }
+                String ide   = request.getParameter("ide");
+                String sigla = request.getParameter("sigla");
+                String docum = request.getParameter("documento");
+                String codia = request.getParameter("codigo_dian");
+                
+                TipoIdentificacion tipoIdentificacion = new TipoIdentificacion();
+                tipoIdentificacion.setIdtipodocumento(Utilidades.get().parseShort(ide, LOG, true));
+                tipoIdentificacion.setSigla(sigla);
+                tipoIdentificacion.setDocumento(docum);
+                tipoIdentificacion.setCodigo_dian(codia);
+                
+                boolean respuesta;
                 
                 try{
-                    sIdPermiso = Short.parseShort(idPermiso);
+                    respuesta = dao.actualizar(tipoIdentificacion);
                     tipo = Constantes.MSG_CORRECTO;
-                } catch (NumberFormatException nfe){
+                    if(respuesta){
+                        mensaje = Constantes.MSG_ACTUALIZADO_TEXT;
+                    } else {
+                        mensaje = Constantes.MSG_ACTUALIZADO_NO_TEXT;
+                    }
+                } catch (ExcepcionGeneral eg){
+                    Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en STipoIdentificacionActualizar {0}", new Object[]{eg.getMessage()});
                     tipo = Constantes.MSG_ERROR;
-                    Utilidades.get().generaLogServer(LOG, Level.WARNING, "Error al hacer parseShort de {0}", new Object[]{idPermiso});
-                }
-
-                respuesta = dao.actualizaPermisoXPerfil(sIdPermiso, bInsertar, bModificar, bBorrar, bConsultar);
-
-                objeto = "{\"actualizado\":"+respuesta+"}";
-                if(respuesta){
-                    mensaje = "Permisos actualizados correctamente";
-                } else {
-                    mensaje = "No se actualizaron los permisos";
+                    mensaje = eg.getMessage();
                 }
             } else {
                 tipo = Constantes.MSG_ADVERTENCIA;
-                mensaje = "Su perfil no está autorizado para modificar los permisos";
+                mensaje = Constantes.MSG_SIN_PERMISO_TEXT;
             }
         } else {
             tipo = Constantes.MSG_NO_AUTENTICADO;
-            mensaje = "Usted no se encuentra autenticado.";
+            mensaje = Constantes.MSG_NO_AUTENTICADO_TEXT;
         }
-
         try (PrintWriter out = response.getWriter()) {
             out.println(Utilidades.get().respuestaJSON(tipo, mensaje, objeto));
         }

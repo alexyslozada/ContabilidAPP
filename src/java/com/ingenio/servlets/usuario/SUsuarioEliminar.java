@@ -7,6 +7,7 @@ import com.ingenio.utilidades.Constantes;
 import com.ingenio.utilidades.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -35,9 +36,10 @@ public class SUsuarioEliminar extends HttpServlet {
         if(Utilidades.get().autenticado(sesion)){
             DAOUsuarios dao = new DAOUsuarios();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
-            if(dao.tienePermiso(usuario.getPerfil(), "USUARIOS", "borrar")){
+            
+            if(dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.BORRAR)){
                 String idUsuario = request.getParameter("id");
-                short sIdUsuario = Utilidades.get().parseShort(idUsuario, LOG);
+                short sIdUsuario = Utilidades.get().parseShort(idUsuario, LOG, true);
                 try{
                     boolean respuesta = dao.eliminar(sIdUsuario);
                     tipo = Constantes.MSG_CORRECTO;
@@ -47,6 +49,7 @@ public class SUsuarioEliminar extends HttpServlet {
                         mensaje = Constantes.MSG_ELIMINADO_NO_TEXT;
                     }
                 } catch (ExcepcionGeneral eg){
+                    Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en SUsuarioEliminar {0}", new Object[]{eg.getMessage()});
                     tipo = Constantes.MSG_ERROR;
                     mensaje = Constantes.MSG_ERROR_GENERAL_TEXT + eg.getMessage();
                 }

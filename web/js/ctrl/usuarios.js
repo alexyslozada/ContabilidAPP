@@ -25,7 +25,7 @@
         },
         listar: function(callback){
             var data = _.paginacion(this.pagina, this.limite, this.columna_orden, this.tipo_orden);
-            data.append("tipo_consulta", usuariosCtrl.tipo_consulta);
+            data.append("tipo_consulta", this.tipo_consulta);
             _.ajax({url: 'SUsuarioListar', datos: data})
                   .then(function(datos){callback(datos);},
                         function(error){console.log(error);});
@@ -73,7 +73,7 @@
         },
         paginar_paginas: function(accion){
             _.paginar_paginas(accion);
-            usuariosCtrl.paginar();
+            this.paginar();
         },
         poblarPerfiles: function(datos){
             var data   = JSON.parse(datos),

@@ -33,7 +33,7 @@ public class SPerfilCrear extends HttpServlet {
             String nombre = request.getParameter("nombre");
             DAOPerfiles dao = new DAOPerfiles();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
-            if(dao.tienePermiso(usuario.getPerfil(), "PERFILES", "insertar")){
+            if(dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.INSERTAR)){
                 try{
                     short resultado = dao.crear(nombre);
                     tipo = Constantes.MSG_CORRECTO;

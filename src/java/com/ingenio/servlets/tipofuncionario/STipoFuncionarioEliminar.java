@@ -1,6 +1,8 @@
-package com.ingenio.servlets.perfil;
+package com.ingenio.servlets.tipofuncionario;
 
-import com.ingenio.dao.DAOObjetosXPerfil;
+import com.ingenio.dao.DAOTipoFuncionario;
+import com.ingenio.excepciones.ExcepcionGeneral;
+import com.ingenio.objetos.TipoFuncionario;
 import com.ingenio.objetos.Usuario;
 import com.ingenio.utilidades.Constantes;
 import com.ingenio.utilidades.Utilidades;
@@ -17,11 +19,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @MultipartConfig
-@WebServlet(name = "SObjXPerfilActualizar", urlPatterns = {"/SObjXPerfilActualizar"})
-public class SObjXPerfilActualizar extends HttpServlet {
+@WebServlet(name = "STipoFuncionarioEliminar", urlPatterns = {"/STipoFuncionarioEliminar"})
+public class STipoFuncionarioEliminar extends HttpServlet {
 
-    private static final Logger LOG = Logger.getLogger(SObjXPerfilActualizar.class.getName());
-
+    private static final Logger LOG = Logger.getLogger(STipoFuncionarioEliminar.class.getName());
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -33,66 +35,40 @@ public class SObjXPerfilActualizar extends HttpServlet {
         String objeto = "";
 
         if(Utilidades.get().autenticado(sesion)){
-            DAOObjetosXPerfil dao = new DAOObjetosXPerfil();
+            DAOTipoFuncionario dao = new DAOTipoFuncionario();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
 
-            if(dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.MODIFICAR)){
-
-                String idPermiso = request.getParameter("id");
-                String insertar  = request.getParameter("insertar");
-                String modificar  = request.getParameter("modificar");
-                String borrar  = request.getParameter("borrar");
-                String consultar  = request.getParameter("consultar");
-
-                short sIdPermiso = 0;
-                boolean bInsertar = false,
-                        bModificar = false,
-                        bBorrar = false,
-                        bConsultar = false,
-                        respuesta;
-
-                if(insertar != null && insertar.equals("true")){
-                    bInsertar = true;
-                }
-                if(modificar != null && modificar.equals("true")){
-                    bModificar = true;
-                }
-                if(borrar != null && borrar.equals("true")){
-                    bBorrar = true;
-                }
-                if(consultar != null && consultar.equals("true")){
-                    bConsultar = true;
-                }
+            if(dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.BORRAR)){
                 
+                String id = request.getParameter("id");
+                short sId = Utilidades.get().parseShort(id, LOG, true);
+
                 try{
-                    sIdPermiso = Short.parseShort(idPermiso);
+                    boolean respuesta = dao.eliminar(sId);
                     tipo = Constantes.MSG_CORRECTO;
-                } catch (NumberFormatException nfe){
+                    if(respuesta){
+                        mensaje = Constantes.MSG_ELIMINADO_TEXT;
+                    } else {
+                        mensaje = Constantes.MSG_ELIMINADO_NO_TEXT;
+                    }
+                } catch (ExcepcionGeneral eg){
+                    Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en STipoFuncionarioEliminar {0}", new Object[]{eg.getMessage()});
                     tipo = Constantes.MSG_ERROR;
-                    Utilidades.get().generaLogServer(LOG, Level.WARNING, "Error al hacer parseShort de {0}", new Object[]{idPermiso});
-                }
-
-                respuesta = dao.actualizaPermisoXPerfil(sIdPermiso, bInsertar, bModificar, bBorrar, bConsultar);
-
-                objeto = "{\"actualizado\":"+respuesta+"}";
-                if(respuesta){
-                    mensaje = "Permisos actualizados correctamente";
-                } else {
-                    mensaje = "No se actualizaron los permisos";
+                    mensaje = eg.getMessage();
                 }
             } else {
                 tipo = Constantes.MSG_ADVERTENCIA;
-                mensaje = "Su perfil no está autorizado para modificar los permisos";
+                mensaje = Constantes.MSG_SIN_PERMISO_TEXT;
             }
         } else {
             tipo = Constantes.MSG_NO_AUTENTICADO;
-            mensaje = "Usted no se encuentra autenticado.";
+            mensaje = Constantes.MSG_NO_AUTENTICADO_TEXT;
         }
-
         try (PrintWriter out = response.getWriter()) {
             out.println(Utilidades.get().respuestaJSON(tipo, mensaje, objeto));
         }
     }
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

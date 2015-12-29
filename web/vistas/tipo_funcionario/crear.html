@@ -1,0 +1,20 @@
+<div class="vista">
+    <form id="frmCrearTipoFuncionario" method="post" action="#" class="formulario">
+        <fieldset>
+            <legend>Tipo de Funcionario - Crear</legend>
+            <div class="contenedor">
+                <div class="item tablet-50">
+                    <label for="nombre" class="label-titulo">nombre</label>
+                    <input id="nombre" name="nombre" required type="text" maxlength="25" placeholder="nombre" autocomplete="off">
+                </div>
+                <div class="item">
+                    <button id="btnCrear"
+                            class="boton primario"
+                            onclick="_.getCtrl().crear();">Crear</button>
+                    <a href="#/tipo-funcionario" class="boton">Volver al Listado</a>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+</div>

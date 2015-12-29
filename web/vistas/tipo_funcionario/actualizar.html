@@ -1,0 +1,24 @@
+<div class="vista">
+    <form id="frmActualizarTipoFuncionario" method="post" action="#" class="formulario">
+        <fieldset>
+            <legend>Tipo de Funcionario - Actualizar</legend>
+            <div class="contenedor">
+                <div class="item tablet-50">
+                    <label for="ide" class="label-titulo">ID</label>
+                    <input id="ide" name="ide" type="number" readonly>
+                </div>                
+                <div class="item tablet-50">
+                    <label for="nombre" class="label-titulo">nombre</label>
+                    <input id="nombre" name="nombre" required type="text" maxlength="25" placeholder="nombre" autocomplete="off">
+                </div>
+                <div class="item">
+                    <button id="btnActualizar"
+                            class="boton primario"
+                            onclick="_.getCtrl().actualizar();">Actualizar</button>
+                    <a href="#/tipo-funcionario" class="boton">Volver al Listado</a>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+</div>

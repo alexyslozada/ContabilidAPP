@@ -16,6 +16,8 @@ public class DAOPerfiles extends DAOGenerales{
     private PreparedStatement sentencia = null;
     private ResultSet resultado = null;
     private static final Logger LOG = Logger.getLogger(DAOPerfiles.class.getName());
+    
+    public final String OBJETO = "PERFILES";
 
     public short crear(String nombre) throws ExcepcionGeneral{
         short respuesta = 0;

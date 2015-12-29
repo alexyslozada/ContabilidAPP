@@ -40,7 +40,7 @@ public class SUsuarioListar extends HttpServlet {
             DAOUsuarios dao = new DAOUsuarios();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
 
-            if(dao.tienePermiso(usuario.getPerfil(), "USUARIOS", "consultar")){
+            if(dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.CONSULTAR)){
 
                 String tipoConsulta   = request.getParameter("tipo_consulta");
 
@@ -51,10 +51,10 @@ public class SUsuarioListar extends HttpServlet {
 
                 short sTipoConsulta, sPagina, sLimite, sColumna_orden;
 
-                sTipoConsulta  = Utilidades.get().parseShort(tipoConsulta, LOG);
-                sPagina        = Utilidades.get().parseShort(pagina, LOG);
-                sLimite        = Utilidades.get().parseShort(limite, LOG);
-                sColumna_orden = Utilidades.get().parseShort(columna_orden, LOG);
+                sTipoConsulta  = Utilidades.get().parseShort(tipoConsulta, LOG, true);
+                sPagina        = Utilidades.get().parseShort(pagina, LOG, false);
+                sLimite        = Utilidades.get().parseShort(limite, LOG, false);
+                sColumna_orden = Utilidades.get().parseShort(columna_orden, LOG, false);
 
                 Usuario userConsulta = new Usuario();
                 Perfil perfilConsulta = new Perfil();
@@ -64,13 +64,13 @@ public class SUsuarioListar extends HttpServlet {
                 
                 try{
                     tipo = Constantes.MSG_CORRECTO;
-                    mensaje = "Consulta realizada";
+                    mensaje = Constantes.MSG_CONSULTA_REALIZADA_TEXT;
                     switch(sTipoConsulta){
                         case 1:
                             break;
                         case 2:
                             String id_usuario = request.getParameter("id");
-                            short sId_usuario = Utilidades.get().parseShort(id_usuario, LOG);
+                            short sId_usuario = Utilidades.get().parseShort(id_usuario, LOG, true);
                             userConsulta.setIdusuario(sId_usuario);
                             break;
                         case 3:
@@ -83,7 +83,7 @@ public class SUsuarioListar extends HttpServlet {
                             break;
                         case 5:
                             String perfil = request.getParameter("perfil");
-                            short sPerfil = Utilidades.get().parseShort(perfil, LOG);
+                            short sPerfil = Utilidades.get().parseShort(perfil, LOG, true);
                             perfilConsulta.setIdperfil(sPerfil);
                             break;
                         case 6:

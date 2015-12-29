@@ -72,6 +72,13 @@ public final class Utilidades {
         }
     }
     
+    /**
+     * Permite cambiar un String recibido en el servlet a un boolean
+     * @param bool El String a cambiar
+     * @param LOG El Log de la clase que lo generó
+     * @return El boolean generado.
+     */
+    
     public boolean parseBoolean(String bool, Logger LOG){
         boolean respuesta = false;
         if(bool != null){
@@ -80,12 +87,21 @@ public final class Utilidades {
         return respuesta;
     }
     
-    public short parseShort(String cadena, Logger LOG){
+    /**
+     * Permite cambiar un String a un short.
+     * @param cadena Cadena a cambiar
+     * @param LOG Log de la Clase que lo generó
+     * @param generarLog Identifica si se genera el log o no.
+     * @return short El short generado.
+     */
+    public short parseShort(String cadena, Logger LOG, boolean generarLog){
         short datos = 0;
         try{
             datos = Short.parseShort(cadena);
         } catch (NumberFormatException nfe){
-            Utilidades.get().generaLogServer(LOG, Level.WARNING, "Error al hacer parse de un dato que no es numérico {0}", new Object[]{cadena});
+            if(generarLog){
+                Utilidades.get().generaLogServer(LOG, Level.WARNING, "Error al hacer parse de un dato que no es numérico {0}", new Object[]{cadena});
+            }
         }
         return datos;
     }

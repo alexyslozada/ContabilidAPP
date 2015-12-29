@@ -1,0 +1,32 @@
+<div class="vista">
+    <form id="frmActualizarTipoIdentificacion" method="post" action="#" class="formulario">
+        <fieldset>
+            <legend>Tipo Identificación - Actualizar</legend>
+            <div class="contenedor">
+                <div class="item tablet-50">
+                    <label for="ide" class="label-titulo">ID</label>
+                    <input id="ide" name="ide" type="number" readonly />
+                </div>
+                <div class="item tablet-50">
+                    <label for="sigla" class="label-titulo">Sigla</label>
+                    <input id="sigla" name="sigla" required type="text" maxlength="3" placeholder="sigla" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="documento" class="label-titulo">Documento</label>
+                    <input id="documento" name="documento" required type="text" maxlength="30" placeholder="documento" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="codigo_dian" class="label-titulo">Código DIAN</label>
+                    <input id="codigo_dian" name="codigo_dian" required type="text" maxlength="2" placeholder="codigo_dian" autocomplete="off">
+                </div>
+                <div class="item">
+                    <button id="btnActualizar"
+                            class="boton primario"
+                            onclick="_.getCtrl().actualizar();">Actualizar Tipo Documento</button>
+                    <a href="#/tipo-identificacion" class="boton">Volver al Listado</a>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+</div>

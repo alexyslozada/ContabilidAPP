@@ -1,0 +1,28 @@
+<div class="vista">
+    <form id="frmCreartipoidentificacion" method="post" action="#" class="formulario">
+        <fieldset>
+            <legend>Tipo Identificación - Crear</legend>
+            <div class="contenedor">
+                <div class="item tablet-50">
+                    <label for="sigla" class="label-titulo">Sigla</label>
+                    <input id="sigla" name="sigla" required type="text" maxlength="3" placeholder="Sigla" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="documento" class="label-titulo">Documento</label>
+                    <input id="documento" name="documento" required type="text" maxlength="30" placeholder="Documento" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="codigo_dian" class="label-titulo">Código DIAN</label>
+                    <input id="codigo_dian" name="codigo_dian" required type="text" maxlength="2" placeholder="Codigo DIAN" autocomplete="off">
+                </div>
+                <div class="item">
+                    <button id="btnCrear"
+                            class="boton primario"
+                            onclick="_.getCtrl().crear();">Crear Tipo Documento</button>
+                    <a href="#/tipo-identificacion" class="boton">Volver al Listado</a>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+</div>

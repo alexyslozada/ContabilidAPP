@@ -36,7 +36,7 @@ public class SObjXPerfilListar extends HttpServlet {
             DAOObjetosXPerfil dao = new DAOObjetosXPerfil();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
 
-            if(dao.tienePermiso(usuario.getPerfil(), "PERMISOS", "consultar")){
+            if(dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.CONSULTAR)){
 
                 String idPerfil = request.getParameter("id");
                 short sIdPerfil = 0;

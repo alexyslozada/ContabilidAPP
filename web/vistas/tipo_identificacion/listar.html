@@ -1,0 +1,67 @@
+<div class="vista">
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+    <a href="#/tipo-identificacion-crear" class="boton">Nuevo</a>
+    <table class="tabla">
+        <caption>Tipo de Identificación</caption>
+        <colgroup>
+            <col class="col-5">
+            <col class="col-20">
+            <col>
+            <col class="col-10">
+            <col class="col-20">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Sigla</th>
+                <th>Documento</th>
+                <th>DIAN</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="cuerpoTabla"></tbody>
+    </table>
+    <div class="contenedor">
+        <div class="item">
+            <div class="paginacion">
+                <label for="pagina">Página</label>
+                <input type="number" id="pagina" name="pagina" value="1" min="1" class="paginacion__numero"/>
+                <label id="total_paginas"></label>
+                <label for="limite">Reg x Pag</label>
+                <input type="number" id="limite" name="limite" value="10" min="1" class="paginacion__numero"/>
+                <label for="columna_orden">Ordenado x</label>
+                <select id="columna_orden" name="columna_orden" class="paginacion__select">
+                    <option value="1">Id</option>
+                    <option value="2">Sigla</option>
+                    <option value="3" selected>Documento</option>
+                    <option value="4">DIAN</option>
+                </select>
+                <label for="tipo_orden">Tipo</label>
+                <select id="tipo_orden" name="tipo_orden" class="paginacion__select">
+                    <option value="asc">Ascendente</option>
+                    <option value="desc">Descendente</option>
+                </select>
+                <button id="btnListar" class="paginacion__boton"
+                        onclick="_.getCtrl().paginar();">Listar</button>
+                <ul class="paginacion__paginas">
+                    <li><button class="paginacion__navegacion" id="pag_primer" title="Primero" onclick="_.getCtrl().paginar_paginas('primer');">&laquo;</button></li>
+                    <li><button class="paginacion__navegacion" id="pag_anterior" title="Anterior" onclick="_.getCtrl().paginar_paginas('anterior');">&lt;</button></li>
+                    <li><button class="paginacion__navegacion" id="pag_siguiente" title="Siguiente" onclick="_.getCtrl().paginar_paginas('siguiente');">&gt;</button></li>
+                    <li><button class="paginacion__navegacion" id="pag_ultimo" title="Último" onclick="_.getCtrl().paginar_paginas('ultimo');">&raquo;</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <template id="plantilla">
+        <tr class="fila">
+            <td class="id"></td>
+            <td class="sigla"></td>
+            <td class="documento"></td>
+            <td class="codigo_dian"></td>
+            <td class="acciones">
+                <button class="eliminar accion">Eliminar</button>
+                <button class="actualizar accion">Actualizar</button>
+            </td>
+        </tr>
+    </template>
+</div>

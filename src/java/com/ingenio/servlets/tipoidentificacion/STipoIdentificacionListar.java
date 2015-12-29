@@ -1,13 +1,15 @@
-package com.ingenio.servlets.perfil;
+package com.ingenio.servlets.tipoidentificacion;
 
-import com.ingenio.dao.DAOPerfiles;
+import com.ingenio.dao.DAOTipoIdentificacion;
 import com.ingenio.excepciones.ExcepcionGeneral;
-import com.ingenio.objetos.Perfil;
+import com.ingenio.objetos.Paginacion;
+import com.ingenio.objetos.TipoIdentificacion;
 import com.ingenio.objetos.Usuario;
 import com.ingenio.utilidades.Constantes;
 import com.ingenio.utilidades.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -18,11 +20,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @MultipartConfig
-@WebServlet(name = "SPerfilActualizar", urlPatterns = {"/SPerfilActualizar"})
-public class SPerfilActualizar extends HttpServlet {
+@WebServlet(name = "STipoIdentificacionListar", urlPatterns = {"/STipoIdentificacionListar"})
+public class STipoIdentificacionListar extends HttpServlet {
+    private static final Logger LOG = Logger.getLogger(STipoIdentificacionListar.class.getName());
 
-    private static final Logger LOG = Logger.getLogger(SPerfilActualizar.class.getName());
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -32,48 +33,63 @@ public class SPerfilActualizar extends HttpServlet {
         byte tipo;
         String mensaje;
         String objeto = "";
+        Paginacion paginacion = new Paginacion();
 
         if(Utilidades.get().autenticado(sesion)){
-
-            DAOPerfiles dao = new DAOPerfiles();
+            DAOTipoIdentificacion dao = new DAOTipoIdentificacion();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
 
-            if(dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.MODIFICAR)){
+            if(dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.CONSULTAR)){
+                
+                String tipoConsulta   = request.getParameter("tipo_consulta");
 
-                String id = request.getParameter("ide");
-                String nombre = request.getParameter("nombre");
-                String activo = request.getParameter("activo");
-                boolean bActivo = Utilidades.get().parseBoolean(activo, LOG);
+                String pagina         = request.getParameter("pagina");
+                String limite         = request.getParameter("limite");
+                String columna_orden  = request.getParameter("columna_orden");
+                String tipo_orden     = request.getParameter("tipo_orden");
 
-                Perfil perfil = new Perfil();
-                perfil.setIdperfil(Short.parseShort(id));
-                perfil.setNombre(nombre);
-                perfil.setActivo(bActivo);
+                short sTipoConsulta, sPagina, sLimite, sColumna_orden;
+
+                sTipoConsulta  = Utilidades.get().parseShort(tipoConsulta, LOG, true);
+                sPagina        = Utilidades.get().parseShort(pagina, LOG, false);
+                sLimite        = Utilidades.get().parseShort(limite, LOG, false);
+                sColumna_orden = Utilidades.get().parseShort(columna_orden, LOG, false);
+                
+                paginacion = new Paginacion(sPagina, sLimite, sColumna_orden, tipo_orden);
                 
                 try{
-                    boolean respuesta = dao.actualizar(perfil);
-                    objeto = "{\"actualizado\":"+respuesta+"}";
                     tipo = Constantes.MSG_CORRECTO;
-                    if(respuesta){
-                        mensaje = "Se actualizó correctamente el perfil: "+perfil.getNombre();
-                    } else {
-                        mensaje = "No se actualizó el perfil: "+perfil.getNombre();
+                    mensaje = Constantes.MSG_CONSULTA_REALIZADA_TEXT;
+                    TipoIdentificacion tipoIdentificacion = new TipoIdentificacion();
+                    switch(sTipoConsulta){
+                        case 1:
+                            break;
+                        case 2:
+                            String id = request.getParameter("id");
+                            tipoIdentificacion.setIdtipodocumento(Utilidades.get().parseShort(id, LOG, true));
+                            break;
+                        default:
+                            tipo = Constantes.MSG_ERROR;
+                            mensaje = Constantes.MSG_CONSULTA_NO_VALIDA_TEXT;
                     }
+                    objeto = dao.listar(sTipoConsulta, tipoIdentificacion, paginacion);
                 } catch (ExcepcionGeneral eg){
-                    tipo = Constantes.MSG_ADVERTENCIA;
+                    Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en STipoIdentificacionListar {0}", new Object[]{eg.getMessage()});
+                    tipo = Constantes.MSG_ERROR;
                     mensaje = eg.getMessage();
                 }
             } else {
                 tipo = Constantes.MSG_ADVERTENCIA;
-                mensaje = "Su perfil no tiene acceso a la modificación del perfil";
+                mensaje = Constantes.MSG_SIN_PERMISO_TEXT;
             }
         } else {
             tipo = Constantes.MSG_NO_AUTENTICADO;
-            mensaje = "Usted no se encuentra autenticado.";
+            mensaje = Constantes.MSG_NO_AUTENTICADO_TEXT;
         }
         try (PrintWriter out = response.getWriter()) {
-            out.println(Utilidades.get().respuestaJSON(tipo, mensaje, objeto));
+            out.println(Utilidades.get().respuestaJSON(tipo, mensaje, objeto, paginacion));
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

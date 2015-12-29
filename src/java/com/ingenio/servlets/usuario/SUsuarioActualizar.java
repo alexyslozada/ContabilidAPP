@@ -8,6 +8,7 @@ import com.ingenio.utilidades.Constantes;
 import com.ingenio.utilidades.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -36,15 +37,17 @@ public class SUsuarioActualizar extends HttpServlet {
         if(Utilidades.get().autenticado(sesion)){
             DAOUsuarios dao = new DAOUsuarios();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
-            if(dao.tienePermiso(usuario.getPerfil(), "USUARIOS", "modificar")){
+            
+            if(dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.MODIFICAR)){
+                
                 String idUsuario      = request.getParameter("ide");
                 String identificacion = request.getParameter("identificacion");
                 String nombre         = request.getParameter("nombre");
                 String correo         = request.getParameter("correo");
                 String perfil         = request.getParameter("perfil");
                 String activo         = request.getParameter("activo");
-                short idPerfil   = Utilidades.get().parseShort(perfil, LOG),
-                      sIdUsuario = Utilidades.get().parseShort(idUsuario, LOG);
+                short idPerfil   = Utilidades.get().parseShort(perfil, LOG, true),
+                      sIdUsuario = Utilidades.get().parseShort(idUsuario, LOG, true);
                 boolean bActivo  = Utilidades.get().parseBoolean(activo, LOG);
 
                 Usuario user = new Usuario();
@@ -67,6 +70,7 @@ public class SUsuarioActualizar extends HttpServlet {
                         mensaje = Constantes.MSG_ACTUALIZADO_NO_TEXT;
                     }
                 } catch (ExcepcionGeneral eg){
+                    Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en SUsuarioActualizar {0}", new Object[]{eg.getMessage()});
                     tipo = Constantes.MSG_ERROR;
                     mensaje = Constantes.MSG_ERROR_GENERAL_TEXT + eg.getMessage();
                 }

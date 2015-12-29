@@ -8,6 +8,7 @@ import com.ingenio.utilidades.Constantes;
 import com.ingenio.utilidades.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -36,13 +37,14 @@ public class SUsuarioCrear extends HttpServlet {
         if(Utilidades.get().autenticado(sesion)){
             DAOUsuarios dao = new DAOUsuarios();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
-            if(dao.tienePermiso(usuario.getPerfil(), "USUARIOS", "insertar")){
+            
+            if(dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.INSERTAR)){
                 String identificacion = request.getParameter("identificacion");
                 String nombre         = request.getParameter("nombre");
                 String correo         = request.getParameter("correo");
                 String clave          = request.getParameter("clave");
                 String perfil         = request.getParameter("perfil");
-                short idPerfil = Utilidades.get().parseShort(perfil, LOG),
+                short idPerfil = Utilidades.get().parseShort(perfil, LOG, true),
                       resultado;
                 
                 Usuario user = new Usuario();
@@ -59,17 +61,18 @@ public class SUsuarioCrear extends HttpServlet {
                     tipo = Constantes.MSG_CORRECTO;
                     mensaje = "Usuario creado con el id: "+resultado;
                 } catch (ExcepcionGeneral eg){
+                    Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en SUsuarioCrear {0}", new Object[]{eg.getMessage()});
                     tipo = Constantes.MSG_ERROR;
                     mensaje = eg.getMessage();
                 }
                 
             } else {
                 tipo = Constantes.MSG_ADVERTENCIA;
-                mensaje = "Su perfil no tiene permiso para realizar esta acción.";
+                mensaje = Constantes.MSG_SIN_PERMISO_TEXT;
             }
         } else {
             tipo = Constantes.MSG_NO_AUTENTICADO;
-            mensaje = "No está autenticado.";
+            mensaje = Constantes.MSG_NO_AUTENTICADO_TEXT;
         }
         try (PrintWriter out = response.getWriter()) {
             out.println(Utilidades.get().respuestaJSON(tipo, mensaje, objeto));

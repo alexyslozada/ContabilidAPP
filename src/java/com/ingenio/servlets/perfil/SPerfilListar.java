@@ -7,7 +7,6 @@ import com.ingenio.utilidades.Constantes;
 import com.ingenio.utilidades.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -39,16 +38,16 @@ public class SPerfilListar extends HttpServlet {
             String ide          = request.getParameter("id");
             
             short sTipoConsulta, sIde = 0;
-            sTipoConsulta = Utilidades.get().parseShort(tipoConsulta, LOG);
+            sTipoConsulta = Utilidades.get().parseShort(tipoConsulta, LOG, true);
 
             if(sTipoConsulta == 2){
-                sIde = Utilidades.get().parseShort(ide, LOG);
+                sIde = Utilidades.get().parseShort(ide, LOG, true);
             }
 
             DAOPerfiles dao = new DAOPerfiles();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
 
-            if(dao.tienePermiso(usuario.getPerfil(), "PERFILES", "consultar")){
+            if(dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.CONSULTAR)){
                 try{
                     switch (sTipoConsulta){
                         case 1:

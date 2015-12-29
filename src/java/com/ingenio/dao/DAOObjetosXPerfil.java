@@ -14,6 +14,8 @@ public class DAOObjetosXPerfil extends DAOGenerales {
     private PreparedStatement sentencia = null;
     private ResultSet resultado = null;
     private static final Logger LOG = Logger.getLogger(DAOObjetosXPerfil.class.getName());
+    
+    public final String OBJETO = "PERMISOS";
 
     public boolean actualizaPermisoXPerfil(short idpermiso, boolean insertar, boolean modificar, boolean borrar, boolean consultar) throws ExcepcionGeneral{
         boolean respuesta = false;

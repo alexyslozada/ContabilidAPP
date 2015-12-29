@@ -17,6 +17,8 @@ public class DAOUsuarios extends DAOGenerales{
     private ResultSet resultado = null;
     private static final Logger LOG = Logger.getLogger(DAOUsuarios.class.getName());
     
+    public final String OBJETO = "USUARIOS";
+    
     public short crear(Usuario usuario) throws ExcepcionGeneral{
         short respuesta = 0;
         try{
