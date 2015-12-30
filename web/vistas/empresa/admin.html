@@ -1,0 +1,76 @@
+<div class="vista">
+    <form id="frmAdminEmpresa" method="post" action="#" class="formulario">
+        <fieldset>
+            <legend>Empresa</legend>
+            <div class="contenedor">
+                <div class="item tablet-50">
+                    <label for="tipo_identificacion" class="label-titulo">Tipo Identificacion</label>
+                    <select id="tipo_identificacion" name="tipo_identificacion"></select>
+                </div>
+                <div class="item tablet-50">
+                    <label for="numero_identificacion" class="label-titulo">Número Identificacion</label>
+                    <input id="numero_identificacion" name="numero_identificacion" required type="text" maxlength="12" placeholder="Identificacion" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="digito_verificacion" class="label-titulo">DV</label>
+                    <input id="digito_verificacion" name="digito_verificacion" required type="text" maxlength="1" placeholder="DV" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="nombre" class="label-titulo">Nombre</label>
+                    <input id="nombre" name="nombre" required type="text" maxlength="100" placeholder="Nombre" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="direccion" class="label-titulo">Dirección</label>
+                    <input id="direccion" name="direccion" required type="text" maxlength="100" placeholder="Dirección" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="telefono" class="label-titulo">Teléfono</label>
+                    <input id="telefono" name="telefono" required type="text" maxlength="20" placeholder="Teléfono" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="departamento" class="label-titulo">Departamento</label>
+                    <select id="departamento" name="departamento"></select>
+                </div>
+                <div class="item tablet-50">
+                    <label for="ciudad" class="label-titulo">Ciudad</label>
+                    <select id="ciudad" name="ciudad"></select>
+                </div>
+                <div class="item tablet-50">
+                    <label for="direccion_web" class="label-titulo">Página Web</label>
+                    <input id="direccion_web" name="direccion_web"  type="url" maxlength="100" placeholder="WEB" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="correo" class="label-titulo">Correo</label>
+                    <input id="correo" name="correo" required type="email" maxlength="100" placeholder="Correo" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="actividad" class="label-titulo">Actividad DIAN</label>
+                    <input id="actividad" name="actividad" required type="text" maxlength="10" placeholder="Actividad DIAN" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label class="label-titulo">Autorretenedor</label>
+                    <input id="autorretenedor" name="autorretenedor" type="checkbox">
+                    <label for="autorretenedor" class="label-check"></label>
+                </div>
+                <div class="item tablet-50">
+                    <label for="tipo_persona" class="label-titulo">Tipo Persona</label>
+                    <select id="tipo_persona" name="tipo_persona"></select>
+                </div>
+                <div class="item tablet-50">
+                    <label for="tipo_regimen" class="label-titulo">Tipo Régimen</label>
+                    <select id="tipo_regimen" name="tipo_regimen"></select>
+                </div>
+                <!--<div class="item tablet-50">
+                    <label for="logo" class="label-titulo">logo</label>
+                    <input id="logo" name="logo"  type="text" maxlength="254" placeholder="logo" autocomplete="off">
+                </div>-->
+                <div class="item">
+                    <button id="btnUpsert"
+                            class="boton primario"
+                            onclick="_.getCtrl().upsert();">Actualizar</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+</div>

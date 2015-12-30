@@ -4,7 +4,7 @@
 (function(window){
     function validar(datos){
         var data = JSON.parse(datos);
-        if(data.tipo === 2){
+        if(data.tipo === _.MSG_CORRECTO){
             _.getID('mensaje-inicial').text(data.mensaje);
         } else {
             window.location.href = 'index.html';

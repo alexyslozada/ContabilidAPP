@@ -1,10 +1,7 @@
-package com.ingenio.servlets.tipoidentificacion;
+package com.ingenio.servlets.departamento;
 
-import com.ingenio.dao.DAOTipoIdentificacion;
+import com.ingenio.dao.DAODepartamentos;
 import com.ingenio.excepciones.ExcepcionGeneral;
-import com.ingenio.objetos.Paginacion;
-import com.ingenio.objetos.TipoIdentificacion;
-import com.ingenio.objetos.Usuario;
 import com.ingenio.utilidades.Constantes;
 import com.ingenio.utilidades.Utilidades;
 import java.io.IOException;
@@ -12,17 +9,16 @@ import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@MultipartConfig
-@WebServlet(name = "STipoIdentificacionListar", urlPatterns = {"/STipoIdentificacionListar"})
-public class STipoIdentificacionListar extends HttpServlet {
-    private static final Logger LOG = Logger.getLogger(STipoIdentificacionListar.class.getName());
+@WebServlet(name = "SDepartamentoListar", urlPatterns = {"/SDepartamentoListar"})
+public class SDepartamentoListar extends HttpServlet {
+
+    private static final Logger LOG = Logger.getLogger(SDepartamentoListar.class.getName());
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -33,46 +29,17 @@ public class STipoIdentificacionListar extends HttpServlet {
         byte tipo;
         String mensaje;
         String objeto = "";
-        Paginacion paginacion = new Paginacion();
 
         if(Utilidades.get().autenticado(sesion)){
-            DAOTipoIdentificacion dao = new DAOTipoIdentificacion();
-            Usuario usuario = (Usuario) sesion.getAttribute("credencial");
 
-            String tipoConsulta   = request.getParameter("tipo_consulta");
-
-            String pagina         = request.getParameter("pagina");
-            String limite         = request.getParameter("limite");
-            String columna_orden  = request.getParameter("columna_orden");
-            String tipo_orden     = request.getParameter("tipo_orden");
-
-            short sTipoConsulta, sPagina, sLimite, sColumna_orden;
-
-            sTipoConsulta  = Utilidades.get().parseShort(tipoConsulta, LOG, true);
-            sPagina        = Utilidades.get().parseShort(pagina, LOG, false);
-            sLimite        = Utilidades.get().parseShort(limite, LOG, false);
-            sColumna_orden = Utilidades.get().parseShort(columna_orden, LOG, false);
-
-            paginacion = new Paginacion(sPagina, sLimite, sColumna_orden, tipo_orden);
+            DAODepartamentos dao = new DAODepartamentos();
 
             try{
+                objeto = dao.listar();
                 tipo = Constantes.MSG_CORRECTO;
                 mensaje = Constantes.MSG_CONSULTA_REALIZADA_TEXT;
-                TipoIdentificacion tipoIdentificacion = new TipoIdentificacion();
-                switch(sTipoConsulta){
-                    case 1:
-                        break;
-                    case 2:
-                        String id = request.getParameter("id");
-                        tipoIdentificacion.setIdtipodocumento(Utilidades.get().parseShort(id, LOG, true));
-                        break;
-                    default:
-                        tipo = Constantes.MSG_ERROR;
-                        mensaje = Constantes.MSG_CONSULTA_NO_VALIDA_TEXT;
-                }
-                objeto = dao.listar(sTipoConsulta, tipoIdentificacion, paginacion);
             } catch (ExcepcionGeneral eg){
-                Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en STipoIdentificacionListar {0}", new Object[]{eg.getMessage()});
+                Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en SDepartamentoListar {0}", new Object[]{eg.getMessage()});
                 tipo = Constantes.MSG_ERROR;
                 mensaje = eg.getMessage();
             }
@@ -81,9 +48,8 @@ public class STipoIdentificacionListar extends HttpServlet {
             mensaje = Constantes.MSG_NO_AUTENTICADO_TEXT;
         }
         try (PrintWriter out = response.getWriter()) {
-            out.println(Utilidades.get().respuestaJSON(tipo, mensaje, objeto, paginacion));
+            out.println(Utilidades.get().respuestaJSON(tipo, mensaje, objeto));
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

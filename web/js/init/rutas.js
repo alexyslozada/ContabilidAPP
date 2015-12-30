@@ -86,6 +86,12 @@
               'tipoFuncionario',
               function(){
                   _.getCtrl().inicio_actualizar();
+              })
+        .ruta('/empresa',
+              'vistas/empresa/admin.html',
+              'empresa',
+              function(){
+                  _.getCtrl().inicio();
               });
 
     window.addEventListener('load', _.manejadorRutas, false);
