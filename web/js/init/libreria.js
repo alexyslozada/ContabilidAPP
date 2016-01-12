@@ -149,6 +149,36 @@
             data.append("tipo_orden", tipo_orden);
             return data;
           },
+        /**
+         * poblarSelect permite poblar la información de un select
+         * @param {JSON} datos Objeto JSON que contiene los datos
+         * @param {string} tabla Nombre de la tabla que contiene los datos. Es el nombre que está en el select como AS ...
+         * @param {string} id Nombre de la columna que identifica el ID de la tabla y será el value del select
+         * @param {string} campo Nombre del campo que se desea mostrar en el select
+         * @param {string} select ID del select que se va a poblar
+         * @param {boolean} esInterno Identifica si la información que viene en el JSON tiene paginación o no.
+         * @returns {void} Pobla el select con la información obtenida.
+         */
+          poblarSelect: function(datos, tabla, id, campo, select, esInterno){
+            var data = JSON.parse(datos),
+                fragmento = document.createDocumentFragment(),
+                lista = null, i = 0, max = 0, opcion = null;
+            if(data.tipo === this.MSG_CORRECTO){
+                if(esInterno){
+                    lista = data.objeto[tabla];
+                } else {
+                    lista = data.objeto;
+                }
+                max = lista.length;
+                for(; i < max; i = i + 1){
+                    opcion = document.createElement('option');
+                    opcion.setAttribute('value', lista[i][id]);
+                    opcion.textContent = lista[i][campo];
+                    fragmento.appendChild(opcion);
+                }
+                this.getID(select).get().appendChild(fragmento);
+            }
+          },
           controlador: function(nombre, controller){
             controladores[nombre] = {'controlador': controller};
           },

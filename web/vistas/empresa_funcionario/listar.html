@@ -1,0 +1,46 @@
+<div class="vista">
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+    <a href="#/empresa-funcionarios-crear" class="boton">Nuevo</a>
+    <table class="tabla">
+        <caption>Funcionarios</caption>
+        <colgroup>
+            <col class="col-10">
+            <col>
+            <col>
+            <col class="col-10">
+            <col>
+            <col>
+            <col class="col-10">
+            <col class="col-20">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Documento</th>
+                <th>Identificacion</th>
+                <th>DV</th>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Vigente</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="cuerpoTabla"></tbody>
+    </table>
+
+    <template id="plantilla">
+        <tr class="fila">
+            <td class="id"></td>
+            <td class="documento"></td>
+            <td class="identificacion"></td>
+            <td class="digito_verificacion"></td>
+            <td class="nombre"></td>
+            <td class="tipo_funcionario"></td>
+            <td class="vigente"></td>
+            <td class="acciones">
+                <button class="eliminar accion">Eliminar</button>
+                <button class="actualizar accion">Actualizar</button>
+            </td>
+        </tr>
+    </template>
+</div>

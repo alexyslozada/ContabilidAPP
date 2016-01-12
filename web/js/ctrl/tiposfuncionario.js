@@ -10,14 +10,10 @@
         tipo_consulta: 1,
         formulario: null,
         inicio_actualizar: function(){
-            var form = _.getID('frmActualizarTipoFuncionario');
-            form.noSubmit();
-            this.formulario = form.get();
+            this.formulario = _.getID('frmActualizarTipoFuncionario').noSubmit().get();
         },
         inicio_crear: function(){
-            var form = _.getID('frmCrearTipoFuncionario');
-            form.noSubmit();
-            this.formulario = form.get();
+            this.formulario = _.getID('frmCrearTipoFuncionario').noSubmit().get();
         },
         inicio_listar: function(){
             this.listar(cargaTabla);

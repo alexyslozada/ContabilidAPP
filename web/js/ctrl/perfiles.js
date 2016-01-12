@@ -145,7 +145,8 @@
         var data = new FormData();
         data.append('tipoConsulta', 2);
         data.append('id', id);
-        _.ajax({url: 'SPerfilListar', datos: data}).then(function(datos){muestraActualizar(datos);}, function(error){console.log(error);});
+        _.ajax({url: 'SPerfilListar', datos: data})
+              .then(function(datos){muestraActualizar(datos);}, function(error){console.log(error);});
     };
 
     _.controlador('perfiles', perfilesCtrl);

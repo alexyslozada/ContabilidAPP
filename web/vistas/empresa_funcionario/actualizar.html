@@ -1,0 +1,45 @@
+<div class="vista">
+    <form id="frmActualizarFuncionarios" method="post" action="#" class="formulario">
+        <fieldset>
+            <legend>Funcionarios</legend>
+            <div class="contenedor">
+                <div class="item tablet-50">
+                    <label for="ide" class="label-titulo">ID</label>
+                    <input type="number" id="ide" name="ide" readonly />
+                </div>
+                <div class="item tablet-50">
+                    <label for="tipo_identificacion" class="label-titulo">Tipo Identificación</label>
+                    <select id="tipo_identificacion" name="tipo_identificacion" required></select>
+                </div>
+                <div class="item tablet-50">
+                    <label for="identificacion" class="label-titulo">Identificación</label>
+                    <input id="identificacion" name="identificacion" required type="text" maxlength="12" placeholder="Identificación" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="digito_verificacion" class="label-titulo">DV</label>
+                    <input id="digito_verificacion" name="digito_verificacion"  type="text" maxlength="1" placeholder="DV" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="nombre" class="label-titulo">Nombre</label>
+                    <input id="nombre" name="nombre" required type="text" maxlength="100" placeholder="Nombre" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="tipo_funcionario" class="label-titulo">Tipo Funcionario</label>
+                    <select id="tipo_funcionario" name="tipo_funcionario" required></select>
+                </div>
+                <div class="item tablet-50">
+                    <label class="label-titulo">Vigente</label>
+                    <input id="vigente" name="vigente" type="checkbox">
+                    <label for="vigente" class="label-check"></label>
+                </div>
+                <div class="item">
+                    <button id="btnActualizar"
+                            class="boton primario"
+                            onclick="_.getCtrl().actualizar();">Actualizar</button>
+                    <a href="#/empresa-funcionarios" class="boton">Volver al Listado</a>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+</div>

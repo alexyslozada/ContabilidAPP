@@ -60,10 +60,7 @@ public final class Utilidades {
      * @return true si está activado, false si no.
      */
     public boolean isLogServerActivo() {
-        if (contexto.getInitParameter("activar_log_server").equals("1")) {
-            return true;
-        }
-        return false;
+        return contexto.getInitParameter("activar_log_server").equals("1");
     }
 
     public void generaLogServer(Logger logger, Level level, String mensaje, Object[] data) {
