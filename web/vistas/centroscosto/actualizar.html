@@ -1,0 +1,28 @@
+<div class="vista">
+    <form id="frmActualizarCentrosCosto" method="post" action="#" class="formulario">
+        <fieldset>
+            <legend>Centro de Costo</legend>
+            <div class="contenedor">
+                <div class="item tablet-50">
+                    <label for="id" class="label-titulo">ID</label>
+                    <input type="number" id="id" name="id" readonly />
+                </div>
+                <div class="item tablet-50">
+                    <label for="codigo" class="label-titulo">Código</label>
+                    <input id="codigo" name="codigo" required type="text" maxlength="3" placeholder="codigo" autocomplete="off" autofocus>
+                </div>
+                <div class="item tablet-50">
+                    <label for="nombre" class="label-titulo">Nombre</label>
+                    <input id="nombre" name="nombre" required type="text" maxlength="30" placeholder="nombre" autocomplete="off">
+                </div>
+                <div class="item">
+                    <button id="btnActualizar"
+                            class="boton primario"
+                            onclick="_.getCtrl().actualizar();">Actualizar</button>
+                    <a href="#/centros-costo" class="boton">Volver al Listado</a>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+</div>

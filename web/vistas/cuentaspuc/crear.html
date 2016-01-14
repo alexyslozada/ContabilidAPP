@@ -1,0 +1,29 @@
+<div class="vista">
+    <form id="frmCrearCuentasPuc" method="post" action="#" class="formulario">
+        <fieldset>
+            <legend>CUENTAS PUC</legend>
+            <div class="contenedor">
+                <div class="item tablet-50">
+                    <label for="cuenta" class="label-titulo">Cuenta</label>
+                    <input id="cuenta" name="cuenta" required type="number" max="99999999" min="1" placeholder="cuenta" autofocus>
+                </div>
+                <div class="item tablet-50">
+                    <label for="nombre" class="label-titulo">Nombre</label>
+                    <input id="nombre" name="nombre" required type="text" maxlength="100" placeholder="nombre" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label class="label-titulo">Centro de costo?</label>
+                    <input id="maneja_centrocosto" name="maneja_centrocosto" type="checkbox">
+                    <label for="maneja_centrocosto" class="label-check"></label>
+                </div>
+                <div class="item">
+                    <button id="btnCrear"
+                            class="boton primario"
+                            onclick="_.getCtrl().crear();">Crear</button>
+                    <a href="#/cuentas-puc" class="boton">Volver al Listado</a>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+</div>

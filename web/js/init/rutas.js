@@ -1,4 +1,3 @@
-/* global libreria */
 /* global _ */
 'use strict';
 (function (window, _) {
@@ -116,6 +115,50 @@
                     function () {
                         _.getCtrl().inicio_actualizar();
                     }
+            )
+            .ruta('/cuentas-puc',
+                  'vistas/cuentaspuc/listar.html',
+                  'cuentaspuc',
+                  function(){
+                      var ctrl = _.getCtrl();
+                      ctrl.listar(ctrl.cargarTabla);
+                  }
+            )
+            .ruta('/cuentas-puc-crear',
+                  'vistas/cuentaspuc/crear.html',
+                  'cuentaspuc',
+                  function(){
+                      _.getCtrl().inicio_crear();
+                  }
+            )
+            .ruta('/cuentas-puc-actualizar',
+                  'vistas/cuentaspuc/actualizar.html',
+                  'cuentaspuc',
+                  function(){
+                      _.getCtrl().inicio_actualizar();
+                  }
+            )
+            .ruta('/centros-costo',
+                  'vistas/centroscosto/listar.html',
+                  'centroscosto',
+                  function(){
+                      _.getCtrl().inicio();
+                      _.getCtrl().listar(_.getCtrl().cargarTabla);
+                  }
+            )
+            .ruta('/centros-costo/crear',
+                  'vistas/centroscosto/crear.html',
+                  'centroscosto',
+                  function(){
+                      _.getCtrl().inicio_crear();
+                  }
+            )
+            .ruta('/centros-costo/actualizar',
+                  'vistas/centroscosto/actualizar.html',
+                  'centroscosto',
+                  function(){
+                      _.getCtrl().inicio_actualizar();
+                  }
             );
 
     window.addEventListener('load', _.manejadorRutas, false);
