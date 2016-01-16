@@ -37,12 +37,12 @@
             this.elemento.classList.remove(clase);
             return this;
           },
-          innerHTML: function(contenido){
-            this.elemento.innerHTML = contenido;
-            return this;
-          },
           noSubmit: function(){
             this.elemento.addEventListener('submit', function(e){e.preventDefault();}, false);
+            return this;
+          },
+          innerHTML: function(contenido){
+            this.elemento.innerHTML = contenido;
             return this;
           },
           setValue: function(valor){
@@ -253,6 +253,15 @@
               }, false);
               xhr.send(datos);
             });
+          },
+          /* Es un FACADE del ajax */
+          ejecutar: function (obj) {
+              this.ajax({url: obj.url, datos: obj.datos})
+                      .then(function (datos) {
+                          obj.callback(datos);
+                      }, function (error) {
+                          console.log(error);
+                      });
           },
           extender: function(out) {
             out = out || {};

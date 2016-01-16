@@ -40,17 +40,13 @@
                     'vistas/usuarios/crear.html',
                     'usuarios',
                     function () {
-                        var ctrl = _.getCtrl();
-                        _.getID('frmCrearUsuario').noSubmit();
-                        ctrl('perfiles').listar(ctrl.poblarPerfiles);
+                        _.getCtrl().inicio_crear();
                     })
             .ruta('/usuarios-actualizar',
                     'vistas/usuarios/actualizar.html',
                     'usuarios',
                     function () {
-                        var ctrl = _.getCtrl();
-                        _.getID('frmActualizarUsuario').noSubmit();
-                        ctrl('perfiles').listar(ctrl.poblarPerfiles);
+                        _.getCtrl().inicio_actualizar();
                     })
             .ruta('/tipo-identificacion',
                     'vistas/tipo_identificacion/listar.html',
@@ -142,8 +138,9 @@
                   'vistas/centroscosto/listar.html',
                   'centroscosto',
                   function(){
-                      _.getCtrl().inicio();
-                      _.getCtrl().listar(_.getCtrl().cargarTabla);
+                      var ctrl = _.getCtrl();
+                      ctrl.inicio();
+                      ctrl.listar(ctrl.cargarTabla);
                   }
             )
             .ruta('/centros-costo/crear',
@@ -158,6 +155,36 @@
                   'centroscosto',
                   function(){
                       _.getCtrl().inicio_actualizar();
+                  }
+            )
+            .ruta('/terceros',
+                  'vistas/terceros/listar.html',
+                  'terceros',
+                  function(){
+                      var ctrl = _.getCtrl();
+                      ctrl.inicio();
+                      ctrl.listar(ctrl.cargarTabla);
+                  }
+            )
+            .ruta('/terceros/crear',
+                  'vistas/terceros/crear.html',
+                  'terceros',
+                  function(){
+                      _.getCtrl().inicio_crear();
+                  }
+            )
+            .ruta('/terceros/actualizar',
+                  'vistas/terceros/actualizar.html',
+                  'terceros',
+                  function(){
+                      _.getCtrl().inicio_actualizar();
+                  }
+            )
+            .ruta('/terceros/detalle',
+                  'vistas/terceros/detalle.html',
+                  'terceros',
+                  function(){
+                      _.getCtrl().inicio();
                   }
             );
 

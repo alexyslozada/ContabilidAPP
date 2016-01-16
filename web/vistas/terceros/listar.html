@@ -1,0 +1,75 @@
+<div class="vista">
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+    <a href="#/terceros/crear" class="boton">Nuevo</a>
+    <table class="tabla">
+        <caption>Terceros</caption>
+        <colgroup>
+            <col class="col-10">
+            <col>
+            <col>
+            <col class="col-10">
+            <col>
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Identificacion</th>
+                <th>Persona</th>
+                <th>Razón Social</th>
+                <th>Teléfono</th>
+                <th>Correo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="cuerpoTabla"></tbody>
+    </table>
+    <div class="contenedor">
+        <div class="item">
+            <div class="paginacion">
+                <label for="pagina">Página</label>
+                <input type="number" id="pagina" name="pagina" value="1" min="1" class="paginacion__numero"/>
+                <label id="total_paginas"></label>
+                <label for="limite">Reg x Pag</label>
+                <input type="number" id="limite" name="limite" value="10" min="1" class="paginacion__numero"/>
+                <label for="columna_orden">Ordenado x</label>
+                <select id="columna_orden" name="columna_orden" class="paginacion__select">
+                    <option value="4">Identificación</option>
+                    <option value="7">Tipo persona</option>
+                    <option value="8">Razón social</option>
+                    <option value="14">Teléfono</option>
+                    <option value="19">Correo</option>
+                </select>
+                <label for="tipo_orden">Tipo</label>
+                <select id="tipo_orden" name="tipo_orden" class="paginacion__select">
+                    <option value="asc">Ascendente</option>
+                    <option value="desc">Descendente</option>
+                </select>
+                <button id="btnListar" class="paginacion__boton"
+                        onclick="_.getCtrl().paginar();">Listar</button>
+                <ul class="paginacion__paginas">
+                    <li><button class="paginacion__navegacion" id="pag_primer" title="Primero" onclick="_.getCtrl().paginar_paginas('primer');">&laquo;</button></li>
+                    <li><button class="paginacion__navegacion" id="pag_anterior" title="Anterior" onclick="_.getCtrl().paginar_paginas('anterior');">&lt;</button></li>
+                    <li><button class="paginacion__navegacion" id="pag_siguiente" title="Siguiente" onclick="_.getCtrl().paginar_paginas('siguiente');">&gt;</button></li>
+                    <li><button class="paginacion__navegacion" id="pag_ultimo" title="Último" onclick="_.getCtrl().paginar_paginas('ultimo');">&raquo;</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <template id="plantilla">
+        <tr class="fila">
+            <td class="numero_identificacion"></td>
+            <td class="tipopersona"></td>
+            <td class="razon_social"></td>
+            <td class="telefono"></td>
+            <td class="correo"></td>
+            <td class="acciones">
+                <button class="eliminar accion">Eliminar</button>
+                <button class="actualizar accion">Actualizar</button>
+                <button class="detalles accion">Detalles</button>
+            </td>
+        </tr>
+    </template>
+</div>
+
+

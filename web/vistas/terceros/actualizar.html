@@ -1,0 +1,76 @@
+<div class="vista">
+    <form id="frmActualizarTerceros" method="post" action="#" class="formulario">
+        <fieldset>
+            <legend>Terceros - Actualizar</legend>
+            <div class="contenedor">
+                <div class="item tablet-50">
+                    <label for="id">ID</label>
+                    <input type="number" id="id" name="id" readonly />
+                </div>
+                <div class="item tablet-50">
+                    <label for="tipo_identificacion" class="label-titulo">Tipo Identificación</label>
+                    <select id="tipo_identificacion" name="tipo_identificacion" required></select>
+                </div>
+                <div class="item tablet-50">
+                    <label for="numero_identificacion" class="label-titulo">Identificación</label>
+                    <input id="numero_identificacion" name="numero_identificacion" required type="number" max="999999999999" min="1" placeholder="Identificación" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="digito_verificacion" class="label-titulo">DV</label>
+                    <input id="digito_verificacion" name="digito_verificacion"  type="number" max="9" min="0" placeholder="Verificación">
+                </div>
+                <div class="item tablet-50">
+                    <label for="tipo_persona" class="label-titulo">Tipo Persona</label>
+                    <select id="tipo_persona" name="tipo_persona" required></select>
+                </div>
+                <div class="item tablet-50">
+                    <label for="razon_social" class="label-titulo">Razón Social</label>
+                    <input id="razon_social" name="razon_social" required type="text" maxlength="200" placeholder="Razón Social" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="primer_apellido" class="label-titulo">Primer Apellido</label>
+                    <input id="primer_apellido" name="primer_apellido"  type="text" maxlength="50" placeholder="Primer Apellido" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="segundo_apellido" class="label-titulo">Segundo Apellido</label>
+                    <input id="segundo_apellido" name="segundo_apellido"  type="text" maxlength="50" placeholder="Segundo Apellido" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="primer_nombre" class="label-titulo">Primer Nombre</label>
+                    <input id="primer_nombre" name="primer_nombre"  type="text" maxlength="50" placeholder="Primer Nombre" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="segundo_nombre" class="label-titulo">Segundo Nombre</label>
+                    <input id="segundo_nombre" name="segundo_nombre"  type="text" maxlength="50" placeholder="Segundo Nombre" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="direccion" class="label-titulo">Dirección</label>
+                    <input id="direccion" name="direccion" required type="text" maxlength="150" placeholder="Dirección" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="telefono" class="label-titulo">Teléfono</label>
+                    <input id="telefono" name="telefono" required type="text" maxlength="20" placeholder="Teléfono" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="depto_residencia" class="label-titulo">Departamento</label>
+                    <select id="depto_residencia" name="depto_residencia" required></select>
+                </div>
+                <div class="item tablet-50">
+                    <label for="ciudad_residencia" class="label-titulo">Ciudad</label>
+                    <select id="ciudad_residencia" name="ciudad_residencia" required></select>
+                </div>
+                <div class="item tablet-50">
+                    <label for="correo" class="label-titulo">Correo</label>
+                    <input id="correo" name="correo" required type="email" maxlength="150" placeholder="Correo electrónico" autocomplete="off">
+                </div>
+                <div class="item">
+                    <button id="btnActualizar"
+                            class="boton primario"
+                            onclick="_.getCtrl().actualizar();">Actualizar</button>
+                    <a href="#/terceros" class="boton">Volver al Listado</a>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+</div>

@@ -10,6 +10,18 @@
         columna_orden: 2,
         tipo_orden: 'acs',
         tipo_consulta: 1,
+        inicio_crear: function(){
+            _.getID('frmCrearUsuario').noSubmit();
+            _.getCtrl('perfiles').listar(function(datos){
+                _.poblarSelect(datos, 'perfiles', 'id', 'nombre', 'perfil', false);
+            });
+        },
+        inicio_actualizar: function(){
+            _.getID('frmActualizarUsuario').noSubmit();
+            _.getCtrl('perfiles').listar(function(datos){
+                _.poblarSelect(datos, 'perfiles', 'id', 'nombre', 'perfil', false);
+            });
+        },
         actualizar: function(){
             var formulario = _.getID('frmActualizarUsuario').get();
             _.ajax({url: 'SUsuarioActualizar', datos: new FormData(formulario)})
@@ -74,22 +86,6 @@
         paginar_paginas: function(accion){
             _.paginar_paginas(accion);
             this.paginar();
-        },
-        poblarPerfiles: function(datos){
-            var data   = JSON.parse(datos),
-                select = _.getID('perfil').get(),
-                opcion = null, 
-                fragmento = document.createDocumentFragment(),
-                i = 0, max = 0;
-
-            max = data.objeto.length;
-            for(; i < max; i = i + 1){
-                opcion = document.createElement('option');
-                opcion.setAttribute('value', data.objeto[i].id);
-                opcion.textContent = data.objeto[i].nombre;
-                fragmento.appendChild(opcion);
-            }
-            select.appendChild(fragmento);
         }
     };
     

@@ -107,6 +107,8 @@ public class DAOCuentasPuc extends DAOGenerales {
         } catch (SQLException sqle){
             Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en DAOCuentasPuc.getCuentaXCuentaOId {0}", new Object[]{sqle.getMessage()});
             throw new ExcepcionGeneral(sqle.getMessage());
+        } finally {
+            cierraConexion(conexion, sentencia, resultado);
         }
         return respuesta;
     }
