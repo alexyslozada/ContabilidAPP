@@ -1,0 +1,28 @@
+<div class="vista">
+    <form id="frmCambiarClave" method="post" action="#" class="formulario">
+        <fieldset>
+            <legend>Cambiar mi Contraseña</legend>
+            <div class="contenedor">
+                <div class="item tablet-50">
+                    <label for="anterior" class="label-titulo">Clave Actual</label>
+                    <input type="password" id="anterior" name="anterior" autofocus autocomplete="off" required placeholder="Clave actual">
+                </div>
+                <div class="item tablet-50">
+                    <label for="nueva" class="label-titulo">Clave Nueva</label>
+                    <input type="password" id="nueva" name="nueva" autocomplete="off" required placeholder="Clave Nueva">
+                </div>
+                <div class="item tablet-50">
+                    <label for="nuevaDos" class="label-titulo">Confirmar Nueva Clave</label>
+                    <input type="password" id="nuevaDos" name="nuevaDos" autocomplete="off" required placeholder="Confirmar Nueva Clave">
+                </div>
+                <div class="item">
+                    <button id="btnCambiarClave"
+                            class="boton primario"
+                            onclick="_.getCtrl().cambiarClave();">Cambiar Clave</button>
+                    <a href="#/" class="boton">Volver al inicio</a>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+</div>

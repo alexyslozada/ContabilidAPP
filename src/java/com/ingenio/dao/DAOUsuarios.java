@@ -116,4 +116,26 @@ public class DAOUsuarios extends DAOGenerales{
         }
         return respuesta;
     }
+    
+    public boolean cambiarClave(short id, String anterior, String nueva){
+        boolean respuesta = false;
+        try{
+            setConsulta("select fn_usuarios_clave(?,?,?)");
+            conexion = getConexion();
+            sentencia = conexion.prepareStatement(getConsulta());
+            sentencia.setShort(1, id);
+            sentencia.setString(2, anterior);
+            sentencia.setString(3, nueva);
+            resultado = sentencia.executeQuery();
+            if(resultado.next()){
+                respuesta = resultado.getBoolean(1);
+            }
+        } catch (SQLException sqle){
+            Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en DAOUsuarios.cambiarClave {0}", new Object[]{sqle.getMessage()});
+            throw new ExcepcionGeneral(sqle.getMessage());
+        } finally {
+            cierraConexion(conexion, sentencia, resultado);
+        }
+        return respuesta;
+    }
 }

@@ -1,8 +1,7 @@
 /* global _ */
 /* global CryptoJS */
-
 'use strict';
-(function(_, window, document, CryptoJS){
+(function(_, window, CryptoJS, JSON){
     var usuariosCtrl = {
         pagina: 1,
         total_paginas: 0,
@@ -22,6 +21,9 @@
                 _.poblarSelect(datos, 'perfiles', 'id', 'nombre', 'perfil', false);
             });
         },
+        inicio_cambiar_clave: function(){
+            _.getID('frmCambiarClave').noSubmit();
+        },
         actualizar: function(){
             var formulario = _.getID('frmActualizarUsuario').get();
             _.ajax({url: 'SUsuarioActualizar', datos: new FormData(formulario)})
@@ -34,6 +36,19 @@
             data = new FormData(formulario);
             _.ajax({url: 'SUsuarioCrear', datos: data})
                     .then(function(datos){creado(datos);}, function(error){console.log(error);});
+        },
+        cambiarClave: function(){
+            var formulario = _.getID('frmCambiarClave').get(),
+                data;
+            if(formulario.nueva.value === formulario.nuevaDos.value){
+                formulario.anterior.value = CryptoJS.SHA3(formulario.anterior.value);
+                formulario.nueva.value = CryptoJS.SHA3(formulario.nueva.value);
+                data = new FormData(formulario);
+                _.ajax({url: 'SUsuarioCambiarClave', datos:data})
+                        .then(function(datos){claveCambiada(datos);}, function(error){console.log(error);});
+            } else {
+                _.getID('mensaje').delClass('no-mostrar').text('La confirmación de la clave NO coincide.');
+            }
         },
         listar: function(callback){
             var data = _.paginacion(this.pagina, this.limite, this.columna_orden, this.tipo_orden);
@@ -102,6 +117,18 @@
         }
     };
     
+    function claveCambiada(datos){
+        var data = JSON.parse(datos);
+        _.getID('mensaje').delClass('no-mostrar').text(data.mensaje);
+        if(data.tipo === _.MSG_CORRECTO){
+            _.getID('frmCambiarClave').get().reset();
+        } else if (data.tipo === _.MSG_ERROR || data.tipo === _.MSG_ADVERTENCIA){
+            _.getID('nueva').setValue(_.getID('nuevaDos').value());
+        } else if (data.tipo === _.MSG_NO_AUTENTICADO){
+            window.location.href = 'index.html';
+        }
+    }
+    
     function creado(datos){
         var data = JSON.parse(datos);
         _.getID('mensaje').delClass('no-mostrar').text(data.mensaje);
@@ -158,4 +185,4 @@
     };
 
     _.controlador('usuarios', usuariosCtrl);
-})(_, window, document, CryptoJS);
+})(_, window, CryptoJS, JSON);

@@ -48,6 +48,13 @@
                     function () {
                         _.getCtrl().inicio_actualizar();
                     })
+            .ruta('/usuarios-cambiar-clave',
+                  'vistas/usuarios/cambiarclave.html',
+                  'usuarios',
+                  function(){
+                      _.getCtrl().inicio_cambiar_clave();
+                  }
+            )
             .ruta('/tipo-identificacion',
                     'vistas/tipo_identificacion/listar.html',
                     'tipoIdentificacion',
