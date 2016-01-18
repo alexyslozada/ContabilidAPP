@@ -186,6 +186,29 @@
                   function(){
                       _.getCtrl().inicio();
                   }
+            )
+            .ruta('/documento-contable',
+                  'vistas/documento_contable/listar.html',
+                  'documentoContable',
+                  function(){
+                      var ctrl = _.getCtrl();
+                      ctrl.inicio();
+                      ctrl.listar(ctrl.cargarTabla);
+                  }
+            )
+            .ruta('/documento-contable/crear',
+                  'vistas/documento_contable/crear.html',
+                  'documentoContable',
+                  function(){
+                      _.getCtrl().inicio_crear();
+                  }
+            )
+            .ruta('/documento-contable/actualizar',
+                  'vistas/documento_contable/actualizar.html',
+                  'documentoContable',
+                  function(){
+                      _.getCtrl().inicio_actualizar();
+                  }
             );
 
     window.addEventListener('load', _.manejadorRutas, false);

@@ -1,0 +1,24 @@
+<div class="vista">
+    <form id="frmCrearDocumento" method="post" action="#" class="formulario">
+        <fieldset>
+            <legend>Documentos Contables</legend>
+            <div class="contenedor">
+                <div class="item tablet-50">
+                    <label for="abreviatura" class="label-titulo">Abreviatura</label>
+                    <input id="abreviatura" name="abreviatura" required type="text" maxlength="4" placeholder="abreviatura" autocomplete="off">
+                </div>
+                <div class="item tablet-50">
+                    <label for="documento" class="label-titulo">Documento</label>
+                    <input id="documento" name="documento" required type="text" maxlength="50" placeholder="documento" autocomplete="off">
+                </div>
+                <div class="item">
+                    <button id="btnCrear"
+                            class="boton primario"
+                            onclick="_.getCtrl().crear();">Crear</button>
+                    <a href="#/documento-contable" class="boton">Volver al Listado</a>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+</div>

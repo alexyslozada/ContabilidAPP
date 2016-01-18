@@ -1,0 +1,34 @@
+<div class="vista">
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+    <a href="#/documento-contable/crear" class="boton">Nuevo</a>
+    <table class="tabla">
+        <caption>Documentos Contables</caption>
+        <colgroup>
+            <col class="col-10">
+            <col>
+            <col>
+            <col class="col-20">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Abr</th>
+                <th>Documento</th>
+                <th>Consecutivo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="cuerpoTabla"></tbody>
+    </table>
+
+    <template id="plantilla">
+        <tr class="fila">
+            <td class="abreviatura"></td>
+            <td class="documento"></td>
+            <td class="consecutivo"></td>
+            <td class="acciones">
+                <button class="eliminar accion">Eliminar</button>
+                <button class="actualizar accion">Actualizar</button>
+            </td>
+        </tr>
+    </template>
+</div>

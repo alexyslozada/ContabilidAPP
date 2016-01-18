@@ -13,30 +13,13 @@ import javax.servlet.http.HttpSession;
 
 public final class Utilidades {
     
-    private final static Utilidades utilidades = new Utilidades();
-    private ServletContext contexto = null;
-    private boolean contextoCreado = false;
+    private final static Utilidades UTILIDADES = new Utilidades();
+    private boolean logServerActivo = false;
 
     private Utilidades(){}
 
     public static Utilidades get(){
-        return utilidades;
-    }
-
-    public void setContexto(ServletContext contexto){
-        this.contexto = contexto;
-    }
-
-    public boolean isContextoCreado(){
-        return contextoCreado;
-    }
-    
-    public void setContextoCreado(){
-        this.contextoCreado = true;
-    }
-
-    public ServletContext getContexto(){
-        return this.contexto;
+        return UTILIDADES;
     }
 
     public void irAPagina(String direccion, HttpServletRequest solicitud,
@@ -60,9 +43,13 @@ public final class Utilidades {
      * @return true si está activado, false si no.
      */
     public boolean isLogServerActivo() {
-        return contexto.getInitParameter("activar_log_server").equals("1");
+        return logServerActivo;
     }
 
+    public void setLogServerActivo(boolean activo){
+        logServerActivo = activo;
+    }
+    
     public void generaLogServer(Logger logger, Level level, String mensaje, Object[] data) {
         if (isLogServerActivo()) {
             logger.log(level, mensaje, data);
@@ -97,7 +84,7 @@ public final class Utilidades {
             datos = Short.parseShort(cadena);
         } catch (NumberFormatException nfe){
             if(generarLog){
-                Utilidades.get().generaLogServer(LOG, Level.WARNING, "Error al hacer parse de un dato que no es numérico {0}", new Object[]{cadena});
+                Utilidades.get().generaLogServer(LOG, Level.WARNING, "Error al hacer parse de un dato que no es numérico {0} en {1}, {2}", new Object[]{cadena, LOG.getClass().getName(), LOG.getName()});
             }
         }
         return datos;

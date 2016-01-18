@@ -123,7 +123,7 @@
             _.ejecutar(obj);
         },
         eliminar: function(id){
-            var data = new FormData(), obj = {}, self = this;
+            var data = new FormData(), obj = {};
             data.append('id', id);
             obj.datos = data;
             obj.url = 'STerceroEliminar';

@@ -23,23 +23,14 @@ public final class DAO {
         return dao;
     }
 
-
     public void creaPiscina(ServletContext ctx){
-        if(!Utilidades.get().isContextoCreado()){
-            Utilidades.get().setContexto(ctx);
-            setPiscina();
-        }
-    }
-
-    public void setPiscina(){
-        ServletContext contexto = Utilidades.get().getContexto();
-        String servidor = contexto.getInitParameter("servidor");
-        int puertobd = Integer.parseInt(contexto.getInitParameter("puertobd"));
-        String basededa = contexto.getInitParameter("basededatos");
-        String usuariob = contexto.getInitParameter("usuariobd");
-        String clavebda = contexto.getInitParameter("clavebd");
-        int conexionesiniciales = Integer.parseInt(contexto.getInitParameter("conexionesiniciales"));
-        int conexionesmaximas = Integer.parseInt(contexto.getInitParameter("conexionesmaximas"));
+        String servidor = ctx.getInitParameter("servidor");
+        int puertobd = Integer.parseInt(ctx.getInitParameter("puertobd"));
+        String basededa = ctx.getInitParameter("basededatos");
+        String usuariob = ctx.getInitParameter("usuariobd");
+        String clavebda = ctx.getInitParameter("clavebd");
+        int conexionesiniciales = Integer.parseInt(ctx.getInitParameter("conexionesiniciales"));
+        int conexionesmaximas = Integer.parseInt(ctx.getInitParameter("conexionesmaximas"));
         piscina = new PGPoolingDataSource();
         piscina.setDataSourceName("Conexion a la Base Contabilidad");
         piscina.setServerName(servidor);
@@ -49,16 +40,16 @@ public final class DAO {
         piscina.setPassword(clavebda);
         piscina.setInitialConnections(conexionesiniciales);
         piscina.setMaxConnections(conexionesmaximas);
-        Utilidades.get().setContextoCreado();
+    }
+    
+    public void cierraPiscina(){
+        piscina.close();
     }
 
     public Connection getConexion() throws SQLException{
         if (piscina == null) {
-            setPiscina();
-            if (piscina == null) {
-                Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en DAO. No fue posible cargar la piscina de conexiones", null);
-                return null;
-            }
+            Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en DAO. No fue posible cargar la piscina de conexiones", null);
+            return null;
         }
         return piscina.getConnection();
     }
