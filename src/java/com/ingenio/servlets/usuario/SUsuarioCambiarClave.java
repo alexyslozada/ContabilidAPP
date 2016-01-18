@@ -40,8 +40,6 @@ public class SUsuarioCambiarClave extends HttpServlet {
             short id = usuario.getIdusuario();
             String anterior = request.getParameter("anterior");
             String nueva = request.getParameter("nueva");
-            System.out.println(id);
-            System.out.println(anterior);
 
             try {
                 boolean resultado = dao.cambiarClave(id, anterior, nueva);
