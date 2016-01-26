@@ -216,6 +216,13 @@
                   function(){
                       _.getCtrl().inicio_actualizar();
                   }
+            )
+            .ruta('/periodos/crear',
+                  'vistas/periodos/crear.html',
+                  'periodos',
+                  function(){
+                      _.getCtrl().inicio();
+                  }
             );
 
     window.addEventListener('load', _.manejadorRutas, false);
