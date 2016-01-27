@@ -23,6 +23,7 @@ public final class Constantes {
     public static final String MSG_ACTUALIZADO_TEXT = "Se ha actualizado correctamente el registro";
     public static final String MSG_ACTUALIZADO_NO_TEXT = "No se ha actualizado ningún registro";
     public static final String MSG_CONSULTA_NO_VALIDA_TEXT = "El tipo de consulta no es válido.";
+    public static final String MSG_REGISTROS_NO_ENCONTRADOS_TEXT = "Registro no encontrado.";
     
     /* Acciones en texto */
     public static final String INSERTAR  = "insertar";

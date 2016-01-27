@@ -1,5 +1,7 @@
 package com.ingenio.objetos;
 
+import com.ingenio.utilidades.Utilidades;
+
 public class Tercero {
 
     private short id_tercero;
@@ -177,5 +179,40 @@ public class Tercero {
         this.correo = correo;
     }
     
-    
+    public String toJSON(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("{")
+                .append("\"id\"")
+                .append(id_tercero)
+                .append(",\"tipo_identificacion\":")
+                .append(tipo_identificacion)
+                .append(",\"numero_identificacion\":");
+        Utilidades.get().appendJSON(sb, numero_identificacion);
+        sb.append(",\"digito_verificacion\":");
+        Utilidades.get().appendJSON(sb, digito_verificacion);
+        sb.append(",\"tipo_persona\":")
+                .append(tipo_persona)
+                .append(", \"razon_social\":");
+        Utilidades.get().appendJSON(sb, razon_social);
+        sb.append(",\"primer_apellido\":");
+        Utilidades.get().appendJSON(sb, primer_apellido);
+        sb.append(",\"segundo_apellido\":");
+        Utilidades.get().appendJSON(sb, segundo_apellido);
+        sb.append(",\"primer_nombre\":");
+        Utilidades.get().appendJSON(sb, primer_nombre);
+        sb.append(",\"segundo_nombre\":");
+        Utilidades.get().appendJSON(sb, segundo_nombre);
+        sb.append(",\"direccion\":");
+        Utilidades.get().appendJSON(sb, direccion);
+        sb.append(",\"telefono\":");
+        Utilidades.get().appendJSON(sb, telefono);
+        sb.append(",\"depto_residencia\":")
+                .append(depto_residencia)
+                .append(",\"ciudad_residencia\":")
+                .append(ciudad_residencia)
+                .append(",\"correo\":");
+        Utilidades.get().appendJSON(sb, correo);
+        sb.append("}");
+        return sb.toString();
+    }
 }

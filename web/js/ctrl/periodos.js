@@ -2,8 +2,10 @@
 (function (window, JSON, _) {
     var periodoCtrl = {
         formulario: null,
+        divMensaje: null,
         inicio: function () {
             this.formulario = _.getID('frmCrearPeriodo').noSubmit().get();
+            this.divMensaje = _.getID('mensaje');
         },
         crear: function () {
             var self = this,
@@ -19,9 +21,6 @@
 
             periodoCtrl.divMensaje.delClass('no-mostrar').text(data.mensaje);
             switch (data.tipo) {
-                case _.MSG_CORRECTO:
-                    periodoCtrl.formulario.reset();
-                    break;
                 case _.MSG_NO_AUTENTICADO:
                     window.location.href = 'index.html';
                     break;

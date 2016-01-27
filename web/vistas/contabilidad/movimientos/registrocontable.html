@@ -1,0 +1,33 @@
+<div class="vista">
+    <form id="frmRegistroContable" method="post" action="#">
+        <fieldset>
+            <legend>Registro de Movimientos Contables</legend>
+            <div class="contenedor">
+                <div class="item tablet-50">
+                    <label for="abreviatura" class="label-titulo">Abreviatura</label>
+                    <input type="text" id="abreviatura" name="abreviatura" maxlength="4" required placeholder="Abreviatura" autofocus />
+                </div>
+                <div class="item tablet-50">
+                    <label for="documento" class="label-titulo">Documento</label>
+                    <input type="hidden" id="idDocumento" />
+                    <input type="text" id="documento" readonly />
+                </div>
+                <div class="item tablet-50">
+                    <label for="fecha" class="label-titulo">Fecha</label>
+                    <input type="date" id="fecha" name="fecha" required />
+                </div>
+                <div class="item">
+                    <label for="comentario">Comentario</label>
+                    <input type="text" id="comentario" name="comentario" required placeholder="Comentario del documento" />
+                </div>
+                <div class="item">
+                    <button id="btnValidar"
+                            class="boton primario"
+                            onclick="_.getCtrl().validarEncabezado();">Detalles</button>
+                    <a href="#/" class="boton">Volver al Inicio</a>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+</div>

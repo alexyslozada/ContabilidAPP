@@ -60,6 +60,10 @@ public class SDocumentoContableGetXId extends HttpServlet {
 
             try {
                 objeto = dao.getXAbrXId(iTipoConsulta, documento);
+                if(objeto == null){
+                    tipo = Constantes.MSG_ADVERTENCIA;
+                    mensaje = Constantes.MSG_REGISTROS_NO_ENCONTRADOS_TEXT;
+                }
             } catch (ExcepcionGeneral eg) {
                 Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en SDocumentoContableGetXId {0}", new Object[]{eg.getMessage()});
                 tipo = Constantes.MSG_ERROR;

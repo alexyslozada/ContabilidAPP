@@ -98,5 +98,36 @@ public class CuentasPuc {
         this.maneja_centrocosto = centrocosto;
     }
 
-    
+    public String toJSON(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("{")
+                .append("\"id\":")
+                .append(idcuenta)
+                .append(",\"cuenta\":");
+        if(cuenta != null){
+            sb.append("\"")
+                    .append(cuenta)
+                    .append("\"");
+        } else {
+            sb.append(cuenta);
+        }
+        sb.append(",\"nombre\":");
+        if(nombre != null){
+            sb.append("\"")
+                    .append(nombre)
+                    .append("\"");
+        } else {
+            sb.append(nombre);
+        }
+        sb.append(",\"idcuentapadre\":")
+                .append(idcuentapadre)
+                .append(",\"idclasecuenta\":")
+                .append(idclasecuenta)
+                .append(",\"idnivelcuenta\":")
+                .append(idnivelcuenta)
+                .append(",\"maneja_centrocosto\":")
+                .append(maneja_centrocosto)
+                .append("}");
+        return sb.toString();
+    }
 }

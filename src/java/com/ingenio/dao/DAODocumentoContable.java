@@ -82,7 +82,7 @@ public class DAODocumentoContable extends DAOGenerales {
     }
     
     public String getXAbrXId(short tipo, DocumentoContable documento) throws ExcepcionGeneral {
-        String respuesta = "";
+        String respuesta = null;
         try{
             setConsulta("select fn_documento_contable_sel_xabrxid_json(?,?,?)");
             conexion = getConexion();

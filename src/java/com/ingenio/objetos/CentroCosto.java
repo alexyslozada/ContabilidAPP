@@ -1,5 +1,7 @@
 package com.ingenio.objetos;
 
+import com.ingenio.utilidades.Utilidades;
+
 public class CentroCosto {
 
     private short id_centro_costo;
@@ -44,5 +46,16 @@ public class CentroCosto {
         this.nombre = nombre;
     }
 
-    
+    public String toJSON(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("{")
+                .append("\"id\":")
+                .append(id_centro_costo)
+                .append(",\"codigo\":");
+        Utilidades.get().appendJSON(sb, codigo);;
+        sb.append(",\"nombre\":");
+        Utilidades.get().appendJSON(sb, nombre);
+        sb.append("}");
+        return sb.toString();
+    }
 }

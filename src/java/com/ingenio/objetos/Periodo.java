@@ -1,5 +1,6 @@
 package com.ingenio.objetos;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Periodo {
@@ -59,9 +60,45 @@ public class Periodo {
         return fecha_cierre;
     }
 
+    public String getFecha_cierreFormat(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(fecha_cierre); 
+    }
+    
     public void setFecha_cierre(Calendar fecha_cierre) {
         this.fecha_cierre = fecha_cierre;
     }
     
+    public void setFecha_cierre(java.sql.Date fecha){
+        if(fecha != null){
+            fecha_cierre = Calendar.getInstance();
+            fecha_cierre.setTime(fecha);
+        }
+    }
+    
+    public String toJSON(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("{")
+                .append("\"id\":")
+                .append(id_periodo_contable)
+                .append(",\"anio\":")
+                .append(anio)
+                .append(", \"mes\":")
+                .append(mes)
+                .append(",\"abierto\":")
+                .append(abierto)
+                .append(",\"fecha_cierre\":");
+                
+        if(fecha_cierre != null){
+            sb.append("\"")
+                    .append(getFecha_cierreFormat())
+                    .append("\"");
+        } else {
+            sb.append("null");
+        }
+        
+        sb.append("}");
+        return sb.toString();
+    }
     
 }

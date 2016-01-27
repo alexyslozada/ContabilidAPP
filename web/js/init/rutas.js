@@ -218,12 +218,18 @@
                   }
             )
             .ruta('/periodos/crear',
-                  'vistas/periodos/crear.html',
-                  'periodos',
+                  'vistas/periodo/crear.html',
+                  'periodo',
                   function(){
                       _.getCtrl().inicio();
                   }
-            );
+            )
+            .ruta('/contabilidad/registro',
+                  'vistas/contabilidad/movimientos/registrocontable.html',
+                  'registroContable',
+                  function(){
+                      _.getCtrl().inicio_registro();
+                  });
 
     window.addEventListener('load', _.manejadorRutas, false);
     window.addEventListener('hashchange', _.manejadorRutas, false);

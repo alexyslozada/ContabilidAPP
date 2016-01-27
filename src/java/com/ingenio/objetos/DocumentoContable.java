@@ -53,5 +53,18 @@ public class DocumentoContable {
         this.consecutivo = consecutivo;
     }
 
-    
+    public String toJSON(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("{")
+                .append("\"id\":")
+                .append(id_documento)
+                .append(",\"abreviatura\":\"")
+                .append(abreviatura)
+                .append("\",\"documento\":\"")
+                .append(documento)
+                .append("\",\"consecutivo\":")
+                .append(consecutivo)                
+                .append("}");
+        return sb.toString();
+    }
 }

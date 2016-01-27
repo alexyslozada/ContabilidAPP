@@ -2,6 +2,9 @@ package com.ingenio.utilidades;
 
 import com.ingenio.objetos.Paginacion;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -84,13 +87,34 @@ public final class Utilidades {
             datos = Short.parseShort(cadena);
         } catch (NumberFormatException nfe){
             if(generarLog){
-                Utilidades.get().generaLogServer(LOG, Level.WARNING, "Error al hacer parse de un dato que no es numérico {0} en {1}, {2}", new Object[]{cadena, LOG.getClass().getName(), LOG.getName()});
+                generaLogServer(LOG, Level.WARNING, "Error al hacer parse de un dato que no es numérico {0} en {1}", new Object[]{cadena, LOG.getName()});
             }
         }
         return datos;
     }
+    
+    public void appendJSON(StringBuilder sb, String dato){
+        if(dato != null){
+            sb.append("\"").append(dato).append("\"");
+        } else {
+            sb.append(dato);
+        }
+    }
 
-
+    public Calendar parseFecha(String fecha, Logger LOG, boolean generarLog){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar fechaResultado = Calendar.getInstance();
+        try {
+            fechaResultado.setTime(sdf.parse(fecha));
+        } catch (ParseException ex) {
+            fechaResultado = null;
+            if(generarLog){
+                generaLogServer(LOG, Level.WARNING, "Error al hacer parse de una fecha no válida {0} en {1}", new Object[]{fecha, LOG.getName()});
+            }
+        }
+        return fechaResultado;
+    }
+    
     public String paginacionJSON(Paginacion paginacion){
         StringBuilder sb = new StringBuilder();
         sb.append("{")
