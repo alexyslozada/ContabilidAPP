@@ -21,15 +21,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @MultipartConfig
-@WebServlet(name = "SRegContableEncabezadoCrear", urlPatterns = {"/SRegContableEncabezadoCrear"})
-public class SRegContableEncabezadoCrear extends HttpServlet {
+@WebServlet(name = "SRegContableEncabezadoValidar", urlPatterns = {"/SRegContableEncabezadoValidar"})
+public class SRegContableEncabezadoValidar extends HttpServlet {
 
-    private static final Logger LOG = Logger.getLogger(SRegContableEncabezadoCrear.class.getName());
+    private static final Logger LOG = Logger.getLogger(SRegContableEncabezadoValidar.class.getName());
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         response.setContentType("application/json;charset=UTF-8");
+        request.setCharacterEncoding("utf-8");
 
         HttpSession sesion = request.getSession();
         byte tipo;
@@ -45,6 +46,7 @@ public class SRegContableEncabezadoCrear extends HttpServlet {
 
             if (dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.INSERTAR)) {
                 String idDocumento = request.getParameter("idDocumento");
+                String documento = request.getParameter("documento");
                 String fecha = request.getParameter("fecha");
                 String comentario = request.getParameter("comentario");
 
@@ -75,10 +77,11 @@ public class SRegContableEncabezadoCrear extends HttpServlet {
                 
                 if(registroValido){
                     RegistroContableEncabezado rce = new RegistroContableEncabezado();
-                    DocumentoContable documento = new DocumentoContable();
+                    DocumentoContable documentoContable = new DocumentoContable();
                     
-                    documento.setId_documento(iIdDocumento);
-                    rce.setDocumento(documento);
+                    documentoContable.setId_documento(iIdDocumento);
+                    documentoContable.setDocumento(documento);
+                    rce.setDocumento(documentoContable);
                     rce.setFechaMovimiento(cFecha);
                     rce.setComentario(comentario);
                     rce.setPeriodo(periodoContable);

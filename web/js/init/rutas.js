@@ -229,7 +229,15 @@
                   'registroContable',
                   function(){
                       _.getCtrl().inicio_registro();
-                  });
+                  }
+            )
+            .ruta('/contabilidad/registro/detalle',
+                  'vistas/contabilidad/movimientos/registrocontabledetalle.html',
+                  'registroContable',
+                  function(){
+                      _.getCtrl().inicio_detalle();
+                  }
+            );
 
     window.addEventListener('load', _.manejadorRutas, false);
     window.addEventListener('hashchange', _.manejadorRutas, false);

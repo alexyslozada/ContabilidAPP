@@ -1,5 +1,6 @@
 package com.ingenio.objetos;
 
+import com.ingenio.utilidades.Utilidades;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -78,8 +79,11 @@ public class RegistroContableEncabezado {
     }
     
     public String getFechaCreacionFormat(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return sdf.format(fechaCreacion.getTime());
+        if(fechaCreacion != null){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            return sdf.format(fechaCreacion.getTime());
+        }
+        return null;
     }
 
     public void setFechaCreacion(Calendar fechaCreacion) {
@@ -99,8 +103,11 @@ public class RegistroContableEncabezado {
     }
     
     public String getFechaUpdateFormat(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return sdf.format(fechaUpdate.getTime());
+        if(fechaUpdate != null){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            return sdf.format(fechaUpdate.getTime());
+        }
+        return null;
     }
 
     public void setFechaUpdate(Calendar fechaUpdate) {
@@ -135,63 +142,36 @@ public class RegistroContableEncabezado {
                 .append(",\"documento\":")
                 .append(documento.toJSON())
                 .append(",\"fechaMovimiento\":");
-        if(fechaMovimiento != null){
-            sb.append("\"")
-                    .append(getFechaMovimientoFormat())
-                    .append("\"");
-        } else {
-            sb.append(fechaMovimiento);
-        }
+        Utilidades.get().appendJSON(sb, getFechaMovimientoFormat());
         sb.append(",\"comentario\":");
-        if(comentario != null){
-            sb.append("\"")
-                    .append(comentario)
-                    .append("\"");
-        } else {
-            sb.append(comentario);
-        }
+        Utilidades.get().appendJSON(sb, comentario);
         sb.append(",\"periodo\":")
                 .append(periodo.toJSON())
                 .append(",\"usuario\":");
         if(usuario != null){
-            sb.append("\"")
-                    .append(usuario)
-                    .append("\"");
+            sb.append(usuario.toJSON());
         } else {
             sb.append(usuario);
         }
         sb.append(",\"fechaCreacion\":");
-        if(fechaCreacion != null){
-            sb.append("\"")
-                    .append(getFechaCreacionFormat())
-                    .append("\"");
-        } else {
-            sb.append(fechaCreacion);
-        }
+        Utilidades.get().appendJSON(sb, getFechaCreacionFormat());
         sb.append(",\"usuarioUpdate\":");
         if(usuarioUpdate != null){
-            sb.append("\"")
-                    .append(usuarioUpdate)
-                    .append("\"");
+            sb.append(usuarioUpdate.toJSON());
         } else {
             sb.append(usuarioUpdate);
         }
         sb.append(",\"fechaUpdate\":");
-        if(fechaUpdate != null){
-            sb.append("\"")
-                    .append(getFechaUpdate())
-                    .append("\"");
-        } else {
-            sb.append(fechaUpdate);
-        }
+        Utilidades.get().appendJSON(sb, getFechaUpdateFormat());
         sb.append(",\"anulado\":")
                 .append(anulado)
                 .append(",\"registros\":[");
-        for(RegistroContableDetalle rcd:registros){
-            sb.append(rcd.toJSON());
+        if(registros != null){
+            for(RegistroContableDetalle rcd:registros){
+                sb.append(rcd.toJSON());
+            }
         }
-        sb.append("]")
-                .append("}");
+        sb.append("]").append("}");
         return sb.toString();
     }
 }

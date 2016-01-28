@@ -1,0 +1,154 @@
+<div class="vista">
+    <fieldset>
+        <legend>Registro de Movimientos</legend>
+        <div class="contenedor">
+            <div class="item tablet-50">
+                <label for="documento" class="label-titulo">Documento</label>
+                <input type="text" id="documento" readonly />
+            </div>
+            <div class="item tablet-50">
+                <label for="fecha" class="label-titulo">Fecha</label>
+                <input type="date" id="fecha" readonly />
+            </div>
+            <div class="item">
+                <label for="comentario" class="label-titulo">Comentario</label>
+                <textarea id="comentario" readonly></textarea>
+            </div>
+        </div>
+    </fieldset>
+    <br>
+    <hr>
+    <div id="registros_titulo">
+        <div class="contenedor">
+            <div class="item tablet-30">
+                <label class="label-titulo">Cuenta</label>
+            </div>
+            <div class="item tablet-20">
+                <label class="label-titulo">Tercero</label>
+            </div>
+            <div class="item tablet-20">
+                <label class="label-titulo">C.Costo</label>
+            </div>
+            <div class="item tablet-10">
+                <label class="label-titulo">Débito</label>
+            </div>
+            <div class="item tablet-10">
+                <label class="label-titulo">Crédito</label>
+            </div>
+            <div class="item tablet-10">
+                <label class="label-titulo">Eliminar</label>
+            </div>
+        </div>
+    </div>
+    <div id="registros_detalle">
+        <div class="contenedor">
+            <div class="item tablet-30">
+                <div class="cuenta_codigo">11100501</div>
+                <div class="cuenta_nombre">CAJA GENERAL</div>
+            </div>
+            <div class="item tablet-20">
+                <div class="tercero_nit">80005465</div>
+                <div class="tercero_nombre">JESUS ALEXYS LOZADA CASALLAS</div>
+            </div>
+            <div class="item tablet-20">
+                <div class="ccosto_codigo">001</div>
+                <div class="ccosto_nombre">ADMINISTRATIVA</div>
+            </div>
+            <div class="item tablet-10">
+                <div class="valor_debito">100,000</div>
+            </div>
+            <div class="item tablet-10">
+                <div class="valor_credito">0</div>
+            </div>
+            <div class="item tablet-10">
+                <button class="boton eliminar">Eliminar</button>
+            </div>
+        </div>
+    </div>
+    <div id="registros_resumen">
+        <div class="contenedor">
+            <div class="item tablet-70" style="text-align: right;">TOTALES</div>
+            <div class="item tablet-10">
+                <div id="total_debitos" class="total_debitos"></div>
+            </div>
+            <div class="item tablet-10">
+                <div id="total_creditos" class="total_creditos"></div>
+            </div>
+            <div id="total_diferencia" class="total_diferencia"></div>
+        </div>
+    </div>
+    <form id="frmRegistroContableDetalle" method="post" action="#">
+        <fieldset>
+            <legend>Detalle</legend>
+            <div class="contenedor">
+                <div class="item tablet-50">
+                    <label for="cuentapuc" class="label-titulo">Cuenta</label>
+                    <input type="text" id="cuentapuc" name="cuentapuc" maxlength="8" required placeholder="Cuenta" autofocus autocomplete="off" />
+                </div>
+                <div class="item tablet-50">
+                    <label for="cuenta" class="label-titulo">Nombre</label>
+                    <input type="text" id="cuenta" name="cuenta" readonly/>
+                    <input type="hidden" id="id_cuenta_puc" name="id_cuenta_puc" />
+                </div>
+                <div class="item tablet-50">
+                    <label for="debito" class="label-titulo">Débito</label>
+                    <input type="number" id="debito" name="debito" value="0" min="0" required />
+                </div>
+                <div class="item tablet-50">
+                    <label for="credito" class="label-titulo">Crédito</label>
+                    <input type="number" id="credito" name="credito" value="0" min="0" required />
+                </div>
+                <div class="item tablet-50">
+                    <label for="tercero" class="label-titulo">Tercero</label>
+                    <input type="text" id="tercero" name="tercero" maxlength="12" required placeholder="Identificación" />
+                </div>
+                <div class="item tablet-50">
+                    <label for="nombre_tercero" class="label-titulo">Nombre</label>
+                    <input type="text" id="nombre_tercero" readonly />
+                    <input type="hidden" id="id_tercero" name="id_tercero" />
+                </div>
+                <div class="item tablet-50">
+                    <label for="centrocosto" class="label-titulo">Centro de Costo</label>
+                    <input type="text" id="centrocosto" name="centrocosto" maxlength="3" required placeholder="Código" />
+                </div>
+                <div class="item tablet-50">
+                    <label for="nombre_ccosto" class="label-titulo">Nombre</label>
+                    <input type="text" id="nombre_ccosto" readonly />
+                    <input type="hidden" id="id_centro_costo" name="id_centro_costo" />
+                </div>
+                <div class="item tablet-50">
+                    <button id="btnRegistrar"
+                            class="boton primario"
+                            onclick="_.getCtrl().registrarDetalle();">Registrar</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+
+    <template id="tmpl_registro">
+        <div class="contenedor">
+            <div class="item tablet-30">
+                <div class="cuenta_codigo"></div>
+                <div class="cuenta_nombre"></div>
+            </div>
+            <div class="item tablet-20">
+                <div class="tercero_nit"></div>
+                <div class="tercero_nombre"></div>
+            </div>
+            <div class="item tablet-20">
+                <div class="ccosto_codigo"></div>
+                <div class="ccosto_nombre"></div>
+            </div>
+            <div class="item tablet-10">
+                <div class="valor_debito"></div>
+            </div>
+            <div class="item tablet-10">
+                <div class="valor_credito"></div>
+            </div>
+            <div class="item tablet-10">
+                <button class="boton eliminar">Eliminar</button>
+            </div>
+        </div>
+    </template>
+</div>

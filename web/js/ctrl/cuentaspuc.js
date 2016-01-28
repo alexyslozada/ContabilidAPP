@@ -62,6 +62,25 @@
             }
             return enviar;
         },
+        validaCuentaDetalle: function(cuenta){
+            var enviar = false;
+            if(cuenta.length === 8){
+                enviar = true;
+            }
+            return enviar;
+        },
+        buscarXCuentaOId: function(tipo, cuenta, id, callback){
+            var data = new FormData(),
+                obj = {
+                    url: 'SCuentasPucConsultaXCuentaOId',
+                    datos: data,
+                    callback: callback
+                };
+            data.append('tipoConsulta', tipo);
+            data.append('cuenta', cuenta);
+            data.append('id', id);
+            _.ejecutar(obj);
+        },
         listar: function(callback){
             var data = _.paginacion(this.pagina, this.limite, this.columna_orden, this.tipo_orden);
             data.append('tipoConsulta', 1);

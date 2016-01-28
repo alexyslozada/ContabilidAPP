@@ -263,6 +263,18 @@
                 window.location.href = 'index.html';
             }
         },
+        buscarPorNumeroOId: function(tipo, numero, id, callback){
+            var data = new FormData(),
+                obj = {
+                    url: 'STerceroGetXId',
+                    datos: data,
+                    callback: callback
+                };
+            data.append('tipoConsulta', tipo);
+            data.append('numero_identificacion', numero);
+            data.append('id', id);
+            _.ejecutar(obj);
+        },
         paginar: function () {
             _.paginar();
             this.listar(this.cargarTabla);

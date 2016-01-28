@@ -86,6 +86,18 @@
                 window.location.href = 'index.html';
             }
         },
+        buscarXCodigoOId: function(tipo, codigo, id, callback){
+            var data = new FormData(),
+                obj = {
+                    url: 'SCentroCostoGetXCodigoXId',
+                    datos: data,
+                    callback: callback
+                };
+            data.append('tipoConsulta', tipo);
+            data.append('codigo', codigo);
+            data.append('id', id);
+            _.ejecutar(obj);
+        },
         paginar: function () {
             _.paginar();
             this.listar(this.cargarTabla);
@@ -147,7 +159,7 @@
         var data = new FormData();
         data.append('tipoConsulta', 2);
         data.append('id', id);
-        _.ajax({url: 'SCentroCostoGetXCuentaXId', datos: data})
+        _.ajax({url: 'SCentroCostoGetXCodigoXId', datos: data})
                 .then(function (datos) {
                     muestraActualizar(datos);
                 }, function (error) {

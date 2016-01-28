@@ -3,13 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/web/js/init/libreria.js</file>
+            <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/web/js/ctrl/centroscosto.js</file>
             <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/web/vistas/contabilidad/movimientos/registrocontable.html</file>
-            <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/web/js/ctrl/documentocontable.js</file>
-            <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/web/vistas/cuentaspuc/crear.html</file>
-            <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/src/java/com/ingenio/servlets/periodo/SPeriodoCrear.java</file>
+            <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/src/java/com/ingenio/servlets/tercero/STerceroGetXId.java</file>
+            <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/web/css/agregar.css</file>
             <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/web/js/ctrl/registrocontable.js</file>
-            <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/src/java/com/ingenio/servlets/contabilidad/SRegContableEncabezadoCrear.java</file>
-            <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/src/java/com/ingenio/dao/DAORegistroContableEncabezado.java</file>
+            <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/web/vistas/contabilidad/movimientos/registrocontabledetalle.html</file>
         </group>
     </open-files>
 </project-private>

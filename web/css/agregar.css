@@ -1,0 +1,13 @@
+textarea{
+    display: block;
+    font-family: 'Roboto';
+    padding: 1em;
+    text-transform: uppercase;
+    width: 100%;
+}
+#registros_detalle{
+    font-family: 'Open Sans', sans-serif;
+}
+#registros_detalle > div > div > div:nth-child(even){
+    font-weight: 300;
+}

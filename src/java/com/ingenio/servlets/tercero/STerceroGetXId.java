@@ -38,39 +38,38 @@ public class STerceroGetXId extends HttpServlet {
             DAOTerceros dao = new DAOTerceros();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
 
-            if (dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.CONSULTAR)) {
-                String tipoConsulta = request.getParameter("tipoConsulta");
-                
-                short iTipoConsulta = Utilidades.get().parseShort(tipoConsulta, LOG, true);
-                
-                Tercero tercero = new Tercero();
-                
-                tipo = Constantes.MSG_CORRECTO;
-                mensaje = Constantes.MSG_CONSULTA_REALIZADA_TEXT;
-                switch(iTipoConsulta){
-                    case 1:
-                        String numero = request.getParameter("numero_identificacion");
-                        tercero.setNumero_identificacion(numero);
-                        break;
-                    case 2:
-                        String id = request.getParameter("id");
-                        short iId = Utilidades.get().parseShort(id, LOG, true);
-                        tercero.setId_tercero(iId);
-                        break;
-                    default:
-                        tipo = Constantes.MSG_ADVERTENCIA;
-                        mensaje = Constantes.MSG_CONSULTA_NO_VALIDA_TEXT;
+            String tipoConsulta = request.getParameter("tipoConsulta");
+
+            short iTipoConsulta = Utilidades.get().parseShort(tipoConsulta, LOG, true);
+
+            Tercero tercero = new Tercero();
+
+            tipo = Constantes.MSG_CORRECTO;
+            mensaje = Constantes.MSG_CONSULTA_REALIZADA_TEXT;
+            switch (iTipoConsulta) {
+                case 1:
+                    String numero = request.getParameter("numero_identificacion");
+                    tercero.setNumero_identificacion(numero);
+                    break;
+                case 2:
+                    String id = request.getParameter("id");
+                    short iId = Utilidades.get().parseShort(id, LOG, true);
+                    tercero.setId_tercero(iId);
+                    break;
+                default:
+                    tipo = Constantes.MSG_ADVERTENCIA;
+                    mensaje = Constantes.MSG_CONSULTA_NO_VALIDA_TEXT;
+            }
+            try {
+                objeto = dao.getXId(iTipoConsulta, tercero);
+                if (objeto.length() == 0) {
+                    tipo = Constantes.MSG_ADVERTENCIA;
+                    mensaje = Constantes.MSG_REGISTROS_NO_ENCONTRADOS_TEXT;
                 }
-                try{
-                    objeto = dao.getXId(iTipoConsulta, tercero);
-                } catch (ExcepcionGeneral eg){
-                    Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en STerceroGetXId {0}", new Object[]{eg.getMessage()});
-                    tipo = Constantes.MSG_ERROR;
-                    mensaje = eg.getMessage();
-                }
-            } else {
-                tipo = Constantes.MSG_ADVERTENCIA;
-                mensaje = Constantes.MSG_SIN_PERMISO_TEXT;
+            } catch (ExcepcionGeneral eg) {
+                Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en STerceroGetXId {0}", new Object[]{eg.getMessage()});
+                tipo = Constantes.MSG_ERROR;
+                mensaje = eg.getMessage();
             }
         } else {
             tipo = Constantes.MSG_NO_AUTENTICADO;

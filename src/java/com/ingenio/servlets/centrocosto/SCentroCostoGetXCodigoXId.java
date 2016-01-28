@@ -20,10 +20,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @MultipartConfig
-@WebServlet(name = "SCentroCostoGetXCuentaXId", urlPatterns = {"/SCentroCostoGetXCuentaXId"})
-public class SCentroCostoGetXCuentaXId extends HttpServlet {
+@WebServlet(name = "SCentroCostoGetXCodigoXId", urlPatterns = {"/SCentroCostoGetXCodigoXId"})
+public class SCentroCostoGetXCodigoXId extends HttpServlet {
 
-    private static final Logger LOG = Logger.getLogger(SCentroCostoGetXCuentaXId.class.getName());
+    private static final Logger LOG = Logger.getLogger(SCentroCostoGetXCodigoXId.class.getName());
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -40,42 +40,40 @@ public class SCentroCostoGetXCuentaXId extends HttpServlet {
             DAOCentroCosto dao = new DAOCentroCosto();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
 
-            if (dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.CONSULTAR)) {
+            String tipoConsulta = request.getParameter("tipoConsulta");
+            short iTipoConsulta = Utilidades.get().parseShort(tipoConsulta, LOG, true);
 
-                String tipoConsulta = request.getParameter("tipoConsulta");
-                short iTipoConsulta = Utilidades.get().parseShort(tipoConsulta, LOG, true);
-                
-                CentroCosto centrocosto = new CentroCosto();
-                tipo = Constantes.MSG_CORRECTO;
-                mensaje = Constantes.MSG_CONSULTA_REALIZADA_TEXT;
-                
-                switch(iTipoConsulta){
-                    case 1:
-                        String codigo = request.getParameter("codigo");
-                        centrocosto.setCodigo(codigo);
-                        break;
-                    case 2:
-                        String id = request.getParameter("id");
-                        short iId = Utilidades.get().parseShort(id, LOG, true);
-                        centrocosto.setId_centro_costo(iId);
-                        break;
-                    default:
-                        tipo = Constantes.MSG_ADVERTENCIA;
-                        mensaje = Constantes.MSG_CONSULTA_NO_VALIDA_TEXT;
-                }
-                       
-                try{
-                    objeto = dao.getCentroPorCodigoOId(iTipoConsulta, centrocosto);
-                } catch (ExcepcionGeneral eg){
-                    Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en SCentroCostoGetXCuentaXId {0}", new Object[]{eg.getMessage()});
-                    tipo = Constantes.MSG_ERROR;
-                    mensaje = eg.getMessage();
-                }
-                
-            } else {
-                tipo = Constantes.MSG_ADVERTENCIA;
-                mensaje = Constantes.MSG_SIN_PERMISO_TEXT;
+            CentroCosto centrocosto = new CentroCosto();
+            tipo = Constantes.MSG_CORRECTO;
+            mensaje = Constantes.MSG_CONSULTA_REALIZADA_TEXT;
+
+            switch (iTipoConsulta) {
+                case 1:
+                    String codigo = request.getParameter("codigo");
+                    centrocosto.setCodigo(codigo);
+                    break;
+                case 2:
+                    String id = request.getParameter("id");
+                    short iId = Utilidades.get().parseShort(id, LOG, true);
+                    centrocosto.setId_centro_costo(iId);
+                    break;
+                default:
+                    tipo = Constantes.MSG_ADVERTENCIA;
+                    mensaje = Constantes.MSG_CONSULTA_NO_VALIDA_TEXT;
             }
+
+            try {
+                objeto = dao.getCentroPorCodigoOId(iTipoConsulta, centrocosto);
+                if(objeto.length() == 0){
+                    tipo = Constantes.MSG_ADVERTENCIA;
+                    mensaje = Constantes.MSG_REGISTROS_NO_ENCONTRADOS_TEXT;
+                }
+            } catch (ExcepcionGeneral eg) {
+                Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en SCentroCostoGetXCuentaXId {0}", new Object[]{eg.getMessage()});
+                tipo = Constantes.MSG_ERROR;
+                mensaje = eg.getMessage();
+            }
+
         } else {
             tipo = Constantes.MSG_NO_AUTENTICADO;
             mensaje = Constantes.MSG_NO_AUTENTICADO_TEXT;
