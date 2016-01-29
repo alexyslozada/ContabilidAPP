@@ -1,7 +1,7 @@
 package com.ingenio.servlets.contabilidad;
 
 import com.ingenio.dao.DAOPeriodo;
-import com.ingenio.dao.DAORegistroContableEncabezado;
+import com.ingenio.dao.DAORegistroContable;
 import com.ingenio.objetos.DocumentoContable;
 import com.ingenio.objetos.Periodo;
 import com.ingenio.objetos.RegistroContableEncabezado;
@@ -39,7 +39,7 @@ public class SRegContableEncabezadoValidar extends HttpServlet {
         boolean registroValido = false;
 
         if (Utilidades.get().autenticado(sesion)) {
-            DAORegistroContableEncabezado dao = new DAORegistroContableEncabezado();
+            DAORegistroContable dao = new DAORegistroContable();
             DAOPeriodo daoPeriodo = new DAOPeriodo();
             
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
@@ -86,7 +86,7 @@ public class SRegContableEncabezadoValidar extends HttpServlet {
                     rce.setComentario(comentario);
                     rce.setPeriodo(periodoContable);
                     
-                    sesion.setAttribute("registrocontableencabezado", rce);
+                    sesion.setAttribute(Constantes.REGISTROCONTABLEENCABEZADO, rce);
                     tipo = Constantes.MSG_CORRECTO;
                     mensaje = "Registro contable establecido en la sesión";
                     objeto = rce.toJSON();

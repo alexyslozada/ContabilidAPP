@@ -30,4 +30,8 @@ public final class Constantes {
     public static final String MODIFICAR = "modificar";
     public static final String BORRAR    = "borrar";
     public static final String CONSULTAR = "consultar";
+    
+    /* Nombres de los atributos que ayudan en las sesiones */
+    public static final String REGISTROCONTABLEENCABEZADO = "RegistroContableEncabezado";
+    public static final String REGISTROCONTABLEDETALLE = "RegistroContableDetalle";
 }

@@ -64,6 +64,10 @@ public class SCuentasPucConsultaXCuentaOId extends HttpServlet {
                             mensaje = Constantes.MSG_CONSULTA_NO_VALIDA_TEXT;
                     }
                     objeto = dao.getCuentaXCuentaOId(iTipoConsulta, cuentasPuc);
+                    if(objeto == null || objeto.length() == 0){
+                        tipo = Constantes.MSG_ADVERTENCIA;
+                        mensaje = Constantes.MSG_REGISTROS_NO_ENCONTRADOS_TEXT;
+                    }
                 } catch (ExcepcionGeneral eg){
                     Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en SCuentasPucListar {0}", new Object[]{eg.getMessage()});
                     tipo = Constantes.MSG_ERROR;

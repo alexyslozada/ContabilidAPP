@@ -182,7 +182,7 @@ public class Tercero {
     public String toJSON(){
         StringBuilder sb = new StringBuilder();
         sb.append("{")
-                .append("\"id\"")
+                .append("\"id\":")
                 .append(id_tercero)
                 .append(",\"tipo_identificacion\":")
                 .append(tipo_identificacion)

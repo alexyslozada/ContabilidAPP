@@ -11,15 +11,15 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DAORegistroContableEncabezado extends DAOGenerales {
+public class DAORegistroContable extends DAOGenerales {
 
     public final String OBJETO = "REGISTROCONTABLE";
     private Connection conexion = null;
     private PreparedStatement sentencia = null;
     private ResultSet resultado = null;
-    private static final Logger LOG = Logger.getLogger(DAORegistroContableEncabezado.class.getName());
+    private static final Logger LOG = Logger.getLogger(DAORegistroContable.class.getName());
     
-    public short crear(RegistroContableEncabezado registro) throws ExcepcionGeneral {
+    public short crearEncabezado(RegistroContableEncabezado registro) throws ExcepcionGeneral {
         short respuesta = 0;
         try{
             setConsulta("select fn_regconenc_ins(?,?,?,?,?)");
@@ -35,7 +35,7 @@ public class DAORegistroContableEncabezado extends DAOGenerales {
                 respuesta = resultado.getShort(1);
             }
         } catch (SQLException sqle){
-            Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en DAORegistroContableEncabezado.crear: {0}", new Object[]{sqle.getMessage()});
+            Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en DAORegistroContable.crear: {0}", new Object[]{sqle.getMessage()});
             throw new ExcepcionGeneral(sqle.getMessage());
         } finally {
             cierraConexion(conexion, sentencia, resultado);

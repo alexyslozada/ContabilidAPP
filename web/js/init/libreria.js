@@ -297,7 +297,7 @@
          */
         Number.prototype.formatNumero = function (decimales, negativo, digitos, temporal) {
             var n = this,
-                c = isNaN(decimales = Math.abs(decimales)) ? 2 : decimales,
+                c = isNaN(decimales = Math.abs(decimales)) ? 0 : decimales,
                 d = typeof digitos === 'undefined' ? "." : digitos,
                 t = typeof temporal === 'undefined' ? "," : temporal,
                 si = n < 0 ? "-" : "",

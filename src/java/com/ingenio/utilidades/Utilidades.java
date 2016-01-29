@@ -93,6 +93,23 @@ public final class Utilidades {
         return datos;
     }
     
+    public int parseInt(String cadena, Logger LOG, boolean generarLog){
+        int datos = 0;
+        try{
+            datos = Integer.parseInt(cadena);
+        } catch (NumberFormatException nfe){
+            if(generarLog){
+                generaLogServer(LOG, Level.WARNING, "Error al hacer parse de un dato que no es numérico {0} en {1}", new Object[]{cadena, LOG.getName()});
+            }
+        }
+        return datos;
+    }
+    
+    /**
+     * Permite agregar datos string o nulos a la función toJSON de los objetos
+     * @param sb El StringBuilder que está almacenando el resultado
+     * @param dato El String que se evalua para agregar
+     */
     public void appendJSON(StringBuilder sb, String dato){
         if(dato != null){
             sb.append("\"").append(dato).append("\"");
