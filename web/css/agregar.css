@@ -5,6 +5,9 @@ textarea{
     text-transform: uppercase;
     width: 100%;
 }
+.texto-derecha{
+    text-align: right;
+}
 #registros_detalle{
     font-family: 'Open Sans', sans-serif;
 }

@@ -68,6 +68,21 @@
                 setSingleton: function (objeto) {
                     singleton = objeto;
                 },
+                onEnterSiguiente: function(){
+                    this.elemento.addEventListener('keypress', function(e){
+                        var indice = parseInt(e.target.getAttribute('tabindex'),10),
+                            siguiente;
+                        if (e.keyCode === 13){
+                            e.preventDefault();
+                            siguiente = e.target.parentNode.parentNode.querySelector('[tabindex="'+(indice+1)+'"]');
+                            siguiente.focus();
+                            if(siguiente.select){
+                                siguiente.select();
+                            }
+                        }
+                    }, false);
+                    return this;
+                },
                 llenarFilas: function (cuerpoTabla, template, datos, campos, acciones) {
                     var cuerpo = document.getElementById(cuerpoTabla),
                             fila = document.getElementById(template),

@@ -107,12 +107,18 @@ public class SRegContableDetalleValidar extends HttpServlet {
                     List<RegistroContableDetalle> lista;
                     lista = (ArrayList<RegistroContableDetalle>) sesion.getAttribute(Constantes.REGISTROCONTABLEDETALLE);
                     
+                    int iItem;
+                    
                     if (lista != null) {
+                        iItem = lista.get(lista.size()-1).getId_reg_con_det() + 1;
+                        registro.setId_reg_con_det(iItem);
                         lista.add(registro);
                     } else {
                         lista = new ArrayList<>();
+                        registro.setId_reg_con_det(1);
                         lista.add(registro);
                     }
+                    
                     sesion.setAttribute(Constantes.REGISTROCONTABLEDETALLE, lista);
                     tipo = Constantes.MSG_CORRECTO;
                     mensaje = "Registro agregado a la lista correctamente";

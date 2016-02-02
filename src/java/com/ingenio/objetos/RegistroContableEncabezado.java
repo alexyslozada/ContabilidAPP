@@ -49,6 +49,13 @@ public class RegistroContableEncabezado {
     public void setFechaMovimiento(Calendar fechaMovimiento) {
         this.fechaMovimiento = fechaMovimiento;
     }
+    
+    public void setFechaMovimiento(java.sql.Date fecha){
+        if(fecha != null){
+            fechaMovimiento = Calendar.getInstance();
+            fechaMovimiento.setTime(fecha);
+        }
+    }
 
     public String getComentario() {
         return comentario;
@@ -88,6 +95,13 @@ public class RegistroContableEncabezado {
 
     public void setFechaCreacion(Calendar fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
+    }
+    
+    public void setFechaCreacion(java.sql.Date fecha){
+        if(fecha != null){
+            fechaCreacion = Calendar.getInstance();
+            fechaCreacion.setTime(fecha);
+        }
     }
 
     public Usuario getUsuarioUpdate() {

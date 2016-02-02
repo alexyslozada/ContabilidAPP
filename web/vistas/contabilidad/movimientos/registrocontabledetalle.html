@@ -47,12 +47,19 @@
         <div class="contenedor">
             <div class="item tablet-70" style="text-align: right;">TOTALES</div>
             <div class="item tablet-10">
-                <div id="total_debitos" class="total_debitos"></div>
+                <div id="total_debitos" class="total_debitos texto-derecha"></div>
             </div>
             <div class="item tablet-10">
-                <div id="total_creditos" class="total_creditos"></div>
+                <div id="total_creditos" class="total_creditos texto-derecha"></div>
             </div>
-            <div id="total_diferencia" class="total_diferencia"></div>
+            <div class="item tablet-10">
+                <div id="total_diferencia" class="total_diferencia texto-derecha"></div>
+            </div>
+        </div>
+    </div>
+    <div class="contenedor">
+        <div class="item tablet-80">
+            <button id="btnGuardarDocumento" class="boton primario">Guardar Documento</button> 
         </div>
     </div>
     <form id="frmRegistroContableDetalle" method="post" action="#">
@@ -61,7 +68,7 @@
             <div class="contenedor">
                 <div class="item tablet-50">
                     <label for="cuentapuc" class="label-titulo">Cuenta</label>
-                    <input type="text" id="cuentapuc" name="cuentapuc" maxlength="8" required placeholder="Cuenta" autofocus autocomplete="off" />
+                    <input type="text" id="cuentapuc" name="cuentapuc" maxlength="8" required placeholder="Cuenta" autofocus autocomplete="off" tabindex="1" />
                 </div>
                 <div class="item tablet-50">
                     <label for="cuenta" class="label-titulo">Nombre</label>
@@ -70,15 +77,15 @@
                 </div>
                 <div class="item tablet-50">
                     <label for="debito" class="label-titulo">Débito</label>
-                    <input type="number" id="debito" name="debito" value="0" min="0" required />
+                    <input type="number" id="debito" name="debito" value="0" min="0" required tabindex="2" />
                 </div>
                 <div class="item tablet-50">
                     <label for="credito" class="label-titulo">Crédito</label>
-                    <input type="number" id="credito" name="credito" value="0" min="0" required />
+                    <input type="number" id="credito" name="credito" value="0" min="0" required tabindex="3" />
                 </div>
                 <div class="item tablet-50">
                     <label for="tercero" class="label-titulo">Tercero</label>
-                    <input type="text" id="tercero" name="tercero" maxlength="12" required placeholder="Identificación" />
+                    <input type="text" id="tercero" name="tercero" maxlength="12" required placeholder="Identificación" tabindex="4" />
                 </div>
                 <div class="item tablet-50">
                     <label for="nombre_tercero" class="label-titulo">Nombre</label>
@@ -87,7 +94,7 @@
                 </div>
                 <div class="item tablet-50">
                     <label for="centrocosto" class="label-titulo">Centro de Costo</label>
-                    <input type="text" id="centrocosto" name="centrocosto" maxlength="3" required placeholder="Código" />
+                    <input type="text" id="centrocosto" name="centrocosto" maxlength="3" required placeholder="Código" tabindex="5" />
                 </div>
                 <div class="item tablet-50">
                     <label for="nombre_ccosto" class="label-titulo">Nombre</label>
@@ -97,7 +104,7 @@
                 <div class="item tablet-50">
                     <button id="btnRegistrar"
                             class="boton primario"
-                            onclick="_.getCtrl().registrarDetalle();">Registrar</button>
+                            onclick="_.getCtrl().registrarDetalle();" tabindex="6">Registrar</button>
                 </div>
             </div>
         </fieldset>
@@ -119,10 +126,10 @@
                 <div class="ccosto_nombre"></div>
             </div>
             <div class="item tablet-10">
-                <div class="valor_debito"></div>
+                <div class="valor_debito texto-derecha"></div>
             </div>
             <div class="item tablet-10">
-                <div class="valor_credito"></div>
+                <div class="valor_credito texto-derecha"></div>
             </div>
             <div class="item tablet-10">
                 <button class="boton boton_eliminar">Eliminar</button>
