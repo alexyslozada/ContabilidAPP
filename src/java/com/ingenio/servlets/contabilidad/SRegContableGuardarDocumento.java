@@ -34,7 +34,6 @@ public class SRegContableGuardarDocumento extends HttpServlet {
         byte tipo;
         String mensaje;
         String objeto = "";
-        boolean registroValido = false;
         Utilidades utilidades = Utilidades.get();
 
         if (utilidades.autenticado(sesion)) {
@@ -47,6 +46,7 @@ public class SRegContableGuardarDocumento extends HttpServlet {
                 List<RegistroContableDetalle> detalle = (List<RegistroContableDetalle>) sesion.getAttribute(Constantes.REGISTROCONTABLEDETALLE);
 
                 if (encabezado != null) {
+                    encabezado.setUsuario(usuario);
                     // Validación de detalle cuadrado
                     if (detalle != null) {
                         int diferencia = 0;
@@ -55,26 +55,17 @@ public class SRegContableGuardarDocumento extends HttpServlet {
                         }
                         if (diferencia == 0) {
                             try {
-                                dao.crearEncabezado(encabezado);
-                                registroValido = true;
-
-                                for (RegistroContableDetalle registro : detalle) {
-                                    registro.setId_reg_con_enc(encabezado.getId_reg_con_enc());
-                                    boolean insertado = dao.crearRegistroDetalle(registro);
-                                    // Si existe algún error, se anula el documento
-                                    if (!insertado) {
-                                        dao.anularDocumento(encabezado);
-                                        registroValido = false;
-                                        break;
-                                    }
-                                }
-                                if (registroValido) {
+                                dao.registrarDocumentoCompleto(encabezado, detalle);
+                                if (encabezado.getId_reg_con_enc() > 0) {
                                     tipo = Constantes.MSG_CORRECTO;
                                     mensaje = Constantes.MSG_CREADO_TEXT + encabezado.getDocumento().getConsecutivo();
+                                    objeto = encabezado.toJSON();
                                 } else {
                                     tipo = Constantes.MSG_ERROR;
-                                    mensaje = "Ocurrió un error al momento de registrar el detalle. Se anuló el documento: " + encabezado.getDocumento().getDocumento() + " " + encabezado.getDocumento().getConsecutivo();
+                                    mensaje = "No se pudo registrar el documento";
                                 }
+                                sesion.removeAttribute(Constantes.REGISTROCONTABLEENCABEZADO);
+                                sesion.removeAttribute(Constantes.REGISTROCONTABLEDETALLE);
                             } catch (ExcepcionGeneral eg) {
                                 utilidades.generaLogServer(LOG, Level.SEVERE, "Error en SRegContableGuardarDocumento {0}", new Object[]{eg.getMessage()});
                                 tipo = Constantes.MSG_ERROR;
@@ -86,7 +77,7 @@ public class SRegContableGuardarDocumento extends HttpServlet {
                         }
                     } else {
                         tipo = Constantes.MSG_ERROR;
-                        mensaje = "No se encontró el detalle del documento a guardar";
+                        mensaje = "No se encontraron registros del documento a guardar";
                     }
                 } else {
                     tipo = Constantes.MSG_ERROR;

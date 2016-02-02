@@ -84,6 +84,10 @@
             _.getID('cuentapuc').get().addEventListener('blur', function(e){self.buscarCuenta(e.target.value);}, false);
             _.getID('tercero').get().addEventListener('blur', function(e){self.buscarTercero(e.target.value);}, false);
             _.getID('centrocosto').get().addEventListener('blur', function(e){self.buscarCCosto(e.target.value);}, false);
+            _.getID('btnRegistrar').click(function(e){
+                e.preventDefault();
+                self.registrarDetalle();
+            });
             _.getID('btnGuardarDocumento').click(function(e){
                 e.preventDefault();
                 self.guardarDocumento();
@@ -267,7 +271,8 @@
         documentoGuardado: function(datos){
             var data = JSON.parse(datos);
             if (data.tipo === _.MSG_CORRECTO){
-                alert('Documento guardado con el Consecutivo: '+data.objeto.consecutivo);
+                alert('Documento guardado con el Consecutivo: '+data.objeto.documento.consecutivo);
+                window.location.hash ="#/contabilidad/registro";
             } else {
                 alert(data.mensaje);
                 registroCtrl.divMensaje.delClass('no-mostrar').text(data.mensaje);
