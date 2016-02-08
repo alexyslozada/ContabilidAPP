@@ -237,6 +237,13 @@
                   function(){
                       _.getCtrl().inicio_detalle();
                   }
+            )
+            .ruta('/contabilidad/consultar-documento',
+                  'vistas/contabilidad/movimientos/consultadocumento.html',
+                  'registroContable',
+                  function(){
+                      _.getCtrl().inicio_consultar();
+                  }
             );
 
     window.addEventListener('load', _.manejadorRutas, false);

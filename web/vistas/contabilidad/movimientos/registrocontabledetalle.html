@@ -17,6 +17,7 @@
         </div>
     </fieldset>
     <br>
+    <h3>Detalle</h3>
     <hr>
     <div id="registros_titulo">
         <div class="contenedor">
@@ -58,13 +59,13 @@
         </div>
     </div>
     <div class="contenedor">
-        <div class="item tablet-80">
+        <div class="item">
             <button id="btnGuardarDocumento" class="boton primario">Guardar Documento</button> 
+            <a href="#/contabilidad/registro" class="boton boton_cancelar">Cancelar</a>
         </div>
     </div>
     <form id="frmRegistroContableDetalle" method="post" action="#">
         <fieldset>
-            <legend>Detalle</legend>
             <div class="contenedor">
                 <div class="item tablet-50">
                     <label for="cuentapuc" class="label-titulo">Cuenta</label>
@@ -101,8 +102,9 @@
                     <input type="text" id="nombre_ccosto" name="nombre_ccosto" readonly />
                     <input type="hidden" id="id_centro_costo" name="id_centro_costo" />
                 </div>
-                <div class="item tablet-50">
+                <div class="item">
                     <button id="btnRegistrar" class="boton primario" tabindex="6">Registrar</button>
+                    <a href="#/contabilidad/registro" class="boton boton_cancelar">Cancelar</a>
                 </div>
             </div>
         </fieldset>

@@ -5,6 +5,10 @@ textarea{
     text-transform: uppercase;
     width: 100%;
 }
+.boton_eliminar{
+    margin: 0;
+    padding: .5em .5em;
+}
 .texto-derecha{
     text-align: right;
 }

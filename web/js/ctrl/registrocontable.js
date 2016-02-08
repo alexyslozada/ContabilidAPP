@@ -13,14 +13,15 @@
             var self = this;
             this.formulario = _.getID('frmRegistroContable').noSubmit().get();
             this.divMensaje = _.getID('mensaje');
-            _.getID('abreviatura').get().addEventListener('blur', function(e){self.buscarDocumento(e.target.value);}, false);
+            _.getID('abreviatura').get()
+                    .addEventListener('blur', function(e){
+                        self.buscarDocumento(e.target.value, self.poblarDocumento);}, false);
         },
-        buscarDocumento: function(abr){
-            var self = this,
-                data = new FormData(),
+        buscarDocumento: function(abr, callback){
+            var data = new FormData(),
                 obj = {
                     url: 'SDocumentoContableGetXId',
-                    callback: self.poblarDocumento,
+                    callback: callback,
                     datos: data
                 };
             data.append('tipoConsulta', 1);
@@ -70,14 +71,19 @@
         inicio_detalle: function(){
             var self = this,
                 campos = ['cuentapuc', 'debito', 'credito', 'tercero', 'centrocosto'],
-                i = 0, max = campos.length;
+                i = 0, max = campos.length, btns_cancelar;
+        
             this.formulario = _.getID('frmRegistroContableDetalle').noSubmit().get();
             this.divMensaje = _.getID('mensaje');
             this.poblarEncabezadoDetalle();
             this.valoresTotales.debito = 0;
             this.valoresTotales.credito = 0;
+            btns_cancelar = document.getElementsByClassName('boton_cancelar');
             
-            for(; i < max; i = i + 1){
+            for(i = 0; i < btns_cancelar.length; i = i + 1){
+                btns_cancelar[i].addEventListener('click', registroCtrl.confirmaCancelar, false);
+            }
+            for(i = 0; i < max; i = i + 1){
                 _.getID(campos[i]).onEnterSiguiente();
             }
             
@@ -92,6 +98,18 @@
                 e.preventDefault();
                 self.guardarDocumento();
             });
+        },
+        confirmaCancelar: function(e){
+            var obj = {
+                url: 'SRegContableCancelar',
+                callback: function(){window.location.hash = '#/contabilidad/registro';}
+            };
+            e.preventDefault();
+            if(confirm('Está seguro que desea cancelar el registro?')){
+                _.ejecutar(obj);
+            } else {
+                return false;
+            }
         },
         poblarEncabezadoDetalle: function(){
             _.getID('documento').setValue(this.registroContable.documento.documento);
@@ -182,7 +200,6 @@
         agregaTablaDetalle: function(data){
             var cuerpo = _.getID('registros_detalle').get(),
                 fila   = _.getID('tmpl_registro').get(),
-                i = 0, j = 0,
                 clon = null, cuenta_codigo = null, cuenta_nombre = null,
                 tercero_nit = null, tercero_nombre = null,
                 ccosto_codigo = null, ccosto_nombre = null,
@@ -277,6 +294,135 @@
                 alert(data.mensaje);
                 registroCtrl.divMensaje.delClass('no-mostrar').text(data.mensaje);
             }
+        },
+        inicio_consultar: function(){
+            var self = this;
+            this.formulario = _.getID('frmConsutarDocumento').noSubmit().get();
+            this.divMensaje = _.getID('mensaje');
+            _.getID('abreviatura').onEnterSiguiente().get()
+                    .addEventListener('blur', function(e){
+                        self.buscarDocumento(e.target.value, self.poblarDocumentoBusqueda);}, false);
+            _.getID('btn_buscar').click(function(e){
+                e.preventDefault();
+                self.buscarDocumentoDetallado();
+            });
+        },
+        poblarDocumentoBusqueda: function(datos){
+            var data = JSON.parse(datos),
+                objeto = {};
+            switch(data.tipo){
+                case _.MSG_CORRECTO:
+                    registroCtrl.divMensaje.addClass('no-mostrar');
+                    objeto = data.objeto;
+                    _.getID('idDocumento').setValue(objeto.id);
+                    _.getID('nombre_documento').setValue(objeto.documento);
+                    _.getID('numero_documento').get().focus();
+                    break;
+                default:
+                    _.getID('idDocumento').setValue('');
+                    _.getID('nombre_documento').setValue('');
+                    registroCtrl.divMensaje.delClass('no-mostrar').text(data.mensaje);
+            }
+        },
+        buscarDocumentoDetallado: function(){
+            var self = this,
+                data = new FormData(self.formulario),
+                obj = {
+                    url: 'SRegContableConsultar',
+                    datos: data,
+                    callback: self.llenaDocumentoDetallado
+                };
+            _.ejecutar(obj);
+        },
+        llenaDocumentoDetallado: function(datos){
+            var data = JSON.parse(datos),
+                objeto = data.objeto,
+                msg = _.getID('mensaje');
+            switch (data.tipo) {
+                case _.MSG_CORRECTO:
+                    msg.addClass('no-mostrar');
+                    registroCtrl.poblarDocumentoDetallado(objeto);
+                    break;
+                default:
+                    msg.delClass('no-mostrar').text(data.mensaje);
+                    registroCtrl.limpiarDocumentoDetallado();
+            }
+        },
+        poblarDocumentoDetallado: function(data){
+            var cuerpo = _.getID('registros_detalle').get(),
+                fila   = _.getID('tmpl_registro').get(),
+                clon = null, cuenta_codigo = null, cuenta_nombre = null,
+                tercero_nit = null, tercero_nombre = null,
+                ccosto_codigo = null, ccosto_nombre = null,
+                valor_debito = null, valor_credito = null,
+                valDebito = 0, valCredito = 0, diferencia = 0, i = 0,
+                detalles = data.detalles, max = 0,
+                fragmento = document.createDocumentFragment();
+        
+            _.getID('idPrincipal').setValue(data.id_reg_con_enc);
+            _.getID('documento').setValue(data.documento);
+            _.getID('consecutivo').setValue(data.consecutivo);
+            _.getID('fecha').setValue(data.fecha_movimiento);
+            _.getID('comentario').setValue(data.comentario);
+            _.getID('usuario_digita').setValue(data.usuario_digita);
+            _.getID('fecha_digita').setValue(data.fecha_creacion);
+            if(data.usuario_actualiza){
+                _.getID('usuario_actualiza').setValue(data.usuario_actualiza);
+            }
+            if(data.fecha_update){
+                _.getID('fecha_actualiza').setValue(data.fecha_update);
+            }
+            _.getID('documento_anulado').get().checked = data.anulado;
+
+            // Poblar el detalle
+            cuerpo.innerHTML = '';
+            if (detalles){
+                max = detalles.length;
+            }
+            for(; i < max; i = i + 1){
+                clon = fila.content.cloneNode(true);
+                cuenta_codigo = clon.querySelector('.cuenta_codigo');
+                cuenta_nombre = clon.querySelector('.cuenta_nombre');
+                tercero_nit = clon.querySelector('.tercero_nit');
+                tercero_nombre = clon.querySelector('.tercero_nombre');
+                ccosto_codigo = clon.querySelector('.ccosto_codigo');
+                ccosto_nombre = clon.querySelector('.ccosto_nombre');
+                valor_debito = clon.querySelector('.valor_debito');
+                valor_credito = clon.querySelector('.valor_credito');
+
+                cuenta_codigo.textContent = detalles[i].cuenta;
+                cuenta_nombre.textContent = detalles[i].nombre;
+                tercero_nit.textContent = detalles[i].numero_identificacion;
+                tercero_nombre.textContent = detalles[i].razon_social;
+                ccosto_codigo.textContent = detalles[i].codigo;
+                ccosto_nombre.textContent = detalles[i].centrocosto;
+                valor_debito.textContent = detalles[i].debito.formatNumero();
+                valor_credito.textContent = detalles[i].credito.formatNumero();
+                fragmento.appendChild(clon);
+
+                valDebito += detalles[i].debito;
+                valCredito += detalles[i].credito;
+            }
+            
+            cuerpo.appendChild(fragmento);
+            
+            diferencia = valDebito - valCredito;
+            _.getID('total_debitos').text(valDebito.formatNumero());
+            _.getID('total_creditos').text(valCredito.formatNumero());
+            _.getID('total_diferencia').text(diferencia.formatNumero());
+        },
+        limpiarDocumentoDetallado: function(){
+            _.getID('idPrincipal').setValue('');
+            _.getID('documento').setValue('');
+            _.getID('consecutivo').setValue('');
+            _.getID('fecha').setValue('');
+            _.getID('comentario').setValue('');
+            _.getID('usuario_digita').setValue('');
+            _.getID('fecha_digita').setValue('');
+            _.getID('usuario_actualiza').setValue('');
+            _.getID('fecha_actualiza').setValue('');
+            _.getID('documento_anulado').get().checked = false;
+            _.getID('registros_detalle').innerHTML('');
         }
     };
     

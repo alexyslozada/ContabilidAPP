@@ -1,0 +1,136 @@
+<div class="vista">
+    <form id="frmConsutarDocumento" method="post" action="#">
+        <div class="contenedor">
+            <div class="item tablet-50">
+                <label for="abreviatura" class="label-titulo">Abreviatura</label>
+                <input type="text" id="abreviatura" name="abreviatura" maxlength="4" required placeholder="Abreviatura" tabindex="1" />
+            </div>
+            <div class="item tablet-50">
+                <label for="nombre_documento" class="label-titulo">Documento</label>
+                <input type="hidden" id="idDocumento" name="idDocumento" />
+                <input type="text" id="nombre_documento" name="nombre_documento" readonly />
+            </div>
+            <div class="item tablet-50">
+                <label for="numero_documento" class="label-titulo">Número de Documento</label>
+                <input type="number" id="numero_documento" name="numero_documento" min="1" />
+            </div>
+            <div class="item tablet-50">
+                <button id="btn_buscar" class="boton primario">Buscar</button>
+            </div>
+        </div>
+    </form>
+    
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+    <fieldset>
+        <legend>Consultar Documento</legend>
+        <div class="contenedor">
+            <div class="item tablet-50">
+                <label for="documento" class="label-titulo">Documento</label>
+                <input type="hidden" id="idPrincipal" name="idPrincipal" />
+                <input type="text" id="documento" readonly />
+            </div>
+            <div class="item tablet-50">
+                <label for="consecutivo" class="label-titulo">Consecutivo</label>
+                <input type="number" id="consecutivo" name="consecutivo" readonly />
+            </div>
+            <div class="item tablet-50">
+                <label for="fecha" class="label-titulo">Fecha Movimiento</label>
+                <input type="date" id="fecha" readonly />
+            </div>
+            <div class="item">
+                <label for="comentario" class="label-titulo">Comentario</label>
+                <textarea id="comentario" readonly></textarea>
+            </div>
+            <div class="item tablet-50">
+                <label for="usuario_digita" class="label-titulo">Usuario Digitación</label>
+                <input type="text" id="usuario_digita" name="usuario_digita" readonly />
+            </div>
+            <div class="item tablet-50">
+                <label for="fecha_digita" class="label-titulo">Fecha Digitación</label>
+                <input type="datetime" id="fecha_digita" name="fecha_digita" readonly />
+            </div>
+            <div class="item tablet-50">
+                <label for="usuario_actualiza" class="label-titulo">Usuario Actualización</label>
+                <input type="text" id="usuario_actualiza" name="usuario_actualiza" readonly />
+            </div>
+            <div class="item tablet-50">
+                <label for="fecha_actualiza" class="label-titulo">Fecha Actualización</label>
+                <input type="datetime" id="fecha_actualiza" name="fecha_actualiza" readonly />
+            </div>
+            <div class="item tablet-50">
+                <label class="label-titulo">Anulado</label>
+                <input type="checkbox" class="no-mostrar" id="documento_anulado" name="documento_anulado" disabled />
+                <label for="documento_anulado" class="label-check"></label>
+            </div>
+        </div>
+    </fieldset>
+    <br>
+    <h3>Detalle</h3>
+    <hr>
+    <div id="registros_titulo">
+        <div class="contenedor">
+            <div class="item tablet-30">
+                <label class="label-titulo">Cuenta</label>
+            </div>
+            <div class="item tablet-30">
+                <label class="label-titulo">Tercero</label>
+            </div>
+            <div class="item tablet-20">
+                <label class="label-titulo">C.Costo</label>
+            </div>
+            <div class="item tablet-10">
+                <label class="label-titulo">Débito</label>
+            </div>
+            <div class="item tablet-10">
+                <label class="label-titulo">Crédito</label>
+            </div>
+        </div>
+    </div>
+    
+    <div id="registros_detalle"></div>
+    
+    <div id="registros_resumen">
+        <div class="contenedor">
+            <div class="item tablet-70" style="text-align: right;">TOTALES</div>
+            <div class="item tablet-10">
+                <div id="total_debitos" class="total_debitos texto-derecha"></div>
+            </div>
+            <div class="item tablet-10">
+                <div id="total_creditos" class="total_creditos texto-derecha"></div>
+            </div>
+            <div class="item tablet-10">
+                <div id="total_diferencia" class="total_diferencia texto-derecha"></div>
+            </div>
+        </div>
+    </div>
+    <div class="contenedor">
+        <div class="item">
+            <button id="btn_anular" class="boton secundario">Anular Documento</button> 
+            <a href="#/contabilidad/registro" class="boton">Volver a Registro</a>
+        </div>
+    </div>
+    
+
+    <template id="tmpl_registro">
+        <div class="contenedor">
+            <div class="item tablet-30">
+                <div class="cuenta_codigo"></div>
+                <div class="cuenta_nombre"></div>
+            </div>
+            <div class="item tablet-30">
+                <div class="tercero_nit"></div>
+                <div class="tercero_nombre"></div>
+            </div>
+            <div class="item tablet-20">
+                <div class="ccosto_codigo"></div>
+                <div class="ccosto_nombre"></div>
+            </div>
+            <div class="item tablet-10">
+                <div class="valor_debito texto-derecha"></div>
+            </div>
+            <div class="item tablet-10">
+                <div class="valor_credito texto-derecha"></div>
+            </div>
+        </div>
+    </template>
+</div>

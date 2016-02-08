@@ -87,6 +87,7 @@ public class SRegContableEncabezadoValidar extends HttpServlet {
                     rce.setPeriodo(periodoContable);
                     
                     sesion.setAttribute(Constantes.REGISTROCONTABLEENCABEZADO, rce);
+                    sesion.removeAttribute(Constantes.REGISTROCONTABLEDETALLE);
                     tipo = Constantes.MSG_CORRECTO;
                     mensaje = "Registro contable establecido en la sesión";
                     objeto = rce.toJSON();

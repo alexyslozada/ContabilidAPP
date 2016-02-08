@@ -100,5 +100,26 @@ public class DAORegistroContable extends DAOGenerales {
         }
         return respuesta;
     }
+    
+    public String getDocumentoRegistrado(short idDocumento, int consecutivo) throws ExcepcionGeneral{
+        String respuesta = null;
+        try {
+            setConsulta("select fn_regcon_consultar_json(?,?)");
+            conexion = getConexion();
+            sentencia = conexion.prepareStatement(getConsulta());
+            sentencia.setShort(1, idDocumento);
+            sentencia.setInt(2, consecutivo);
+            resultado = sentencia.executeQuery();
+            if (resultado.next()) {
+                respuesta = resultado.getString(1);
+            }
+        } catch (SQLException eg){
+            Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en DAORegistroContable.getDocumentoRegistrado: {0}", new Object[]{eg.getMessage()});
+            throw new ExcepcionGeneral(eg.getMessage());
+        } finally {
+            cierraConexion(conexion, sentencia, resultado);
+        }
+        return respuesta;
+    }
 
 }
