@@ -13,12 +13,14 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+@MultipartConfig
 @WebServlet(name = "SRegContableGuardarDocumento", urlPatterns = {"/SRegContableGuardarDocumento"})
 public class SRegContableGuardarDocumento extends HttpServlet {
 
@@ -40,8 +42,17 @@ public class SRegContableGuardarDocumento extends HttpServlet {
             DAORegistroContable dao = new DAORegistroContable();
 
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
+            String accion = request.getParameter("accion");
+            boolean tienePermiso = false;
 
-            if (dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.INSERTAR)) {
+            if (accion.equalsIgnoreCase("insertar")) {
+                tienePermiso = dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.INSERTAR);
+            } else if (accion.equalsIgnoreCase("editar")) {
+                tienePermiso = dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.MODIFICAR);
+            }
+
+            if (tienePermiso) {
+
                 RegistroContableEncabezado encabezado = (RegistroContableEncabezado) sesion.getAttribute(Constantes.REGISTROCONTABLEENCABEZADO);
                 List<RegistroContableDetalle> detalle = (List<RegistroContableDetalle>) sesion.getAttribute(Constantes.REGISTROCONTABLEDETALLE);
 
@@ -55,14 +66,26 @@ public class SRegContableGuardarDocumento extends HttpServlet {
                         }
                         if (diferencia == 0) {
                             try {
-                                dao.registrarDocumentoCompleto(encabezado, detalle);
-                                if (encabezado.getId_reg_con_enc() > 0) {
-                                    tipo = Constantes.MSG_CORRECTO;
-                                    mensaje = Constantes.MSG_CREADO_TEXT + encabezado.getDocumento().getConsecutivo();
-                                    objeto = encabezado.toJSON();
+                                if (accion.equalsIgnoreCase("insertar")) {
+                                    dao.registrarDocumentoCompleto(encabezado, detalle);
+                                    if (encabezado.getId_reg_con_enc() > 0) {
+                                        tipo = Constantes.MSG_CORRECTO;
+                                        mensaje = Constantes.MSG_CREADO_TEXT + encabezado.getDocumento().getConsecutivo();
+                                        objeto = encabezado.toJSON();
+                                    } else {
+                                        tipo = Constantes.MSG_ERROR;
+                                        mensaje = "No se pudo registrar el documento";
+                                    }
                                 } else {
-                                    tipo = Constantes.MSG_ERROR;
-                                    mensaje = "No se pudo registrar el documento";
+                                    dao.modificarDocumentoCompleto(encabezado, detalle);
+                                    if (encabezado.getFechaUpdate() != null) {
+                                        tipo = Constantes.MSG_CORRECTO;
+                                        mensaje = Constantes.MSG_ACTUALIZADO_TEXT;
+                                        objeto = encabezado.toJSON();
+                                    } else {
+                                        tipo = Constantes.MSG_ERROR;
+                                        mensaje = "No se pudo modificar el documento";
+                                    }
                                 }
                                 sesion.removeAttribute(Constantes.REGISTROCONTABLEENCABEZADO);
                                 sesion.removeAttribute(Constantes.REGISTROCONTABLEDETALLE);
@@ -73,7 +96,7 @@ public class SRegContableGuardarDocumento extends HttpServlet {
                             }
                         } else {
                             tipo = Constantes.MSG_ERROR;
-                            mensaje = "El documento tiene diferencias entre débitos y créditos";
+                            mensaje = "El documento tiene diferencias entre débitos y créditos "+diferencia;
                         }
                     } else {
                         tipo = Constantes.MSG_ERROR;

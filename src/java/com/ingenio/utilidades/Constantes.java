@@ -24,6 +24,8 @@ public final class Constantes {
     public static final String MSG_ACTUALIZADO_NO_TEXT = "No se ha actualizado ningún registro";
     public static final String MSG_CONSULTA_NO_VALIDA_TEXT = "El tipo de consulta no es válido.";
     public static final String MSG_REGISTROS_NO_ENCONTRADOS_TEXT = "Registro no encontrado.";
+    public static final String MSG_REGISTRO_ANULADO_TEXT = "Registro anulado correctamente.";
+    public static final String MSG_REGISTRO_NO_ANULADO_TEXT = "El registro no fue anulado.";
     
     /* Acciones en texto */
     public static final String INSERTAR  = "insertar";

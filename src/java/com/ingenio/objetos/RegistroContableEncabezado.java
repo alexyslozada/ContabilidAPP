@@ -127,6 +127,13 @@ public class RegistroContableEncabezado {
     public void setFechaUpdate(Calendar fechaUpdate) {
         this.fechaUpdate = fechaUpdate;
     }
+    
+    public void setFechaUpdate(java.sql.Date fecha){
+        if (fecha != null){
+            fechaUpdate = Calendar.getInstance();
+            fechaUpdate.setTime(fecha);
+        }
+    }
 
     public boolean isAnulado() {
         return anulado;

@@ -244,7 +244,13 @@
                   function(){
                       _.getCtrl().inicio_consultar();
                   }
-            );
+            )
+            .ruta('/contabilidad/editar-documento',
+                  'vistas/contabilidad/movimientos/modificaregistrocontable.html',
+                  'registroContable',
+                  function(){
+                      _.getCtrl().inicio_editar();
+                  });
 
     window.addEventListener('load', _.manejadorRutas, false);
     window.addEventListener('hashchange', _.manejadorRutas, false);

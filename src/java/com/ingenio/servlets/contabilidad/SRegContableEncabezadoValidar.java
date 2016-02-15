@@ -37,20 +37,25 @@ public class SRegContableEncabezadoValidar extends HttpServlet {
         String mensaje;
         String objeto = "";
         boolean registroValido = false;
+        Utilidades utilidades = Utilidades.get();
 
-        if (Utilidades.get().autenticado(sesion)) {
+        if (utilidades.autenticado(sesion)) {
             DAORegistroContable dao = new DAORegistroContable();
             DAOPeriodo daoPeriodo = new DAOPeriodo();
-            
+
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
 
             if (dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.INSERTAR)) {
+
+                String accion = request.getParameter("accion");
+                String idRegistro = request.getParameter("idPrincipal"); // Cuando se edita
+                String consecutivo = request.getParameter("consecutivo"); // Cuando se edita
                 String idDocumento = request.getParameter("idDocumento");
                 String documento = request.getParameter("documento");
                 String fecha = request.getParameter("fecha");
                 String comentario = request.getParameter("comentario");
 
-                Calendar cFecha = Utilidades.get().parseFecha(fecha, LOG, true);
+                Calendar cFecha = utilidades.parseFecha(fecha, LOG, true);
                 Periodo periodoContable = new Periodo();
                 if (cFecha != null) {
                     int ano = cFecha.get(Calendar.YEAR);
@@ -59,33 +64,45 @@ public class SRegContableEncabezadoValidar extends HttpServlet {
                     periodoContable.setMes((short) mes);
                     periodoContable = daoPeriodo.getPeriodoXFecha(periodoContable);
                 }
-                
-                short iIdDocumento = Utilidades.get().parseShort(idDocumento, LOG, true);
-                
+
+                int iIdRegistro = 0, iConsecutivo = 0;
+                short iIdDocumento = utilidades.parseShort(idDocumento, LOG, true);
+
+                if (accion.equalsIgnoreCase("editar")) {
+                    iIdRegistro = utilidades.parseInt(idRegistro, LOG, true);
+                    iConsecutivo = utilidades.parseInt(consecutivo, LOG, true);
+                }
+
                 if (iIdDocumento == 0) {
                     mensaje = "El documento no es válido";
                 } else if (comentario == null || comentario.length() == 0) {
                     mensaje = "El comentario no puede estar vacío.";
                 } else if (periodoContable == null || periodoContable.getId_periodo_contable() == 0) {
                     mensaje = "La fecha y/o el periodo es válido.";
-                } else if(!periodoContable.isAbierto()){
+                } else if (!periodoContable.isAbierto()) {
                     mensaje = "Este periodo contable ya está cerrado. No se pueden hacer movimientos.";
+                } else if (accion.equalsIgnoreCase("editar") && iIdRegistro == 0) {
+                    mensaje = "El id del registro no es válido.";
                 } else {
                     mensaje = "";
                     registroValido = true;
                 }
-                
-                if(registroValido){
+
+                if (registroValido) {
                     RegistroContableEncabezado rce = new RegistroContableEncabezado();
                     DocumentoContable documentoContable = new DocumentoContable();
-                    
+
                     documentoContable.setId_documento(iIdDocumento);
                     documentoContable.setDocumento(documento);
                     rce.setDocumento(documentoContable);
                     rce.setFechaMovimiento(cFecha);
                     rce.setComentario(comentario);
                     rce.setPeriodo(periodoContable);
-                    
+                    if (accion.equalsIgnoreCase("editar")) {
+                        rce.setId_reg_con_enc(iIdRegistro);
+                        documentoContable.setConsecutivo(iConsecutivo);
+                    }
+
                     sesion.setAttribute(Constantes.REGISTROCONTABLEENCABEZADO, rce);
                     sesion.removeAttribute(Constantes.REGISTROCONTABLEDETALLE);
                     tipo = Constantes.MSG_CORRECTO;
@@ -104,7 +121,7 @@ public class SRegContableEncabezadoValidar extends HttpServlet {
             mensaje = Constantes.MSG_NO_AUTENTICADO_TEXT;
         }
         try (PrintWriter out = response.getWriter()) {
-            out.println(Utilidades.get().respuestaJSON(tipo, mensaje, objeto));
+            out.println(utilidades.respuestaJSON(tipo, mensaje, objeto));
         }
     }
 

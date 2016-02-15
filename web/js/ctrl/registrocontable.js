@@ -1,37 +1,49 @@
 /* global _ */
 'use strict';
-(function(window, document, JSON, _){
+(function (window, document, JSON, _) {
     var registroCtrl = {
         divMensaje: null,
         formulario: null,
+        accion: '',
         registroContable: {},
-        valoresTotales:{
+        valoresTotales: {
             debito: 0,
             credito: 0
         },
-        inicio_registro: function(){
-            var self = this;
+        inicio_registro: function () {
+            var self = this,
+                campos = ['abreviatura', 'fecha', 'comentario'],
+                i = 0, max = campos.length;
+            this.accion = 'insertar';
             this.formulario = _.getID('frmRegistroContable').noSubmit().get();
             this.divMensaje = _.getID('mensaje');
+            
+            for(; i < max; i = i + 1){
+                _.getID(campos[i]).onEnterSiguiente();
+            }
             _.getID('abreviatura').get()
-                    .addEventListener('blur', function(e){
-                        self.buscarDocumento(e.target.value, self.poblarDocumento);}, false);
+                    .addEventListener('blur', function (e) {
+                        self.buscarDocumento(e.target.value, self.poblarDocumento);
+                    }, false);
+            _.getID('btnValidarEncabezado').click(function(){
+                self.validarEncabezado(self.abrirDetalle);
+            });
         },
-        buscarDocumento: function(abr, callback){
+        buscarDocumento: function (abr, callback) {
             var data = new FormData(),
-                obj = {
-                    url: 'SDocumentoContableGetXId',
-                    callback: callback,
-                    datos: data
-                };
+                    obj = {
+                        url: 'SDocumentoContableGetXId',
+                        callback: callback,
+                        datos: data
+                    };
             data.append('tipoConsulta', 1);
             data.append('abreviatura', abr);
             _.ejecutar(obj);
         },
-        poblarDocumento: function(datos){
+        poblarDocumento: function (datos) {
             var data = JSON.parse(datos),
-                objeto = {};
-            switch(data.tipo){
+                    objeto = {};
+            switch (data.tipo) {
                 case _.MSG_CORRECTO:
                     registroCtrl.divMensaje.addClass('no-mostrar');
                     objeto = data.objeto;
@@ -45,20 +57,22 @@
                     registroCtrl.divMensaje.delClass('no-mostrar').text(data.mensaje);
             }
         },
-        validarEncabezado: function(){
+        validarEncabezado: function (theCallback) {
             var self = this,
-                data = new FormData(self.formulario),
-                obj = {
-                    url: 'SRegContableEncabezadoValidar',
-                    callback: self.abrirDetalle,
-                    datos: data
-                };
+                    data = new FormData(self.formulario),
+                    obj = {
+                        url: 'SRegContableEncabezadoValidar',
+                        callback: theCallback,
+                        datos: data
+                    };
+            data.append('accion', self.accion);
             _.ejecutar(obj);
         },
-        abrirDetalle: function(datos){
+        abrirDetalle: function (datos) {
             var data = JSON.parse(datos),
-                divm = registroCtrl.divMensaje;
-            switch(data.tipo){
+                divm = registroCtrl.divMensaje,
+                accion = registroCtrl.accion;
+            switch (data.tipo) {
                 case _.MSG_CORRECTO:
                     divm.addClass('no-mostrar');
                     registroCtrl.registroContable = data.objeto;
@@ -68,57 +82,66 @@
                     divm.delClass('no-mostrar').text(data.mensaje);
             }
         },
-        inicio_detalle: function(){
+        inicio_detalle: function () {
             var self = this,
-                campos = ['cuentapuc', 'debito', 'credito', 'tercero', 'centrocosto'],
-                i = 0, max = campos.length, btns_cancelar;
-        
+                    campos = ['cuentapuc', 'debito', 'credito', 'tercero', 'centrocosto'],
+                    i = 0, max = campos.length, btnCancelar;
+
             this.formulario = _.getID('frmRegistroContableDetalle').noSubmit().get();
             this.divMensaje = _.getID('mensaje');
             this.poblarEncabezadoDetalle();
             this.valoresTotales.debito = 0;
             this.valoresTotales.credito = 0;
-            btns_cancelar = document.getElementsByClassName('boton_cancelar');
+            btnCancelar = _.getID('btnCancelar').click(registroCtrl.confirmaCancelar);
             
-            for(i = 0; i < btns_cancelar.length; i = i + 1){
-                btns_cancelar[i].addEventListener('click', registroCtrl.confirmaCancelar, false);
-            }
-            for(i = 0; i < max; i = i + 1){
+            for (i = 0; i < max; i = i + 1) {
                 _.getID(campos[i]).onEnterSiguiente();
             }
-            
-            _.getID('cuentapuc').get().addEventListener('blur', function(e){self.buscarCuenta(e.target.value);}, false);
-            _.getID('tercero').get().addEventListener('blur', function(e){self.buscarTercero(e.target.value);}, false);
-            _.getID('centrocosto').get().addEventListener('blur', function(e){self.buscarCCosto(e.target.value);}, false);
-            _.getID('btnRegistrar').click(function(e){
+
+            _.getID('cuentapuc').get().addEventListener('blur', function (e) {
+                self.buscarCuenta(e.target.value);
+            }, false);
+            _.getID('tercero').get().addEventListener('blur', function (e) {
+                self.buscarTercero(e.target.value);
+            }, false);
+            _.getID('centrocosto').get().addEventListener('blur', function (e) {
+                self.buscarCCosto(e.target.value);
+            }, false);
+            _.getID('btnRegistrar').click(function (e) {
                 e.preventDefault();
                 self.registrarDetalle();
             });
-            _.getID('btnGuardarDocumento').click(function(e){
+            _.getID('btnGuardarDocumento').click(function (e) {
                 e.preventDefault();
                 self.guardarDocumento();
             });
+            
+            if (this.accion === 'editar'){
+                this.poblarDocumentoDetalleEditar();
+            }
         },
-        confirmaCancelar: function(e){
+        confirmaCancelar: function (e) {
             var obj = {
                 url: 'SRegContableCancelar',
-                callback: function(){window.location.hash = '#/contabilidad/registro';}
+                callback: function () {
+                    window.location.hash = '#/contabilidad/registro';
+                }
             };
             e.preventDefault();
-            if(confirm('Está seguro que desea cancelar el registro?')){
+            if (confirm('Está seguro que desea cancelar el registro?')) {
                 _.ejecutar(obj);
             } else {
                 return false;
             }
         },
-        poblarEncabezadoDetalle: function(){
+        poblarEncabezadoDetalle: function () {
             _.getID('documento').setValue(this.registroContable.documento.documento);
             _.getID('fecha').setValue(this.registroContable.fechaMovimiento);
             _.getID('comentario').setValue(this.registroContable.comentario);
         },
-        buscarCuenta: function(cuenta){
+        buscarCuenta: function (cuenta) {
             var ctrlCuentas = _.getCtrl('cuentaspuc');
-            if(ctrlCuentas.validaCuentaDetalle(cuenta)){
+            if (ctrlCuentas.validaCuentaDetalle(cuenta)) {
                 registroCtrl.divMensaje.addClass('no-mostrar');
                 ctrlCuentas.buscarXCuentaOId(1, cuenta, 0, registroCtrl.poblarCuenta);
             } else {
@@ -126,9 +149,9 @@
                 registroCtrl.divMensaje.delClass('no-mostrar').text('La longitud de la cuenta debe ser de 8 caracteres');
             }
         },
-        poblarCuenta: function(datos){
+        poblarCuenta: function (datos) {
             var data = JSON.parse(datos);
-            if(data.tipo === _.MSG_CORRECTO){
+            if (data.tipo === _.MSG_CORRECTO) {
                 registroCtrl.divMensaje.addClass('no-mostrar');
                 _.getID('id_cuenta_puc').setValue(data.objeto.id);
                 _.getID('cuenta').setValue(data.objeto.nombre);
@@ -138,16 +161,16 @@
                 registroCtrl.limpiaCamposCuenta();
             }
         },
-        limpiaCamposCuenta: function(){
+        limpiaCamposCuenta: function () {
             _.getID('id_cuenta_puc').setValue('');
             _.getID('cuenta').setValue('');
         },
-        buscarTercero: function(tercero){
+        buscarTercero: function (tercero) {
             _.getCtrl('terceros').buscarPorNumeroOId(1, tercero, 0, registroCtrl.poblarTercero);
         },
-        poblarTercero: function(datos){
+        poblarTercero: function (datos) {
             var data = JSON.parse(datos);
-            if(data.tipo === _.MSG_CORRECTO){
+            if (data.tipo === _.MSG_CORRECTO) {
                 registroCtrl.divMensaje.addClass('no-mostrar');
                 _.getID('id_tercero').setValue(data.objeto.id);
                 _.getID('nombre_tercero').setValue(data.objeto.razon_social);
@@ -156,16 +179,16 @@
                 registroCtrl.limpiarCamposTercero();
             }
         },
-        limpiarCamposTercero: function(){
+        limpiarCamposTercero: function () {
             _.getID('id_tercero').setValue('');
             _.getID('nombre_tercero').setValue('');
         },
-        buscarCCosto: function(ccosto){
+        buscarCCosto: function (ccosto) {
             _.getCtrl('centroscosto').buscarXCodigoOId(1, ccosto, 0, registroCtrl.poblarCCosto);
         },
-        poblarCCosto: function(datos){
+        poblarCCosto: function (datos) {
             var data = JSON.parse(datos);
-            if(data.tipo === _.MSG_CORRECTO){
+            if (data.tipo === _.MSG_CORRECTO) {
                 registroCtrl.divMensaje.addClass('no-mostrar');
                 _.getID('id_centro_costo').setValue(data.objeto.id);
                 _.getID('nombre_ccosto').setValue(data.objeto.nombre);
@@ -174,38 +197,38 @@
                 registroCtrl.divMensaje.delClass('no-mostrar').text(data.mensaje);
             }
         },
-        limpiarCamposCCosto: function(){
+        limpiarCamposCCosto: function () {
             _.getID('id_centro_costo').setValue('');
             _.getID('nombre_ccosto').setValue('');
         },
-        registrarDetalle: function(){
+        registrarDetalle: function () {
             var self = this,
-                data = new FormData(this.formulario),
-                obj = {
-                    url: 'SRegContableDetalleValidar',
-                    datos: data,
-                    callback: self.mostrarRegistro
-                };
+                    data = new FormData(this.formulario),
+                    obj = {
+                        url: 'SRegContableDetalleValidar',
+                        datos: data,
+                        callback: self.mostrarRegistro
+                    };
             _.ejecutar(obj);
         },
-        mostrarRegistro: function(datos){
+        mostrarRegistro: function (datos) {
             var data = JSON.parse(datos);
-            if(data.tipo === _.MSG_CORRECTO){
+            if (data.tipo === _.MSG_CORRECTO) {
                 registroCtrl.divMensaje.addClass('no-mostrar');
                 registroCtrl.agregaTablaDetalle(data.objeto);
             } else {
                 registroCtrl.divMensaje.delClass('no-mostrar').text(data.mensaje);
             }
         },
-        agregaTablaDetalle: function(data){
+        agregaTablaDetalle: function (data) {
             var cuerpo = _.getID('registros_detalle').get(),
-                fila   = _.getID('tmpl_registro').get(),
-                clon = null, cuenta_codigo = null, cuenta_nombre = null,
-                tercero_nit = null, tercero_nombre = null,
-                ccosto_codigo = null, ccosto_nombre = null,
-                valor_debito = null, valor_credito = null,
-                boton_eliminar = null, diferencia = 0;
-        
+                    fila = _.getID('tmpl_registro').get(),
+                    clon = null, cuenta_codigo = null, cuenta_nombre = null,
+                    tercero_nit = null, tercero_nombre = null,
+                    ccosto_codigo = null, ccosto_nombre = null,
+                    valor_debito = null, valor_credito = null,
+                    boton_eliminar = null, diferencia = 0;
+
             clon = fila.content.cloneNode(true);
             cuenta_codigo = clon.querySelector('.cuenta_codigo');
             cuenta_nombre = clon.querySelector('.cuenta_nombre');
@@ -216,7 +239,7 @@
             valor_debito = clon.querySelector('.valor_debito');
             valor_credito = clon.querySelector('.valor_credito');
             boton_eliminar = clon.querySelector('.boton_eliminar');
-            
+
             cuenta_codigo.textContent = data.cuentaPuc.cuenta;
             cuenta_nombre.textContent = data.cuentaPuc.nombre;
             tercero_nit.textContent = data.tercero.numero_identificacion;
@@ -226,48 +249,48 @@
             valor_debito.textContent = data.debito.formatNumero();
             valor_credito.textContent = data.credito.formatNumero();
             boton_eliminar.dataset.id = data.id;
-            boton_eliminar.addEventListener('click', function(e){
+            boton_eliminar.addEventListener('click', function (e) {
                 e.preventDefault();
                 registroCtrl.eliminarRegistroDetalle(e.target.dataset.id);
             }, false);
-            
+
             cuerpo.appendChild(clon);
-            
+
             registroCtrl.valoresTotales.debito += data.debito;
             registroCtrl.valoresTotales.credito += data.credito;
             diferencia = registroCtrl.valoresTotales.debito - registroCtrl.valoresTotales.credito;
             _.getID('total_debitos').text(registroCtrl.valoresTotales.debito.formatNumero());
             _.getID('total_creditos').text(registroCtrl.valoresTotales.credito.formatNumero());
             _.getID('total_diferencia').text(diferencia.formatNumero());
-            
+
             registroCtrl.limpiaCamposCuenta();
             _.getID('debito').setValue('0');
             _.getID('credito').setValue('0');
             _.getID('cuentapuc').setValue('').get().focus();
         },
-        eliminarRegistroDetalle: function(id){
+        eliminarRegistroDetalle: function (id) {
             var data = new FormData(),
-                obj = {
-                    url: 'SRegContableDetalleEliminarDeSesion',
-                    datos: data,
-                    callback: registroCtrl.retiraDeTablaDetalle
-                };
+                    obj = {
+                        url: 'SRegContableDetalleEliminarDeSesion',
+                        datos: data,
+                        callback: registroCtrl.retiraDeTablaDetalle
+                    };
             data.append('id', id);
             _.ejecutar(obj);
         },
-        retiraDeTablaDetalle: function(datos){
+        retiraDeTablaDetalle: function (datos) {
             var data = JSON.parse(datos),
-                detalle = _.getID('registros_detalle').get(),
-                fila, valDebito = 0, valCredito = 0, diferencia = 0;
-            if (data.tipo === _.MSG_CORRECTO){
+                    detalle = _.getID('registros_detalle').get(),
+                    fila, valDebito = 0, valCredito = 0, diferencia = 0;
+            if (data.tipo === _.MSG_CORRECTO) {
                 registroCtrl.divMensaje.addClass('no-mostrar');
-                fila = detalle.querySelector('[data-id="'+data.objeto.id+'"]').parentNode.parentNode;
-                
+                fila = detalle.querySelector('[data-id="' + data.objeto.id + '"]').parentNode.parentNode;
+
                 valDebito = parseInt(fila.querySelector('.valor_debito').textContent.replace(',', ''), 10);
                 valCredito = parseInt(fila.querySelector('.valor_credito').textContent.replace(',', ''), 10);
                 registroCtrl.valoresTotales.debito -= valDebito;
                 registroCtrl.valoresTotales.credito -= valCredito;
-                
+
                 detalle.removeChild(fila);
 
                 diferencia = registroCtrl.valoresTotales.debito - registroCtrl.valoresTotales.credito;
@@ -278,39 +301,48 @@
                 registroCtrl.divMensaje.delClass('no-mostrar').text(data.mensaje);
             }
         },
-        guardarDocumento: function(){
-            var obj = {
+        guardarDocumento: function () {
+            var data = new FormData(),
+                obj = {
                 url: 'SRegContableGuardarDocumento',
-                callback: registroCtrl.documentoGuardado
+                callback: registroCtrl.documentoGuardado,
+                datos: data
             };
+            data.append('accion', registroCtrl.accion);
             _.ejecutar(obj);
         },
-        documentoGuardado: function(datos){
+        documentoGuardado: function (datos) {
             var data = JSON.parse(datos);
-            if (data.tipo === _.MSG_CORRECTO){
-                alert('Documento guardado con el Consecutivo: '+data.objeto.documento.consecutivo);
-                window.location.hash ="#/contabilidad/registro";
+            if (data.tipo === _.MSG_CORRECTO) {
+                alert('Documento guardado con el Consecutivo: ' + data.objeto.documento.consecutivo);
+                window.location.hash = "#/contabilidad/registro";
             } else {
                 alert(data.mensaje);
                 registroCtrl.divMensaje.delClass('no-mostrar').text(data.mensaje);
             }
         },
-        inicio_consultar: function(){
+        inicio_consultar: function () {
             var self = this;
+            this.accion = 'editar';
             this.formulario = _.getID('frmConsutarDocumento').noSubmit().get();
             this.divMensaje = _.getID('mensaje');
             _.getID('abreviatura').onEnterSiguiente().get()
-                    .addEventListener('blur', function(e){
-                        self.buscarDocumento(e.target.value, self.poblarDocumentoBusqueda);}, false);
-            _.getID('btn_buscar').click(function(e){
+                    .addEventListener('blur', function (e) {
+                        self.buscarDocumento(e.target.value, self.poblarDocumentoBusqueda);
+                    }, false);
+            _.getID('btn_buscar').click(function (e) {
                 e.preventDefault();
                 self.buscarDocumentoDetallado();
             });
+            _.getID('btn_anular').click(function (e) {
+                e.preventDefault();
+                self.anularDocumento();
+            });
         },
-        poblarDocumentoBusqueda: function(datos){
+        poblarDocumentoBusqueda: function (datos) {
             var data = JSON.parse(datos),
-                objeto = {};
-            switch(data.tipo){
+                    objeto = {};
+            switch (data.tipo) {
                 case _.MSG_CORRECTO:
                     registroCtrl.divMensaje.addClass('no-mostrar');
                     objeto = data.objeto;
@@ -324,20 +356,20 @@
                     registroCtrl.divMensaje.delClass('no-mostrar').text(data.mensaje);
             }
         },
-        buscarDocumentoDetallado: function(){
+        buscarDocumentoDetallado: function () {
             var self = this,
-                data = new FormData(self.formulario),
-                obj = {
-                    url: 'SRegContableConsultar',
-                    datos: data,
-                    callback: self.llenaDocumentoDetallado
-                };
+                    data = new FormData(self.formulario),
+                    obj = {
+                        url: 'SRegContableConsultar',
+                        datos: data,
+                        callback: self.llenaDocumentoDetallado
+                    };
             _.ejecutar(obj);
         },
-        llenaDocumentoDetallado: function(datos){
+        llenaDocumentoDetallado: function (datos) {
             var data = JSON.parse(datos),
-                objeto = data.objeto,
-                msg = _.getID('mensaje');
+                    objeto = data.objeto,
+                    msg = _.getID('mensaje');
             switch (data.tipo) {
                 case _.MSG_CORRECTO:
                     msg.addClass('no-mostrar');
@@ -348,17 +380,26 @@
                     registroCtrl.limpiarDocumentoDetallado();
             }
         },
-        poblarDocumentoDetallado: function(data){
-            var cuerpo = _.getID('registros_detalle').get(),
-                fila   = _.getID('tmpl_registro').get(),
-                clon = null, cuenta_codigo = null, cuenta_nombre = null,
-                tercero_nit = null, tercero_nombre = null,
-                ccosto_codigo = null, ccosto_nombre = null,
-                valor_debito = null, valor_credito = null,
-                valDebito = 0, valCredito = 0, diferencia = 0, i = 0,
-                detalles = data.detalles, max = 0,
-                fragmento = document.createDocumentFragment();
-        
+        poblarDocumentoDetallado: function (data) {
+            var registroContable = registroCtrl.registroContable,
+                cuerpo = _.getID('registros_detalle').get(),
+                    fila = _.getID('tmpl_registro').get(),
+                    clon = null, cuenta_codigo = null, cuenta_nombre = null,
+                    tercero_nit = null, tercero_nombre = null,
+                    ccosto_codigo = null, ccosto_nombre = null,
+                    valor_debito = null, valor_credito = null,
+                    valDebito = 0, valCredito = 0, diferencia = 0, i = 0,
+                    detalles = data.detalles, max = 0,
+                    fragmento = document.createDocumentFragment();
+
+            registroContable.idPrincipal = data.id_reg_con_enc;
+            registroContable.idDocumento = data.id_documento;
+            registroContable.abreviatura = data.abreviatura;
+            registroContable.documento = data.documento;
+            registroContable.consecutivo = data.consecutivo;
+            registroContable.fechaMovimiento = data.fecha_movimiento;
+            registroContable.comentario = data.comentario;
+            
             _.getID('idPrincipal').setValue(data.id_reg_con_enc);
             _.getID('documento').setValue(data.documento);
             _.getID('consecutivo').setValue(data.consecutivo);
@@ -366,20 +407,24 @@
             _.getID('comentario').setValue(data.comentario);
             _.getID('usuario_digita').setValue(data.usuario_digita);
             _.getID('fecha_digita').setValue(data.fecha_creacion);
-            if(data.usuario_actualiza){
+            if (data.usuario_actualiza) {
                 _.getID('usuario_actualiza').setValue(data.usuario_actualiza);
+            } else {
+                _.getID('usuario_actualiza').setValue('');
             }
-            if(data.fecha_update){
+            if (data.fecha_update) {
                 _.getID('fecha_actualiza').setValue(data.fecha_update);
+            } else {
+                _.getID('fecha_actualiza').setValue('');
             }
             _.getID('documento_anulado').get().checked = data.anulado;
 
             // Poblar el detalle
             cuerpo.innerHTML = '';
-            if (detalles){
+            if (detalles) {
                 max = detalles.length;
             }
-            for(; i < max; i = i + 1){
+            for (; i < max; i = i + 1) {
                 clon = fila.content.cloneNode(true);
                 cuenta_codigo = clon.querySelector('.cuenta_codigo');
                 cuenta_nombre = clon.querySelector('.cuenta_nombre');
@@ -403,15 +448,15 @@
                 valDebito += detalles[i].debito;
                 valCredito += detalles[i].credito;
             }
-            
+
             cuerpo.appendChild(fragmento);
-            
+
             diferencia = valDebito - valCredito;
             _.getID('total_debitos').text(valDebito.formatNumero());
             _.getID('total_creditos').text(valCredito.formatNumero());
             _.getID('total_diferencia').text(diferencia.formatNumero());
         },
-        limpiarDocumentoDetallado: function(){
+        limpiarDocumentoDetallado: function () {
             _.getID('idPrincipal').setValue('');
             _.getID('documento').setValue('');
             _.getID('consecutivo').setValue('');
@@ -423,8 +468,99 @@
             _.getID('fecha_actualiza').setValue('');
             _.getID('documento_anulado').get().checked = false;
             _.getID('registros_detalle').innerHTML('');
+        },
+        anularDocumento: function () {
+            var self = this,
+                    data = new FormData();
+            data.append('idPrincipal', _.getID('idPrincipal').value());
+            if (confirm('Desea anular este documento?')) {
+                _.ejecutar({
+                    url: 'SRegContableAnular',
+                    datos: data,
+                    callback: self.documentoAnulado
+                });
+            }
+        },
+        documentoAnulado: function (datos) {
+            var data = JSON.parse(datos);
+            _.getID('mensaje').delClass('no-mostrar').text(data.mensaje);
+            switch (data.tipo) {
+                case _.MSG_CORRECTO:
+                    registroCtrl.limpiarDocumentoDetallado();
+                    break;
+            }
+        },
+        inicio_editar: function(){
+            var self = this, data = self.registroContable;
+            
+            self.formulario = _.getID('frmRegistroContableModificar').noSubmit().get();
+            self.accion = 'editar';
+            self.divMensaje = _.getID('mensaje');
+            
+            _.getID('idPrincipal').setValue(data.idPrincipal);
+            _.getID('abreviatura').setValue(data.abreviatura);
+            _.getID('idDocumento').setValue(data.idDocumento);
+            _.getID('consecutivo').setValue(data.consecutivo);
+            _.getID('documento').setValue(data.documento);
+            _.getID('fecha').setValue(data.fechaMovimiento);
+            _.getID('comentario').setValue(data.comentario);
+            _.getID('btnValidarEncabezadoModificar').click(function(e){
+                e.preventDefault();
+                self.validarEncabezado(self.abrirDetalle);
+            });
+        },
+        poblarDocumentoDetalleEditar: function(){
+            var self = this,
+                data = new FormData();
+            data.append('idDocumento', this.registroContable.documento.id);
+            data.append('numero_documento', this.registroContable.documento.consecutivo);
+            _.ejecutar({
+                url: 'SRegContableConsultar',
+                datos: data,
+                callback: self.agregaTablaDetalleEditar
+            });
+        },
+        agregaTablaDetalleEditar: function(datos) {
+            var self = registroCtrl,
+                data = JSON.parse(datos),
+                i = 0, max = 0, detalles = [];
+            if (data.tipo === _.MSG_CORRECTO){
+                self.divMensaje.addClass('no-mostrar');
+                detalles = data.objeto.detalles;
+                max = detalles.length;
+                for(; i < max; i = i + 1){
+                    self.agregaTablaDetalleEdicion(detalles[i]);
+                }
+                registroCtrl.limpiaCamposCuenta();
+                _.getID('debito').setValue('0');
+                _.getID('credito').setValue('0');
+                _.getID('cuentapuc').setValue('').get().focus();
+            } else {
+                self.divMensaje.delClass('no-mostrar').text(data.mensaje);
+            }
+        },
+        agregaTablaDetalleEdicion: function(datos){
+            var self = this,
+                data = new FormData(),
+                obj = {
+                    url: 'SRegContableDetalleValidar',
+                    datos: data,
+                    callback: self.mostrarRegistro
+                };
+            data.append('id_cuenta_puc', datos.id_cuenta_puc);
+            data.append('cuenta', datos.cuenta);
+            data.append('cuentapuc', datos.nombre);
+            data.append('debito', datos.debito);
+            data.append('credito', datos.credito);
+            data.append('id_tercero', datos.id_tercero);
+            data.append('nombre_tercero', datos.razon_social);
+            data.append('tercero', datos.numero_identificacion);
+            data.append('id_centro_costo', datos.id_centro_costo);
+            data.append('nombre_ccosto', datos.centrocosto);
+            data.append('centrocosto', datos.codigo);
+            _.ejecutar(obj);
         }
     };
-    
+
     _.controlador('registroContable', registroCtrl);
 })(window, document, JSON, _);

@@ -1,27 +1,30 @@
 <div class="vista">
-    <form id="frmRegistroContable" method="post" action="#">
+    <form id="frmRegistroContableModificar" method="post" action="#">
         <fieldset>
-            <legend>Registro de Movimientos Contables</legend>
+            <legend>Modificar Movimientos Contables</legend>
             <div class="contenedor">
                 <div class="item tablet-50">
                     <label for="abreviatura" class="label-titulo">Abreviatura</label>
-                    <input type="text" id="abreviatura" name="abreviatura" maxlength="4" required placeholder="Abreviatura" autofocus tabindex="1" />
+                    <input type="hidden" id="idPrincipal" name="idPrincipal" />
+                    <input type="text" id="abreviatura" name="abreviatura" readonly />
                 </div>
                 <div class="item tablet-50">
                     <label for="documento" class="label-titulo">Documento</label>
                     <input type="hidden" id="idDocumento" name="idDocumento"/>
+                    <input type="hidden" id="consecutivo" name="consecutivo" />
                     <input type="text" id="documento" name="documento" readonly />
                 </div>
                 <div class="item tablet-50">
                     <label for="fecha" class="label-titulo">Fecha</label>
-                    <input type="date" id="fecha" name="fecha" required tabindex="2"/>
+                    <input type="date" id="fecha" name="fecha" required />
                 </div>
                 <div class="item">
                     <label for="comentario" class="label-titulo">Comentario</label>
-                    <input type="text" id="comentario" name="comentario" required placeholder="Comentario del documento" tabindex="3" />
+                    <input type="text" id="comentario" name="comentario" required placeholder="Comentario del documento" />
                 </div>
                 <div class="item">
-                    <button id="btnValidarEncabezado" class="boton primario" tabindex="4">Detalles</button>
+                    <button id="btnValidarEncabezadoModificar"
+                            class="boton primario">Detalles</button>
                     <a href="#/" class="boton">Volver al Inicio</a>
                     <a href="#/contabilidad/consultar-documento" class="boton">Buscar Registro Contable</a>
                 </div>
