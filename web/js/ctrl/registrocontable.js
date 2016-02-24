@@ -12,20 +12,20 @@
         },
         inicio_registro: function () {
             var self = this,
-                campos = ['abreviatura', 'fecha', 'comentario'],
-                i = 0, max = campos.length;
+                    campos = ['abreviatura', 'fecha', 'comentario'],
+                    i = 0, max = campos.length;
             this.accion = 'insertar';
             this.formulario = _.getID('frmRegistroContable').noSubmit().get();
             this.divMensaje = _.getID('mensaje');
-            
-            for(; i < max; i = i + 1){
+
+            for (; i < max; i = i + 1) {
                 _.getID(campos[i]).onEnterSiguiente();
             }
             _.getID('abreviatura').get()
                     .addEventListener('blur', function (e) {
                         self.buscarDocumento(e.target.value, self.poblarDocumento);
                     }, false);
-            _.getID('btnValidarEncabezado').click(function(){
+            _.getID('btnValidarEncabezado').click(function () {
                 self.validarEncabezado(self.abrirDetalle);
             });
         },
@@ -70,8 +70,8 @@
         },
         abrirDetalle: function (datos) {
             var data = JSON.parse(datos),
-                divm = registroCtrl.divMensaje,
-                accion = registroCtrl.accion;
+                    divm = registroCtrl.divMensaje,
+                    accion = registroCtrl.accion;
             switch (data.tipo) {
                 case _.MSG_CORRECTO:
                     divm.addClass('no-mostrar');
@@ -93,7 +93,7 @@
             this.valoresTotales.debito = 0;
             this.valoresTotales.credito = 0;
             btnCancelar = _.getID('btnCancelar').click(registroCtrl.confirmaCancelar);
-            
+
             for (i = 0; i < max; i = i + 1) {
                 _.getID(campos[i]).onEnterSiguiente();
             }
@@ -115,8 +115,8 @@
                 e.preventDefault();
                 self.guardarDocumento();
             });
-            
-            if (this.accion === 'editar'){
+
+            if (this.accion === 'editar') {
                 this.poblarDocumentoDetalleEditar();
             }
         },
@@ -303,11 +303,11 @@
         },
         guardarDocumento: function () {
             var data = new FormData(),
-                obj = {
-                url: 'SRegContableGuardarDocumento',
-                callback: registroCtrl.documentoGuardado,
-                datos: data
-            };
+                    obj = {
+                        url: 'SRegContableGuardarDocumento',
+                        callback: registroCtrl.documentoGuardado,
+                        datos: data
+                    };
             data.append('accion', registroCtrl.accion);
             _.ejecutar(obj);
         },
@@ -374,6 +374,14 @@
                 case _.MSG_CORRECTO:
                     msg.addClass('no-mostrar');
                     registroCtrl.poblarDocumentoDetallado(objeto);
+                    if (objeto.abierto) {
+                        _.getID('btn_editar').delClass('no-mostrar');
+                        _.getID('btn_anular').delClass('no-mostrar');
+                    } else {
+                        registroCtrl.registroContable = {};
+                        _.getID('btn_editar').addClass('no-mostrar');
+                        _.getID('btn_anular').addClass('no-mostrar');
+                    }
                     break;
                 default:
                     msg.delClass('no-mostrar').text(data.mensaje);
@@ -382,7 +390,7 @@
         },
         poblarDocumentoDetallado: function (data) {
             var registroContable = registroCtrl.registroContable,
-                cuerpo = _.getID('registros_detalle').get(),
+                    cuerpo = _.getID('registros_detalle').get(),
                     fila = _.getID('tmpl_registro').get(),
                     clon = null, cuenta_codigo = null, cuenta_nombre = null,
                     tercero_nit = null, tercero_nombre = null,
@@ -399,7 +407,7 @@
             registroContable.consecutivo = data.consecutivo;
             registroContable.fechaMovimiento = data.fecha_movimiento;
             registroContable.comentario = data.comentario;
-            
+
             _.getID('idPrincipal').setValue(data.id_reg_con_enc);
             _.getID('documento').setValue(data.documento);
             _.getID('consecutivo').setValue(data.consecutivo);
@@ -490,13 +498,13 @@
                     break;
             }
         },
-        inicio_editar: function(){
+        inicio_editar: function () {
             var self = this, data = self.registroContable;
-            
+
             self.formulario = _.getID('frmRegistroContableModificar').noSubmit().get();
             self.accion = 'editar';
             self.divMensaje = _.getID('mensaje');
-            
+
             _.getID('idPrincipal').setValue(data.idPrincipal);
             _.getID('abreviatura').setValue(data.abreviatura);
             _.getID('idDocumento').setValue(data.idDocumento);
@@ -504,14 +512,14 @@
             _.getID('documento').setValue(data.documento);
             _.getID('fecha').setValue(data.fechaMovimiento);
             _.getID('comentario').setValue(data.comentario);
-            _.getID('btnValidarEncabezadoModificar').click(function(e){
+            _.getID('btnValidarEncabezadoModificar').click(function (e) {
                 e.preventDefault();
                 self.validarEncabezado(self.abrirDetalle);
             });
         },
-        poblarDocumentoDetalleEditar: function(){
+        poblarDocumentoDetalleEditar: function () {
             var self = this,
-                data = new FormData();
+                    data = new FormData();
             data.append('idDocumento', this.registroContable.documento.id);
             data.append('numero_documento', this.registroContable.documento.consecutivo);
             _.ejecutar({
@@ -520,15 +528,15 @@
                 callback: self.agregaTablaDetalleEditar
             });
         },
-        agregaTablaDetalleEditar: function(datos) {
+        agregaTablaDetalleEditar: function (datos) {
             var self = registroCtrl,
-                data = JSON.parse(datos),
-                i = 0, max = 0, detalles = [];
-            if (data.tipo === _.MSG_CORRECTO){
+                    data = JSON.parse(datos),
+                    i = 0, max = 0, detalles = [];
+            if (data.tipo === _.MSG_CORRECTO) {
                 self.divMensaje.addClass('no-mostrar');
                 detalles = data.objeto.detalles;
                 max = detalles.length;
-                for(; i < max; i = i + 1){
+                for (; i < max; i = i + 1) {
                     self.agregaTablaDetalleEdicion(detalles[i]);
                 }
                 registroCtrl.limpiaCamposCuenta();
@@ -539,14 +547,14 @@
                 self.divMensaje.delClass('no-mostrar').text(data.mensaje);
             }
         },
-        agregaTablaDetalleEdicion: function(datos){
+        agregaTablaDetalleEdicion: function (datos) {
             var self = this,
-                data = new FormData(),
-                obj = {
-                    url: 'SRegContableDetalleValidar',
-                    datos: data,
-                    callback: self.mostrarRegistro
-                };
+                    data = new FormData(),
+                    obj = {
+                        url: 'SRegContableDetalleValidar',
+                        datos: data,
+                        callback: self.mostrarRegistro
+                    };
             data.append('id_cuenta_puc', datos.id_cuenta_puc);
             data.append('cuenta', datos.cuenta);
             data.append('cuentapuc', datos.nombre);
