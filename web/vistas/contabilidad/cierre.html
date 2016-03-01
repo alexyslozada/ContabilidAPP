@@ -1,0 +1,35 @@
+<div class="vista">
+    <form id="frmCierreContable" method="post" action="#">
+        <fieldset>
+        <legend>Cierre Contable</legend>
+        <div class="contenedor">
+            <div class="item tablet-50">
+                <label for="month" class="label-titulo">Mes</label>
+                <select id="month" name="month">
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                    <option value="13">Ajustes</option>
+                </select>
+            </div>
+            <div class="item tablet-50">
+                <label for="year" class="label-titulo">Año</label>
+                <input type="number" id="year" name="year" min="2015" step="1" />
+            </div>
+            <div class="item tablet-50">
+                <button id="btnCierreContable" class="boton primario">Cerrar Periodo</button>
+            </div>
+        </div>
+        </fieldset>
+    </form>
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+</div>

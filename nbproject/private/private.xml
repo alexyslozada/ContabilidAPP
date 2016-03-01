@@ -2,6 +2,14 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/web/js/ctrl/cierre_contable.js</file>
+            <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/src/java/com/ingenio/dao/DAOPeriodo.java</file>
+            <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/src/java/com/ingenio/utilidades/Constantes.java</file>
+            <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/web/vistas/contabilidad/cierre.html</file>
+            <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/src/java/com/ingenio/negocio/CierreContable.java</file>
+            <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/src/java/com/ingenio/servlets/contabilidad/SCierreContable.java</file>
+            <file>file:/E:/ProgramacionJava/ProyectosNetBeans/ContabilidAPP/src/java/com/ingenio/dao/DAOCierreContable.java</file>
+        </group>
     </open-files>
 </project-private>

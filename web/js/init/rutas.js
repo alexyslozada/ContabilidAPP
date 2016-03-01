@@ -250,7 +250,15 @@
                   'registroContable',
                   function(){
                       _.getCtrl().inicio_editar();
-                  });
+                  }
+            )
+            .ruta('/contabilidad/cierre',
+                  'vistas/contabilidad/cierre.html',
+                  'cierreContable',
+                  function(){
+                      _.getCtrl().inicio_cierre();
+                  }
+            );
 
     window.addEventListener('load', _.manejadorRutas, false);
     window.addEventListener('hashchange', _.manejadorRutas, false);

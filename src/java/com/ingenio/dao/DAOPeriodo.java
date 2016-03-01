@@ -64,4 +64,45 @@ public class DAOPeriodo extends DAOGenerales {
         }
         return respuesta;
     }
+    
+    public boolean cerrarPeriodo(short periodo){
+        boolean respuesta = false;
+        try {
+            setConsulta("select fn_periodo_cerrar(?)");
+            conexion = getConexion();
+            sentencia = conexion.prepareStatement(getConsulta());
+            sentencia.setShort(1, periodo);
+            resultado = sentencia.executeQuery();
+            if (resultado.next()) {
+                respuesta = resultado.getBoolean(1);
+            }
+        } catch (SQLException sqle) {
+            Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en DAOCierreContable.cerrarPeriodo: {0}", new Object[]{sqle.getMessage()});
+            throw new ExcepcionGeneral(sqle.getMessage());
+        } finally {
+            cierraConexion(conexion, sentencia, resultado);
+        }
+        return respuesta;
+    }
+    
+    public boolean periodoCierreIsValid(short year, short month) throws ExcepcionGeneral {
+        boolean respuesta = false;
+        try {
+            setConsulta("select fn_periodo_cierre_isvalid(?,?)");
+            conexion = getConexion();
+            sentencia = conexion.prepareStatement(getConsulta());
+            sentencia.setShort(1, year);
+            sentencia.setShort(2, month);
+            resultado = sentencia.executeQuery();
+            if (resultado.next()) {
+                respuesta = resultado.getBoolean(1);
+            }
+        } catch (SQLException sqle){
+            Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en DAOPeriodo.periodoCierreIsValid: {0}", new Object[]{sqle.getMessage()});
+            throw new ExcepcionGeneral(sqle.getMessage());
+        } finally {
+            cierraConexion(conexion, sentencia, resultado);
+        }
+        return respuesta;
+    }
 }

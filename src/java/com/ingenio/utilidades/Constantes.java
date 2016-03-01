@@ -26,6 +26,7 @@ public final class Constantes {
     public static final String MSG_REGISTROS_NO_ENCONTRADOS_TEXT = "Registro no encontrado.";
     public static final String MSG_REGISTRO_ANULADO_TEXT = "Registro anulado correctamente.";
     public static final String MSG_REGISTRO_NO_ANULADO_TEXT = "El registro no fue anulado.";
+    public static final String MSG_CIERRE_CORRECTO = "El cierre se ha realizado correctamente, por favor abra el nuevo periodo.";
     
     /* Acciones en texto */
     public static final String INSERTAR  = "insertar";
