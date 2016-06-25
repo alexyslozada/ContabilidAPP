@@ -258,6 +258,13 @@
                   function(){
                       _.getCtrl().inicio_cierre();
                   }
+            )
+            .ruta('/informes/detallados/movimientos/cuentas',
+                  'vistas/informes/detallados/movimientos/cuentas.html',
+                  'inf-mov-cuenta',
+                  function () {
+                    _.getCtrl().init();
+                  }
             );
 
     window.addEventListener('load', _.manejadorRutas, false);

@@ -1,5 +1,8 @@
 package com.ingenio.objetos;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CuentasPuc {
 
     private short idcuenta;
@@ -9,6 +12,10 @@ public class CuentasPuc {
     private short idclasecuenta;
     private short idnivelcuenta;
     private boolean maneja_centrocosto;
+    private int saldoAnterior;
+    private int saldoActual;
+    private String naturaleza;
+    private List<MovimientoCuentaDetalle> movimientos = new ArrayList<>();
 
     public CuentasPuc() {
     }
@@ -98,6 +105,42 @@ public class CuentasPuc {
         this.maneja_centrocosto = centrocosto;
     }
 
+    public int getSaldoAnterior() {
+        return saldoAnterior;
+    }
+
+    public void setSaldoAnterior(int saldoAnterior) {
+        this.saldoAnterior = saldoAnterior;
+    }
+
+    public int getSaldoActual() {
+        return saldoActual;
+    }
+
+    public void setSaldoActual(int saldoActual) {
+        this.saldoActual = saldoActual;
+    }
+
+    public String getNaturaleza() {
+        return naturaleza;
+    }
+
+    public void setNaturaleza(String naturaleza) {
+        this.naturaleza = naturaleza;
+    }
+    
+    public void addMovimiento(MovimientoCuentaDetalle movimiento) {
+        movimientos.add(movimiento);
+    }
+    
+    public void setMovimientos(List<MovimientoCuentaDetalle> movimientos) {
+        this.movimientos = movimientos;
+    }
+    
+    public List<MovimientoCuentaDetalle> getMovimientos() {
+        return movimientos;
+    }
+    
     public String toJSON(){
         StringBuilder sb = new StringBuilder();
         sb.append("{")
@@ -127,7 +170,19 @@ public class CuentasPuc {
                 .append(idnivelcuenta)
                 .append(",\"maneja_centrocosto\":")
                 .append(maneja_centrocosto)
-                .append("}");
+                .append(",\"saldo_anterior\":")
+                .append(getSaldoAnterior())
+                .append(",\"saldo_actual\":")
+                .append(getSaldoActual())
+                .append(",\"naturaleza\":\"")
+                .append(getNaturaleza())
+                .append("\",\"movimientos\":[");
+        for (MovimientoCuentaDetalle m : movimientos) {
+            sb.append(m.toJSON())
+                    .append(",");
+        }
+        sb.delete(sb.length()-1, sb.length())
+            .append("]}");
         return sb.toString();
     }
 }

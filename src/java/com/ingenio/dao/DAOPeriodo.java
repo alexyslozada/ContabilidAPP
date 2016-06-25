@@ -13,6 +13,12 @@ import java.util.logging.Logger;
 public class DAOPeriodo extends DAOGenerales {
 
     public final String OBJETO = "PERIODOS";
+    
+    private final String CREAR = "select fn_periodo_crear(?,?)";
+    private final String GETXFECHA = "select id_periodo_contable, anio, mes, abierto, fecha_cierre from fn_periodo_get_xfecha(?,?)";
+    private final String CERRAR = "select fn_periodo_cerrar(?)";
+    private final String ISVALID = "select fn_periodo_cierre_isvalid(?,?)";
+    
     private Connection conexion = null;
     private PreparedStatement sentencia = null;
     private ResultSet resultado = null;
@@ -21,7 +27,7 @@ public class DAOPeriodo extends DAOGenerales {
     public short crear(Periodo periodo) throws ExcepcionGeneral {
         short respuesta = 0;
         try{
-            setConsulta("select fn_periodo_crear(?,?)");
+            setConsulta(CREAR);
             conexion = getConexion();
             sentencia = conexion.prepareStatement(getConsulta());
             sentencia.setShort(1, periodo.getAnio());
@@ -40,21 +46,17 @@ public class DAOPeriodo extends DAOGenerales {
     }
     
     public Periodo getPeriodoXFecha(Periodo periodo) throws ExcepcionGeneral {
-        Periodo respuesta = null;
         try{
-            setConsulta("select id_periodo_contable, anio, mes, abierto, fecha_cierre from fn_periodo_get_xfecha(?,?)");
+            setConsulta(GETXFECHA);
             conexion = getConexion();
             sentencia = conexion.prepareStatement(getConsulta());
             sentencia.setShort(1, periodo.getAnio());
             sentencia.setShort(2, periodo.getMes());
             resultado = sentencia.executeQuery();
             if(resultado.next()){
-                respuesta = new Periodo();
-                respuesta.setId_periodo_contable(resultado.getShort(1));
-                respuesta.setAnio(resultado.getShort(2));
-                respuesta.setMes(resultado.getShort(3));
-                respuesta.setAbierto(resultado.getBoolean(4));
-                respuesta.setFecha_cierre(resultado.getDate(5));
+                periodo.setId_periodo_contable(resultado.getShort(1));
+                periodo.setAbierto(resultado.getBoolean(4));
+                periodo.setFecha_cierre(resultado.getDate(5));
             }
         } catch (SQLException sqle){
             Utilidades.get().generaLogServer(LOG, Level.SEVERE, "Error en DAOPeriodo.getPeriodoXFecha: {0}", new Object[]{sqle.getMessage()});
@@ -62,13 +64,13 @@ public class DAOPeriodo extends DAOGenerales {
         } finally {
             cierraConexion(conexion, sentencia, resultado);
         }
-        return respuesta;
+        return periodo;
     }
     
     public boolean cerrarPeriodo(short periodo){
         boolean respuesta = false;
         try {
-            setConsulta("select fn_periodo_cerrar(?)");
+            setConsulta(CERRAR);
             conexion = getConexion();
             sentencia = conexion.prepareStatement(getConsulta());
             sentencia.setShort(1, periodo);
@@ -88,7 +90,7 @@ public class DAOPeriodo extends DAOGenerales {
     public boolean periodoCierreIsValid(short year, short month) throws ExcepcionGeneral {
         boolean respuesta = false;
         try {
-            setConsulta("select fn_periodo_cierre_isvalid(?,?)");
+            setConsulta(ISVALID);
             conexion = getConexion();
             sentencia = conexion.prepareStatement(getConsulta());
             sentencia.setShort(1, year);

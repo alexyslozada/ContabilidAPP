@@ -1,0 +1,114 @@
+<div class="vista">
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+    <h3>Informe detallado de Movimientos por cuenta</h3>
+    <form id="frmInfMovCuenta" method="post" action="#" class="formulario">
+        <fieldset>
+            <legend>Documentos Contables</legend>
+            <div class="contenedor">
+                <div class="item tablet-50">
+                    <label for="initial-month" class="label-titulo">Periodo Inicial</label>
+                    <select id="initial-month" name="initial-month">
+                        <option value="1">Enero</option>
+                        <option value="2">Febrero</option>
+                        <option value="3">Marzo</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Mayo</option>
+                        <option value="6">Junio</option>
+                        <option value="7">Julio</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+                    <input type="number" min="2015" step="1" value="2016" id="initial-year" name="initial-year">
+                </div>
+                <div class="item tablet-50">
+                    <label for="final-month" class="label-titulo">Periodo Final</label>
+                    <select id="final-month" name="final-month">
+                        <option value="1">Enero</option>
+                        <option value="2">Febrero</option>
+                        <option value="3">Marzo</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Mayo</option>
+                        <option value="6">Junio</option>
+                        <option value="7">Julio</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+                    <input type="number" min="2015" step="1" value="2016" id="final-year" name="final-year">
+                </div>
+                <div class="item tablet-50">
+                    <label for="initial-account" class="label-titulo">Cuenta Inicial</label>
+                    <input type="text" id="initial-account" name="initial-account" required autocomplete="off" placeholder="Cuenta">
+                </div>
+                <div class="item tablet-50">
+                    <label for="final-account" class="label-titulo">Cuenta Final</label>
+                    <input type="text" id="final-account" name="final-account" required autocomplete="off" placeholder="Cuenta">
+                </div>
+                <div class="item">
+                    <button id="btnListar" class="boton primario" onclick="_.getCtrl().list();">Listar</button>
+                    <a href="#/" class="boton">Volver al Inicio</a>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <table class="tabla">
+        <caption>Informe Movimiento Detallado X Cuenta</caption>
+        <colgroup>
+            <col>
+            <col class="col-5">
+            <col class="col-10">
+            <col class="col-20">
+            <col class="col-10">
+            <col>
+            <col>
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>CCos</th>
+                <th>Documento</th>
+                <th>Comentario</th>
+                <th>Tercero</th>
+                <th>Débito</th>
+                <th>Crédito</th>
+                <th>Saldo</th>
+            </tr>
+        </thead>
+        <tbody id="cuerpoTabla"></tbody>
+    </table>
+    <template id="template-header">
+        <tr class="inf-cuenta">
+            <td class="num-cuenta"></td>
+            <td class="nom-cuenta" colspan="4"></td>
+            <td colspan="2">Saldo Anterior</td>
+            <td class="san-cuenta texto-derecha"></td>
+        </tr>
+    </template>
+    <template id="template-detail">
+        <tr>
+            <td class="mov-fecha"></td>
+            <td class="mov-centrocosto"></td>
+            <td class="mov-documento"></td>
+            <td class="mov-comentario"></td>
+            <td class="mov-tercero"></td>
+            <td class="mov-debito texto-derecha"></td>
+            <td class="mov-credito texto-derecha"></td>
+            <td class="mov-saldo texto-derecha"></td>
+        </tr>
+    </template>
+    <template id="template-aggregate">
+        <tr class="total-cuenta">
+            <td colspan="4" class="texto-derecha">Total Movimientos</td>
+            <td class="total-anterior texto-derecha"></td>
+            <td class="total-debitos texto-derecha"></td>
+            <td class="total-creditos texto-derecha"></td>
+            <td class="total-saldo texto-derecha"></td>
+        </tr>
+    </template>
+</div>
