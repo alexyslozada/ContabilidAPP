@@ -1,7 +1,7 @@
-package com.ingenio.servlets.informes.detallados;
+package com.ingenio.servlets.informes.balances;
 
 import com.ingenio.dao.DAOPeriodo;
-import com.ingenio.dao.informes.detallados.DAOMovimientoCuentas;
+import com.ingenio.dao.informes.balances.DAOBalanceGeneral;
 import com.ingenio.excepciones.ExcepcionGeneral;
 import com.ingenio.objetos.Periodo;
 import com.ingenio.objetos.Usuario;
@@ -20,10 +20,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @MultipartConfig
-@WebServlet(name = "SInfMovimientosCuenta", urlPatterns = {"/inf-mov-cuenta"})
-public class SInfMovimientosCuenta extends HttpServlet {
+@WebServlet(name = "SInfBalanceGeneral", urlPatterns = {"/inf-balance-general"})
+public class SInfBalanceGeneral extends HttpServlet {
 
-    private static final Logger LOG = Logger.getLogger(SInfMovimientosCuenta.class.getName());
+    private static final Logger LOG = Logger.getLogger(SInfBalanceGeneral.class.getName());
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -34,38 +34,39 @@ public class SInfMovimientosCuenta extends HttpServlet {
         String mensaje;
         String objeto = "";
         Utilidades u = Utilidades.get();
-
-        if(u.autenticado(sesion)){
-            
-            DAOMovimientoCuentas dao = new DAOMovimientoCuentas();
+        
+        if (u.autenticado(sesion)) {
+            DAOBalanceGeneral dao = new DAOBalanceGeneral();
             Usuario usuario = (Usuario) sesion.getAttribute("credencial");
             
-            if(dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.CONSULTAR)){
-                Periodo initialPeriod = new Periodo();
-                Periodo finalPeriod   = new Periodo();
-
-                String sInitialMonth, sInitialYear, sFinalMonth, sFinalYear, sInitialAccount, sFinalAccount;
-                sInitialMonth = request.getParameter("initial-month");
-                sInitialYear  = request.getParameter("initial-year");
-                sFinalMonth   = request.getParameter("final-month");
-                sFinalYear    = request.getParameter("final-year");
-                sInitialAccount = request.getParameter("initial-account");
-                sFinalAccount = request.getParameter("final-account");
-
-                setPeriodo(initialPeriod, sInitialMonth, sInitialYear);
-                setPeriodo(finalPeriod, sFinalMonth, sFinalYear);
-
+            if (dao.tienePermiso(usuario.getPerfil(), dao.OBJETO, Constantes.CONSULTAR)) {
+                
+                String sTypeReport = request.getParameter("type-report"),
+                       sClassLevel = request.getParameter("class-level"),
+                       sPeriodMonth = request.getParameter("period-month"),
+                       sPeriodYear  = request.getParameter("period-year");
+                
+                short iTypeReport = u.parseShort(sTypeReport, LOG, true),
+                      iClassLevel = u.parseShort(sClassLevel, LOG, true),
+                      iPeriodMonth = u.parseShort(sPeriodMonth, LOG, true),
+                      iPeriodYear = u.parseShort(sPeriodYear, LOG, true);
+                
+                // Get id of period
+                DAOPeriodo daoPeriodo = new DAOPeriodo();
+                Periodo periodo = new Periodo(iPeriodYear, iPeriodMonth);
+                daoPeriodo.getPeriodoXFecha(periodo);
+                
+                // Get query
                 try {
-                    objeto  = dao.getMovimientos(initialPeriod.getId_periodo_contable(),
-                                                    finalPeriod.getId_periodo_contable(),
-                                                    sInitialAccount, sFinalAccount);
-                    tipo    = Constantes.MSG_CORRECTO;
+                    objeto = dao.getBalance(iTypeReport, periodo.getId_periodo_contable(), iClassLevel);
+                    tipo = Constantes.MSG_CORRECTO;
                     mensaje = Constantes.MSG_CONSULTA_REALIZADA_TEXT;
                 } catch (ExcepcionGeneral eg) {
                     tipo = Constantes.MSG_ERROR;
                     mensaje = eg.getMessage();
                     u.generaLogServer(LOG, Level.WARNING, "Error al generar el informe {0}", new Object[]{eg.getMessage()});
                 }
+
             } else {
                 tipo = Constantes.MSG_ERROR;
                 mensaje = "Su perfil no está autorizado para consultar los permisos";
@@ -74,21 +75,10 @@ public class SInfMovimientosCuenta extends HttpServlet {
             tipo = Constantes.MSG_NO_AUTENTICADO;
             mensaje = Constantes.MSG_NO_AUTENTICADO_TEXT;
         }
-
+        
         try (PrintWriter out = response.getWriter()) {
             out.println(u.respuestaJSON(tipo, mensaje, objeto));
         }
-    }
-    
-    private void setPeriodo(Periodo period, String month, String year) {
-        Utilidades u = Utilidades.get();
-        DAOPeriodo daoPeriodo = new DAOPeriodo();
-        
-        short m = u.parseShort(month, LOG, true);
-        short y  = u.parseShort(year, LOG, true);
-        period.setMes(m);
-        period.setAnio(y);
-        daoPeriodo.getPeriodoXFecha(period);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

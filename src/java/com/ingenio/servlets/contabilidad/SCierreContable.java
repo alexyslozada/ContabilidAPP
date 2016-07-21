@@ -51,7 +51,7 @@ public class SCierreContable extends HttpServlet {
                 Periodo periodo = new Periodo(sYear, sMonth);
                 
                 try {
-                    periodo = daoPeriodo.getPeriodoXFecha(periodo);
+                    daoPeriodo.getPeriodoXFecha(periodo);
                     cierre.cierreContable(periodo, usuario.getIdusuario());
                     tipo = Constantes.MSG_CORRECTO;
                     mensaje = Constantes.MSG_CIERRE_CORRECTO;

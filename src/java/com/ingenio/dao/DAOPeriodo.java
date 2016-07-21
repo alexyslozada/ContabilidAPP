@@ -45,7 +45,7 @@ public class DAOPeriodo extends DAOGenerales {
         return respuesta;
     }
     
-    public Periodo getPeriodoXFecha(Periodo periodo) throws ExcepcionGeneral {
+    public void getPeriodoXFecha(Periodo periodo) throws ExcepcionGeneral {
         try{
             setConsulta(GETXFECHA);
             conexion = getConexion();
@@ -64,7 +64,6 @@ public class DAOPeriodo extends DAOGenerales {
         } finally {
             cierraConexion(conexion, sentencia, resultado);
         }
-        return periodo;
     }
     
     public boolean cerrarPeriodo(short periodo){

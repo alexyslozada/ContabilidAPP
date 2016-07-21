@@ -1,0 +1,88 @@
+<div class="vista">
+    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+    <h3>Informe General</h3>
+    <form id="frmBalanceGeneral" method="post" action="#" class="formulario">
+        <fieldset>
+            <legend>Informes Generales</legend>
+            <div class="contenedor">
+                <div class="item tablet-50">
+                    <label for="type-report" class="label-titulo">Tipo de Reporte</label>
+                    <select id="type-report" name="type-report">
+                        <option value="1">Balance General</option>
+                        <option value="2">Estado de Resultados</option>
+                        <option value="3">Cuentas de Orden</option>
+                        <option value="0">Todos</option>
+                    </select>
+                </div>
+                <div class="item tablet-50">
+                    <label for="class-level" class="label-titulo">Nivel de Detalle</label>
+                    <select id="class-level" name="class-level">
+                        <option value="1">1er Nivel</option>
+                        <option value="2">2do Nivel</option>
+                        <option value="3">3er Nivel</option>
+                        <option value="4">4to Nivel</option>
+                        <option value="5">5to Nivel</option>
+                    </select>
+                </div>
+                <div class="item tablet-50">
+                    <label for="period-month" class="label-titulo">Mes</label>
+                    <select id="period-month" name="period-month">
+                        <option value="1">Enero</option>
+                        <option value="2">Febrero</option>
+                        <option value="3">Marzo</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Mayo</option>
+                        <option value="6">Junio</option>
+                        <option value="7">Julio</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+                </div>
+                <div class="item tablet-50">
+                    <label for="period-year" class="label-titulo">Año</label>
+                    <input type="number" id="period-year" name="period-year" value="2016" step="1" min="2015">
+                </div>
+                <div class="item">
+                    <button id="btnListar" class="boton primario" onclick="_.getCtrl().list();">Generar</button>
+                    <a href="#/" class="boton">Volver al Inicio</a>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <table class="tabla">
+        <caption>Balance General</caption>
+        <colgroup>
+            <col class="col-10">
+            <col class="col-30">
+            <col>
+            <col>
+            <col>
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Cuenta</th>
+                <th>Nombre</th>
+                <th>Saldo Anterior</th>
+                <th>Débitos</th>
+                <th>Cŕeditos</th>
+                <th>Salto Nuevo</th>
+            </tr>
+        </thead>
+        <tbody id="cuerpoTabla"></tbody>
+    </table>
+</div>
+
+<template id="template-detail">
+    <tr>
+        <td class="account-number"></td>
+        <td class="account-name"></td>
+        <td class="previus-balance texto-derecha"></td>
+        <td class="debit-balance texto-derecha"></td>
+        <td class="credit-balance texto-derecha"></td>
+        <td class="current-balance texto-derecha"></td>
+    </tr>
+</template>

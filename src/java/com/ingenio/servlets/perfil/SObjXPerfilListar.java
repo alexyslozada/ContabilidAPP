@@ -43,7 +43,7 @@ public class SObjXPerfilListar extends HttpServlet {
                 try{
                     sIdPerfil = Short.parseShort(idPerfil);
                     tipo = Constantes.MSG_CORRECTO;
-                    mensaje = "Consulta realizada";
+                    mensaje = Constantes.MSG_CONSULTA_REALIZADA_TEXT;
                 } catch (NumberFormatException nfe){
                     tipo = Constantes.MSG_ERROR;
                     mensaje = "El perfil debe ser numérico";

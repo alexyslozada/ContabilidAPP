@@ -62,7 +62,7 @@ public class SRegContableEncabezadoValidar extends HttpServlet {
                     int mes = cFecha.get(Calendar.MONTH) + 1;
                     periodoContable.setAnio((short) ano);
                     periodoContable.setMes((short) mes);
-                    periodoContable = daoPeriodo.getPeriodoXFecha(periodoContable);
+                    daoPeriodo.getPeriodoXFecha(periodoContable);
                 }
 
                 int iIdRegistro = 0, iConsecutivo = 0;

@@ -21,10 +21,19 @@
     showList: function (datos) {
       var data = JSON.parse(datos),
           obj = data.objeto;
-      if (data.tipo === _.MSG_CORRECTO) {
-        ctrl.showData(obj);
-      } else if (data.tipo === _.MSG_NO_AUTENTICADO) {
-        window.location.href = 'index.html';
+      ctrl.divMessage.addClass('no-mostrar');
+      switch (data.tipo) {
+        case _.MSG_CORRECTO:
+          ctrl.showData(obj);
+          break;
+        case _.MSG_ERROR:
+          ctrl.divMessage.delClass('no-mostrar').text(data.mensaje);
+          break;
+        case _.MSG_NO_AUTENTICADO:
+          window.location.href = 'index.html';
+          break;
+        default:
+          ctrl.divMessage.delClass('no-mostrar').text('Error No controlado');
       }
     },
     showData: function (datos) {

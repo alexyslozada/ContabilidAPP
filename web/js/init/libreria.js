@@ -120,6 +120,61 @@
                     }
                     cuerpo.appendChild(frag);
                 },
+                // Función que permite llenar una tabla
+                // Se le debe enviar el id del tbody
+                // el id del template
+                // el objeto json con la data
+                // el nombre de los campos del objeto json (en array)
+                // el nombre de las clases de cada campo o columna (en array)
+                // las acciones a realizar
+                fillRows: function (table, template, data, fields, columns, actions) {
+                    var body = document.getElementById(table),
+                        row = document.getElementById(template),
+                        fragment = document.createDocumentFragment(),
+                        i = 0,
+                        j = 0,
+                        maxData = data.length,
+                        registry = {},
+                        clon = null,
+                        maxFields = fields.length,
+                        column = null,
+                        action = null,
+                        btnAction = null;
+
+                    body.textContent = '';
+                    for (; i < maxData; i = i + 1) {
+                        registry = data[i];
+                        clon = row.content.cloneNode(true);
+                        for (; j < maxFields; j = j + 1) {
+                            column = clon.querySelector('.' + columns[j]);
+                            switch (typeof registry[fields[j]]) {
+                              case 'boolean':
+                                column.textContent = registry[fields[j]] ? 'Si' : 'No';
+                                break;
+                              case 'number':
+                                column.textContent = registry[fields[j]].formatNumero();
+                                break;
+                              default:
+                                column.textContent = registry[fields[j]];
+                            }
+                        }
+                        j = 0;
+
+                        /**
+                         * Accines a realizar
+                         * El objeto debe tener la siguiente estructura
+                         * {'nombre': {'clase', 'funcion'}}
+                         */
+                        for (action in actions) {
+                            btnAction = clon.querySelector(actions[action].clase);
+                            btnAction.dataset.idu = registry[fields[0]];
+                            btnAction.addEventListener('click', actions[action].funcion, false);
+                        }
+
+                        fragment.appendChild(clon);
+                    }
+                    body.appendChild(fragment);
+                },
                 paginar: function () {
                     var input = this.getID('pagina'),
                             pag = parseInt(input.value(), 10),

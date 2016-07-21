@@ -265,6 +265,13 @@
                   function () {
                     _.getCtrl().init();
                   }
+            )
+            .ruta('/informes/balance/general',
+                  'vistas/informes/balances/general.html',
+                  'inf-balance-general',
+                  function () {
+                    _.getCtrl().init();
+                  }
             );
 
     window.addEventListener('load', _.manejadorRutas, false);
