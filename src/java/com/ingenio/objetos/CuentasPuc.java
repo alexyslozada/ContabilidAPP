@@ -174,15 +174,23 @@ public class CuentasPuc {
                 .append(getSaldoAnterior())
                 .append(",\"saldo_actual\":")
                 .append(getSaldoActual())
-                .append(",\"naturaleza\":\"")
-                .append(getNaturaleza())
-                .append("\",\"movimientos\":[");
+                .append(",\"naturaleza\":");
+        if (getNaturaleza() != null) {
+          sb.append("\"")
+            .append(getNaturaleza())
+            .append("\"");
+        } else {
+          sb.append(getNaturaleza());
+        }
+        sb.append(",\"movimientos\":[");
         for (MovimientoCuentaDetalle m : movimientos) {
             sb.append(m.toJSON())
                     .append(",");
         }
-        sb.delete(sb.length()-1, sb.length())
-            .append("]}");
+        if (movimientos.size() > 0) {
+            sb.delete(sb.length()-1, sb.length());
+        }
+        sb.append("]}");
         return sb.toString();
     }
 }
